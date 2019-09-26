@@ -1,0 +1,162 @@
+<template>
+    <div class="login-land">
+        <div class="qrcode" id="qrcode"></div>
+    </div>
+</template>
+
+<script>
+import {reqWeChatQRCode} from 'src/api/index'
+import utils from 'src/utils'
+import {mapActions} from 'vuex'
+import qs from 'qs'
+import { Message } from 'element-ui';
+
+export default {
+  props:{},
+  data () {
+    return {
+        
+    }
+    
+  },
+
+  computed: {
+     
+  },
+  created(){
+    
+  },
+  mounted(){
+        
+  },
+  activated(){
+      this.getWeChatQRCode()
+  },
+
+  methods: {
+        //扫码跳转
+        getOpenIdAccessToken(appid,redirect_uri) {
+            // console.log(redirect_uri)
+            var obj = new WxLogin({
+                id: "qrcode",
+                appid,
+                scope: "snsapi_login",
+                redirect_uri:encodeURIComponent(redirect_uri),
+                state: Math.ceil(Math.random() * 1000),
+                style: "black",           
+            });
+        },
+    //   点击弹出二维码
+        async getWeChatQRCode(){
+            let {origin} = window.location
+            let result = await reqWeChatQRCode({trueUrl:origin})
+            let {appid,login,redirect_uri} = result.data
+            //"http://wx.cluster-iot.cn/xx?trueUrl=http://192.168.50.236:8080/login?openid=oBUh059mnb-GkVYeGmJNouSQOBAo"  重定向网址
+            let url = qs.parse(redirect_uri)
+            let frontUrl = Object.keys(url) //obj[0]可以获取到前面一段url
+            url = utils.queryURLParameter(url[frontUrl[0]])
+            redirect_uri = `${frontUrl[0]}=http://${url.host}`
+            // redirect_uri = `${frontUrl[0]}=http://${url.host}`
+            
+            //显示二维码
+            this.qrcode = login //login是二维码图片 
+            //扫码
+            this.$nextTick(()=>{this.getOpenIdAccessToken(appid,redirect_uri)})              
+             //  http://192.168.50.236:8080/?openid=oBUh059mnb-GkVYeGmJNouSQOBAo&accessToken=25_oXBtGHvN1AhmF2-cky27mki0Q7LNjn5h2qfmzZTqPjmPwlM-IhX3eaAnFXxDSOgHkBpzrQM_fvbdEfAq5bxrHI2LbMK-VtoguoCYtlXzINQ#/ 
+        },
+ 
+  },
+
+  components: {},
+}
+
+</script>
+<style lang='less' scoped>
+.login-land {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    height: 480px;
+    width: 600px;
+    box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.2);
+    .login-title {
+        width: 560px;
+        a {
+            cursor: pointer;
+            font-size: 14px;
+            color: rgba(55, 61, 65, 1);
+        }
+    }
+    .login-logo {
+        text-align: center;
+        margin: 45px 0;
+    }
+    .login-img {
+        width: 210px;
+        height: 60px;
+        display: inline-block;
+    }
+    .form-wrap {
+        text-align: center;
+        .user-login {
+            display: inline-block;
+            width: 400px;
+            .login-btn {
+                display: inline-block;
+                width: 400px;
+            }
+            .getCode {
+                font-style: normal;
+                cursor: pointer;
+                color: #00b7c5;
+                margin-right: 10px;
+            }
+        }
+        .iconfont {
+            font-size: 20px;
+        }
+    }
+    .login-way {
+        text-align: center;
+        margin: 40px auto 60px;
+        font-size: 14px;
+        color: #00b7c5;
+        span {
+            margin: 0 30px;
+            cursor: pointer;
+        }
+        i {
+            margin-right: 10px;
+            color: green;
+            cursor: default;
+        }
+    }
+
+    .qrcode {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 300px;
+        height: 400px;
+        margin: auto;
+        text-align: center;
+
+        h3 {
+            font-size: 20px;
+            font-weight: normal;
+        }
+        img {
+            width: 282px;
+            height: 282px;
+            display: inline-block;
+            background-color: pink;
+            margin: 20px 0;
+        }
+    }
+}
+</style>

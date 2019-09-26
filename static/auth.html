@@ -1,0 +1,52 @@
+﻿<html>
+<head>
+<meta charset="utf-8">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<title></title>
+<script src="http://www.cluster-dt.com/edu_app/static/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+    //获取链接参数函数
+    function goToAuth(){
+        //调用更新获取域授权码的方法
+        //
+
+        $.ajax({
+            //请求方式         
+            type : "GET",
+            //请求的媒体类型
+            contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : "http://www.cluster-dt.com/openwechat/event",
+            //数据，json字符串
+            //请求成功 
+            success : function(result) {
+      
+                    //https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=wx3e7ad5ac4e89de24&pre_auth_code=preauthcode@@@RUS3kao2sFUrlqff6beDnCI6zMvI37GT6nt--nGRA7mztmeykxCiLn60QlNhYwDD&redirect_uri=http://www.cluster-dt.com/openwechat/event/success/info&auth_type=1
+                var url = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=wx3e7ad5ac4e89de24&pre_auth_code="+result+"&redirect_uri=http://www.cluster-dt.com/openwechat/event/success/info&auth_type=1";
+     
+
+                window.location.href = url;
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+
+            }
+        });
+    };
+    window.onload=function(){
+        goToAuth()
+    }
+    //preauthcode@@@zoSnO91GBsaUoBELkEjYM3vkKnjmkmqouDVJgf865czj5g-WIfvSqSt-VOer0M2h
+	//preauthcode@@@9yJ5dMguyycCY1jGpBTufcKp82-z6lpIr-xG7GissNZTIsvDDEFQRN4E_z881iYn 
+	//preauthcode@@@9yJ5dMguyycCY1jGpBTufcKp82-z6lpIr-xG7GissNZTIsvDDEFQRN4E_z881iYn
+</script> 
+</head>
+<body>
+    <div class="main"> 
+        <div class="ewm"> 
+            <!-- <input type="button" value="授权" onclick="goToAuth();">    -->
+        </div>
+    </div>
+	
