@@ -48,8 +48,8 @@ export default {
         },
     //   点击弹出二维码
         async getWeChatQRCode(){
-            let {origin} = window.location
-            let result = await reqWeChatQRCode({trueUrl:origin})
+            let {href} = window.location
+            let result = await reqWeChatQRCode({trueUrl:href})
             let {appid,login,redirect_uri} = result.data
             //"http://wx.cluster-iot.cn/xx?trueUrl=http://192.168.50.236:8080/login?openid=oBUh059mnb-GkVYeGmJNouSQOBAo"  重定向网址
             let url = qs.parse(redirect_uri)
@@ -57,7 +57,6 @@ export default {
             url = utils.queryURLParameter(url[frontUrl[0]])
             redirect_uri = `${frontUrl[0]}=http://${url.host}`
             // redirect_uri = `${frontUrl[0]}=http://${url.host}`
-            
             //显示二维码
             this.qrcode = login //login是二维码图片 
             //扫码

@@ -88,8 +88,8 @@ export const reqChangePassword = (data)=>axios({
 export const reqChangePhone = (data)=>axios({
     url:'user/updatephone',
     data,
-    type:'POST'
-
+    type:'POST',
+    flag:false
 })
 
 // 微信管理页面----------------------------------------------------

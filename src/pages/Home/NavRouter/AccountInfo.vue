@@ -66,10 +66,7 @@ export default {
       
     },
     mounted() {
-        
-
     },
-
     methods: {
         ...mapActions(['getUserInfo']),
         // 控制重置密码对话框
@@ -84,7 +81,6 @@ export default {
             let {address='',email='',company='',name='',nickName='',headPicture=''} = this.userInfo
             let info = {address,email,company,name,nickName,headPicture}
             let result = await reqModiUserInfo(info)
-            
             if (result.succeed) {
                 Message.success('修改成功')
                 this.getUserInfo()

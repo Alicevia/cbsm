@@ -100,7 +100,11 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="saveWeChatInfo" class="button-width" type="primary">{{initWxInfo}}</el-button>
+                    <el-button
+                        @click="saveWeChatInfo"
+                        class="button-width"
+                        type="primary"
+                    >{{initWxInfo}}</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -110,26 +114,32 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import {reqInitWeChatAuthInfo,reqModiWeChatAuth,reqCheckAuth} from 'src/api'
-import { Message } from 'element-ui';
-import PopupWx from 'pages/Home/Components/PopupWx'
-import { Promise, resolve } from 'q';
+import { mapState, mapActions } from "vuex";
+import {
+    reqInitWeChatAuthInfo,
+    reqModiWeChatAuth,
+    reqCheckAuth
+} from "src/api";
+import { Message } from "element-ui";
+import PopupWx from "pages/Home/Components/PopupWx";
+import { Promise, resolve } from "q";
 export default {
     data() {
         return {
             labelPosition: "right",
-            dialogVisible:false,
-            modiControl:{
-                online:true,
-                offline:true,
-                warning:true,
-                report:true,
-                wxName:true
+            check1:'测试',
+            dialogVisible: false,
+            modiControl: {
+                online: true,
+                offline: true,
+                warning: true,
+                report: true,
+                wxName: true
             },
-            wxSwitch:false,
-            rules:{
-                 appId: [
+            wxSwitch: false,
+          
+            rules: {
+                appId: [
                     {
                         required: true,
                         message: "appId不能为空",
@@ -149,149 +159,157 @@ export default {
                         message: "logo不能为空",
                         trigger: "blur"
                     }
-                ],
+                ]
             }
-           
         };
     },
 
     computed: {
-        ...mapState(['weChatInfo']),
-        firstTime(){
-            return this.weChatInfo.id?false:true
+        ...mapState(["weChatInfo"]),
+        firstTime() {
+            return this.weChatInfo.id ? false : true;
         },
-        initWxInfo(){
-            return this.firstTime?'初始化':'保存'
+        initWxInfo() {
+            return this.firstTime ? "初始化" : "保存";
         },
-        isAuth(){
-            return this.weChatInfo.isAuthorize?'已授权':'未授权'
+        isAuth() {
+            return this.weChatInfo.isAuthorize ? "已授权" : "未授权";
         },
-        reAuth(){
-            return this.isAuth==='已授权'?'重新授权':'授权'
-        },
+        reAuth() {
+            return this.isAuth === "已授权" ? "重新授权" : "授权";
+        }
+      
     },
-    watch: {
-    
+    watch: {},
+    created() {},
+    mounted() {
+        
     },
-    created() {
-   
-    },
-    mounted() {},
 
     methods: {
-        ...mapActions(['modiWeChatInfo','getAliMessageAuth','getWeChatAuthInfo']),
-        // 修改store中的信息
-        changeWeChatInfo(data){
-            this.modiWeChatInfo(data)
+        ...mapActions([
+            "modiWeChatInfo",
+            "getAliMessageAuth",
+            "getWeChatAuthInfo"
+        ]),
+        // 映射修改store中的信息
+        changeWeChatInfo(data) {
+            this.modiWeChatInfo(data);
         },
         // 更改公众号信息
-         saveWeChatInfo(){
-            this.$refs['wxManage'].validate(async v=>{
-                if (!v) return
-                this.forbiddenInput() //禁止用户修改
+        saveWeChatInfo() {
+            this.$refs["wxManage"].validate(async v => {
+                if (!v) return;
+                this.forbiddenInput(); //禁止用户修改
                 if (this.firstTime) {
-                    let data = this.cellectWeChatInfo()
-                    let result  = await reqInitWeChatAuthInfo(data)
+                    let data = this.cellectWeChatInfo();
+                    let result = await reqInitWeChatAuthInfo(data);
                     if (result.succeed) {
-                        Message.success('初始化信息成功')
+                        Message.success("初始化信息成功");
                         // this.modiWeChatInfo(result.data)
-                        this.getAliMessageAuth()
-                        this.getWeChatAuthInfo()
-                    }else{
-                        Message.error('初始化信息失败')
+                        this.getAliMessageAuth();
+                        this.getWeChatAuthInfo();
+                    } else {
+                        Message.error("初始化信息失败");
                     }
-                }else{
-                    let data = this.cellectWeChatInfo()
-                    let result = await reqModiWeChatAuth(data)
+                } else {
+                    let data = this.cellectWeChatInfo();
+                    let result = await reqModiWeChatAuth(data);
                     if (result.succeed) {
-                        Message.success('修改成功')
+                        Message.success("修改成功");
                         // this.modiWeChatInfo(result.data)
-                        this.getAliMessageAuth()
-                    }else {
-                        Message.error('修改失败')
-                    }          
+                        this.getAliMessageAuth();
+                    } else {
+                        Message.error("修改失败");
+                    }
                 }
-            })
-            
+            });
         },
         // 收集公众号信息
-        cellectWeChatInfo(){
-            let {appId,name,offlineTemplateId,onlineTemplateId,id,
-            reportTemplateId,warnTemplateId } = this.weChatInfo
-            let data = {appId,name,offlineTemplateId,onlineTemplateId,
-            reportTemplateId,warnTemplateId,id}
+        cellectWeChatInfo() {
+            let {
+                appId,
+                name,
+                offlineTemplateId,
+                onlineTemplateId,
+                id,
+                reportTemplateId,
+                warnTemplateId
+            } = this.weChatInfo;
+            let data = {
+                appId,
+                name,
+                offlineTemplateId,
+                onlineTemplateId,
+                reportTemplateId,
+                warnTemplateId,
+                id
+            };
             // console.log(data)
             let formdata = new FormData();
             for (const key in data) {
                 if (data.hasOwnProperty(key) && data[key]) {
-                    formdata.append([key],data[key])
-                }        
+                    formdata.append([key], data[key]);
+                }
             }
             // 如果上传了图片那么将图片追加到formdata
             if (this.img) {
-                formdata.append("file",this.img)
+                formdata.append("file", this.img);
                 this.img = null;
+
             }
-            return formdata
+            return formdata;
         },
         // 接收img raw
-        handleChange(file){
+        handleChange(file) {
             let reader = new FileReader();
             reader.readAsDataURL(file.raw);
-            reader.onload = e=>{
+            reader.onload = e => {
                 // this.weChatInfo.customerIcon = e.target.result
-                this.modiWeChatInfo({customerIcon:e.target.result})
+                this.modiWeChatInfo({ customerIcon: e.target.result });
                 // this.modiWeChatImg(JSON.parse(JSON.stringify(this.weChatInfo)))
-            }
+            };
             this.img = file.raw;
         },
         // wx授权
         togglePopupWx() {
-            this.dialogVisible = !this.dialogVisible
+            this.dialogVisible = !this.dialogVisible;
             if (!this.dialogVisible) {
-                this.getWeChatAuthInfo()
+                this.getWeChatAuthInfo();
             }
-            
         },
         //查询授权
-         checkAuth(){
-             this.$refs['wxManage'].validateField('appId',async error=>{
-                 if (error) return 
+        checkAuth() {
+            this.$refs["wxManage"].validateField("appId", async error => {
+                if (error) return;
                 let data = {
-                    appId:this.weChatInfo.appId
-                }
-                let result = await reqCheckAuth(data)
+                    appId: this.weChatInfo.appId
+                };
+                let result = await reqCheckAuth(data);
                 if (result.succeed && result.data.isAuthorize) {
                     if (!result.data.id) {
-                        Message.success('公众号已授权,需要初始化信息')
-                    }else{
-                        Message.success('公众号已授权')                        
+                        Message.success("公众号已授权,需要初始化信息");
+                    } else {
+                        Message.success("公众号已授权");
                     }
-                    
-                }else{
-                    Message.success('公众号未授权')
-                    
+                } else {
+                    Message.success("公众号未授权");
                 }
-             })
-         
+            });
         },
         // 让用户可以修改 让input解封
-        changeModiControl(data){
-            this.modiControl[data]=false
+        changeModiControl(data) {
+            this.modiControl[data] = false;
         },
         //让input禁止输入
-        forbiddenInput(){
-            let object = this.modiControl
+        forbiddenInput() {
+            let object = this.modiControl;
             for (const key in object) {
                 if (object.hasOwnProperty(key)) {
-                    object[key]=true;
-                    
+                    object[key] = true;
                 }
             }
-        },
-      
-        
-        
+        }
     },
 
     components: {

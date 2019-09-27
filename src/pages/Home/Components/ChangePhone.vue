@@ -8,7 +8,7 @@
             :visible.sync="dialogFormVisible"
         >
             <el-form :model="ruleForm" :rules="rules" ref="changePhone">
-                <el-form-item label="手机号码" prop="phone" :label-width="formLabelWidth">
+                <el-form-item label="新手机号码" prop="phone" :label-width="formLabelWidth">
                     <el-input v-model="ruleForm.phone" placeholder="请输入新的手机号"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password" :label-width="formLabelWidth">

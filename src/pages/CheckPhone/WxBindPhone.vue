@@ -126,8 +126,13 @@ export default {
                 if (result.data) {
                     Message.success("验证码已经发送，请注意查看");
                 } else {
-                    Message.error("验证码发送失败");
+                    if (result.code ===-3) {
+                        Message.error('请更换手机号')
+                    }else{
+                        Message.error("验证码发送失败");
+                    }
                 }
+
             });
         }, 
         timer(){

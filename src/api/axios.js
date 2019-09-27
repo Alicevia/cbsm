@@ -7,10 +7,10 @@ function formatData(data) {
     data = '?' + data
     return data
 }
-let ajax;
+
 // export default function ajax(url, data = {}, type = 'GET', flag = true) {
 
-export default function ajax({ url, data = {}, type = 'GET', flag = true }) {
+export default function _axios({ url, data = {}, type = 'GET', flag = true }) {
     // console.log(url,data,type,flag)
     if (flag) {
         data = formatData(data)

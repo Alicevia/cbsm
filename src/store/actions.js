@@ -72,7 +72,7 @@ export default {
             let data = result.data
             commit(TYPES.ALI_MESSAGE_INFO,{data})
         }else {
-            Message.error('微信授权后可使用阿里短信业务')
+            Message.error('微信授权，初始化信息后可使用阿里短信业务')
         }
     },
     // 修改阿里短信服务
