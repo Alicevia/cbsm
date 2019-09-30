@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from 'src/router/'
 import { Message } from 'element-ui'
-
+import store from '../store'
 // if (process.env.NODE_ENV == 'development') {    
 //     axios.defaults.baseURL = 'https://www.baidu.com';} 
 // else if (process.env.NODE_ENV == 'debug') {    
@@ -19,11 +19,14 @@ import { Message } from 'element-ui'
 //axios.defaults.withCredentials = false;// 表示跨域请求时是否需要使用凭证
 axios.defaults.baseURL = 'http://www.cluster-dt.com:8082/'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
+// axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 axios.defaults.timeout = 10000;
 //请求拦截器
 axios.interceptors.request.use(function (config) {
-    // config.headers['user-token'] = localStorage.getItem('user-token');
+    let userToken = store.state.userToken
+    if (userToken) {
+        config.headers['user-token'] = userToken;
+    }
     //console.log(config)//获取到所有的设置
     return config;
 }, function (err) {
@@ -43,8 +46,9 @@ axios.interceptors.response.use(function (response) {
         if (response.headers['user-token'] && response.data.succeed) {
             let userToken = response.headers['user-token']
             localStorage.setItem('user-token', userToken)
-            axios.defaults.headers.common['user-token'] = userToken
-            axios.defaults.headers.common['Cache-Control'] = 'no-cache'
+            store.dispatch('getUserToken',userToken)
+            // axios.defaults.headers.common['user-token'] = userToken
+            // axios.defaults.headers.common['Cache-Control'] = 'no-cache'
         }
     }
     return response

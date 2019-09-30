@@ -66,8 +66,10 @@ export default {
         },
     //     // 检测userToken是否有效
         async checkUserToken(){
-            let localUserToken = localStorage.getItem('user-token')
-            if (localUserToken) {//确认是否过期            
+            // let localUserToken = localStorage.getItem('user-token')
+            let localUserToken = this.userToken
+            if (localUserToken) {//确认是否过期
+            // console.log('---')            
                 this.checkUserPhone_SaveUserInfo()
             }else {
                 let {search} = window.location

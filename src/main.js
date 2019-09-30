@@ -31,8 +31,9 @@ Vue.config.productionTip = false
 
 function syncStorageToAxios() {
     if (localStorage.getItem('user-token')) {
-        axios.defaults.headers.common['user-token'] = localStorage.getItem('user-token');
- 
+        let userToken =  localStorage.getItem('user-token')
+        axios.defaults.headers.common['user-token'] = userToken;
+        store.dispatch('getUserToken',userToken)
     }
 }
 syncStorageToAxios()

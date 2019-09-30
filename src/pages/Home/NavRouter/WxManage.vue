@@ -21,6 +21,7 @@
                 <el-form-item label="微信授权">
                     <span>{{isAuth}}</span>
                     <el-button
+                        :disabled="firstTime"
                         @click="togglePopupWx"
                         type="primary"
                         style="marginLeft:.2rem"
@@ -185,6 +186,9 @@ export default {
     mounted() {
         
     },
+    activated(){
+
+    },
 
     methods: {
         ...mapActions([
@@ -204,6 +208,7 @@ export default {
                 if (this.firstTime) {
                     let data = this.cellectWeChatInfo();
                     let result = await reqInitWeChatAuthInfo(data);
+                    console.log(result)
                     if (result.succeed) {
                         Message.success("初始化信息成功");
                         // this.modiWeChatInfo(result.data)
@@ -287,13 +292,13 @@ export default {
                 };
                 let result = await reqCheckAuth(data);
                 if (result.succeed && result.data.isAuthorize) {
-                    if (!result.data.id) {
+                    if (this.firstTime) {
                         Message.success("公众号已授权,需要初始化信息");
                     } else {
                         Message.success("公众号已授权");
                     }
                 } else {
-                    Message.success("公众号未授权");
+                    Message.success("公众号未授权,请先初始化信息方可授权");
                 }
             });
         },

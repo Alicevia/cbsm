@@ -148,11 +148,12 @@ export default {
 
     methods: {
         ...mapActions(["modiAliMessageInfo", "getFindMessage"]),
-
+        // 点击修改短信服务
         changeAliMessageServe() {
             this.$refs["messageServe"].validate(async v => {
                 if (v) {
                     let result = await reqModiAliMessage(this.aliMessageInfo);
+                    this.forbiddenInput()
                     if (result.succeed) {
                         Message.success("短信修改成功");
                     } else {
