@@ -18,6 +18,7 @@ import store from '../store'
 // axios.defaults.baseURL='http://192.168.50.144:8888/monitor-pc-api/'
 //axios.defaults.withCredentials = false;// 表示跨域请求时是否需要使用凭证
 axios.defaults.baseURL = 'http://www.cluster-dt.com:8082/'
+// axios.defaults.baseURL = 'http://www.cluster-dt.com:8888/opwx/'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 // axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 axios.defaults.timeout = 10000;
@@ -38,6 +39,7 @@ axios.interceptors.response.use(function (response) {
     if (response.data.succeed === false && response.data.code === 401) {//检测所有的响应
         Message.error('用户信息已过期')
         localStorage.removeItem('user-token');
+        store.dispatch('deleteUserToken')
         router.replace({ path: '/login' })
         // location.href="http://192.168.50.236:8080/login"
     }//如果返回的数据提示user-token过期 那么会自动跳转到login

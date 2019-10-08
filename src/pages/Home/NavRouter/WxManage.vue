@@ -36,7 +36,9 @@
                     ></el-switch>
                 </el-form-item>
 
-                <template v-if="wxSwitch">
+
+                <transition name='fade'>
+                <div v-if="wxSwitch">
                     <el-form-item label="上线通知">
                         <el-input
                             :disabled="modiControl.online"
@@ -73,7 +75,10 @@
                         ></el-input>
                         <span class="cursor-pointer" @click="changeModiControl('report')">修改</span>
                     </el-form-item>
-                </template>
+                </div>
+                </transition>
+
+                
 
                 <el-form-item label="微信公众号名称" prop="name">
                     <el-input
@@ -348,5 +353,11 @@ export default {
 .cursor-pointer {
     color: #409eff;
     cursor: pointer;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

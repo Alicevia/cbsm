@@ -1,10 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import store from 'src/store'
 Vue.use(Router)
-
-
-
 let router =  new Router({
     linkActiveClass:'active',
     // mode:'history',
@@ -13,7 +10,16 @@ let router =  new Router({
             path: '/', 
             redirect:'/home/wx',
             component: ()=>import('pages/Home/Home'),
-       
+            // beforeEnter: (to, from, next) => {
+            //     // console.log(to)
+            //     // console.log(from)
+            //     // console.log(store.state)
+            //     if (store.state.userToken) {
+            //         next()
+            //     }else {
+            //         next({path:'/login'})
+            //     }
+            // },
             children:[
                 {
                     path:'/home/wx',
@@ -27,9 +33,6 @@ let router =  new Router({
                     path:'/home/account',
                     component:()=>import('pages/Home/NavRouter/AccountInfo')
                 },
-        
-                
-
             ]
         },
         {

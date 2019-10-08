@@ -8,9 +8,12 @@
         <div class="home-right">
             <Logout />
             <div class="home-right-wrap">
-                <keep-alive>
-                    <router-view></router-view>
-                </keep-alive>
+                <transition name="slide-left"  mode='out-in' >
+                    <keep-alive>
+                        <router-view></router-view>
+                    </keep-alive>
+                </transition>
+               
             </div>
 
         </div>
@@ -73,6 +76,7 @@ export default {
                 this.checkUserPhone_SaveUserInfo()
             }else {
                 let {search} = window.location
+                // console.log(window.location)
                 if(search){
                     let {accessToken,openid} = qs.parse(search,{ ignoreQueryPrefix: true })     
                     // console.log({accessToken,openid})     
@@ -81,6 +85,7 @@ export default {
                     // console.log(result,'------------------')
                     if (result.succeed) {
                         this.checkUserPhone_SaveUserInfo()
+                        // window.location.search = ''
                     }else {
                         Message.error('微信登陆失败，请重新登陆')
                         this.$router.push({path:'/login'})
@@ -117,6 +122,18 @@ export default {
             height: 100%;
             align-items: center;
             justify-content: center;
+            .slide-left-enter{
+                opacity:0;
+                transform: translate3d(100%,0,0)
+            }
+
+            .slide-left-enter-active,.slide-left-leave-active{
+                transition: all .5s  
+            }
+            .slide-left-leave-to{
+                opacity:0;
+                transition: translate3d(-100%,0,0)  
+            }
         }
     }
 }

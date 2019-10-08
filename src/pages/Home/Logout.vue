@@ -19,15 +19,16 @@ export default {
     mounted() {},
 
     methods: {
-        ...mapActions(["getUserLogout"]),
+        ...mapActions(["getUserLogout",'deleteUserToken']),
 
         async logOut() {
             let result = await reqLogout();
-            
             if (result.data) {
                 localStorage.removeItem("user-token");
+                this.deleteUserToken()
                 Message.success('您已退出登录')
                 this.$router.replace({ path: "/login" });
+                window.location.href ='http://'+ window.location.host
             }else{
                 Message.error('用户信息已过期，请刷新页面重新登陆')
             }

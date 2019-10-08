@@ -10,20 +10,11 @@ export default {
     // async getUserLogout(){
     //     let result = await allReq.reqLogout()
     //     return Promise.resolve(result)
-
     // },
-    // 用户手机密码登陆
-    // async getPhoneLogin({ commit }, data) {
-    //     let result = await allReq.reqPhoneLogin(data)
-    //     if (result.data) {
-    //         localStorage.getItem('user-token')
-    //         commit(TYPES.DELETE_USRE_TOKEN)
-    //         return Promise.resolve(true)
-    //     }
-
-
-
-    // },
+    // 删除usertoken
+    deleteUserToken({ commit }) {
+        commit(TYPES.DELETE_USRE_TOKEN)
+    },
     //保存userToken
     getUserToken({ commit }, userToken) {
         commit(TYPES.RECEIVE_USER_TOKEN, { userToken })

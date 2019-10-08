@@ -18,63 +18,68 @@
                         inactive-color="#ff4949"
                     ></el-switch>
                 </el-form-item>
-                <template v-if="messageSwitch">
-                    <el-form-item label="签名名称" prop="signName">
-                        <el-input
-                            class="input-width"
-                            :disabled="inputControl.signName"
-                            @input='changeAliMessageInfo({"signName":$event})'
-                            :value="aliMessageInfo.signName"
-                        ></el-input>
-                        <span class="modify" @click="changeInputControl('signName')">修改</span>
-                    </el-form-item>
-                    <el-form-item label="KeyID" prop="accessKeyID">
-                        <el-input
-                            class="input-width"
-                            :disabled="inputControl.accessKeyID"
-                            @input='changeAliMessageInfo({"accessKeyID":$event})'
-                            :value="aliMessageInfo.accessKeyID"
-                        ></el-input>
-                        <span class="modify" @click="changeInputControl('accessKeyID')">修改</span>
-                    </el-form-item>
-                    <el-form-item label="KeySecret" prop="accessKeySecret">
-                        <el-input
-                            class="input-width"
-                            :disabled="inputControl.accessKeySecret"
-                            @input='changeAliMessageInfo({"accessKeySecret":$event})'
-                            :value="aliMessageInfo.accessKeySecret"
-                        ></el-input>
-                        <span class="modify" @click="changeInputControl('accessKeySecret')">修改</span>
-                    </el-form-item>
-                    <el-form-item label class="code">
-                        <span>模板CODE</span>
-                    </el-form-item>
-                    <el-form-item label="报警通知" prop="warnSmsNotice">
-                        <el-input
-                            class="input-width"
-                            :disabled="inputControl.warnSmsNotice"
-                            @input='changeAliMessageInfo({"warnSmsNotice":$event})'
-                            :value="aliMessageInfo.warnSmsNotice"
-                        ></el-input>
-                        <span class="modify" @click="changeInputControl('warnSmsNotice')">修改</span>
-                    </el-form-item>
-                    <el-form-item label="验证码" prop="verificationCode">
-                        <el-input
-                            class="input-width"
-                            :disabled="inputControl.verificationCode"
-                            @input='changeAliMessageInfo({"verificationCode":$event})'
-                            :value="aliMessageInfo.verificationCode"
-                        ></el-input>
-                        <span class="modify" @click="changeInputControl('verificationCode')">修改</span>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button
-                            type="primary"
-                            class="button-width"
-                            @click="changeAliMessageServe"
-                        >保存</el-button>
-                    </el-form-item>
-                </template>
+                  <transition name="fade">
+                      <div v-if="messageSwitch">
+                      <el-form-item label="签名名称" prop="signName">
+                          <el-input
+                              class="input-width"
+                              :disabled="inputControl.signName"
+                              @input='changeAliMessageInfo({"signName":$event})'
+                              :value="aliMessageInfo.signName"
+                          ></el-input>
+                          <span class="modify" @click="changeInputControl('signName')">修改</span>
+                      </el-form-item>
+                      <el-form-item label="KeyID" prop="accessKeyID">
+                          <el-input
+                              class="input-width"
+                              :disabled="inputControl.accessKeyID"
+                              @input='changeAliMessageInfo({"accessKeyID":$event})'
+                              :value="aliMessageInfo.accessKeyID"
+                          ></el-input>
+                          <span class="modify" @click="changeInputControl('accessKeyID')">修改</span>
+                      </el-form-item>
+                      <el-form-item label="KeySecret" prop="accessKeySecret">
+                          <el-input
+                              class="input-width"
+                              :disabled="inputControl.accessKeySecret"
+                              @input='changeAliMessageInfo({"accessKeySecret":$event})'
+                              :value="aliMessageInfo.accessKeySecret"
+                          ></el-input>
+                          <span class="modify" @click="changeInputControl('accessKeySecret')">修改</span>
+                      </el-form-item>
+                      <el-form-item label class="code">
+                          <span>模板CODE</span>
+                      </el-form-item>
+                      <el-form-item label="报警通知" prop="warnSmsNotice">
+                          <el-input
+                              class="input-width"
+                              :disabled="inputControl.warnSmsNotice"
+                              @input='changeAliMessageInfo({"warnSmsNotice":$event})'
+                              :value="aliMessageInfo.warnSmsNotice"
+                          ></el-input>
+                          <span class="modify" @click="changeInputControl('warnSmsNotice')">修改</span>
+                      </el-form-item>
+                      <el-form-item label="验证码" prop="verificationCode">
+                          <el-input
+                              class="input-width"
+                              :disabled="inputControl.verificationCode"
+                              @input='changeAliMessageInfo({"verificationCode":$event})'
+                              :value="aliMessageInfo.verificationCode"
+                          ></el-input>
+                          <span class="modify" @click="changeInputControl('verificationCode')">修改</span>
+                      </el-form-item>
+                      <el-form-item>
+                          <el-button
+                              type="primary"
+                              class="button-width"
+                              @click="changeAliMessageServe"
+                          >保存</el-button>
+                      </el-form-item>
+                  </div>
+                  </transition>
+                
+                
+
             </el-form>
         </div>
     </div>
@@ -193,6 +198,12 @@ export default {
     color: #00b7c5;
     text-decoration: underline;
     cursor: pointer;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
 
