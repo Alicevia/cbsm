@@ -96,22 +96,29 @@ export default {
     methods: {
         ...mapActions(['getUserInfo']),
         async wxBindPhone(){
-            let {password,phone,authCode} = this.ruleForm
-            let data = {
-                password,
-                phone,
-                verificationCode:authCode
-            }
-            let result = await reqWxBindPhone(data)
-            if (result.data) {
-                Message.success('手机绑定已经完成')
-                this.dialogFormVisible=false
-                this.getUserInfo()
-                this.$router.replace({path:'/'})
-            }else{
-                Message.error('绑定失败，请重新验证')
-                this.$router.replace({path:'/login'})
-            }
+            this.$refs['bindPhone'].validate(async valid =>{
+              if (!valid) return 
+              let {password,phone,authCode} = this.ruleForm
+              let data = {
+                  password,
+                  phone,
+                  verificationCode:authCode
+              }
+              let result = await reqWxBindPhone(data)
+              if (result.data) {
+                  Message.success('手机绑定已经完成')
+                  this.dialogFormVisible=false
+                  this.getUserInfo()
+                  this.$router.replace({path:'/'})
+              }else{
+                  Message.error('绑定失败，请重新验证')
+                  this.$router.replace({path:'/login'})
+              }
+
+
+            })
+           
+
         },
         receiveAuthCode(){
             if (this.timeId) {

@@ -1,5 +1,9 @@
 <template>
     <div class="login-land">
+        <router-link to="login/phone" class="back">
+        <span class="iconfont">&#xe62c;</span>
+        返回
+        </router-link>
         <div class="qrcode" id="qrcode"></div>
     </div>
 </template>
@@ -43,24 +47,21 @@ export default {
                 scope: "snsapi_login",
                 redirect_uri:encodeURIComponent(redirect_uri),
                 state: Math.ceil(Math.random() * 1000),
-                style: "black",           
+                style: "black",
+                self_redirect:false
             });
         },
     //   点击弹出二维码
         async getWeChatQRCode(){
-            let {href} = window.location
+            let href = window.location.href.split('#')[0];
             let result = await reqWeChatQRCode({trueUrl:href})
             let {appid,login,redirect_uri} = result.data
-            //"http://wx.cluster-iot.cn/xx?trueUrl=http://192.168.50.236:8080/login?openid=oBUh059mnb-GkVYeGmJNouSQOBAo"  重定向网址
-            let url = qs.parse(redirect_uri)
-            let frontUrl = Object.keys(url) //obj[0]可以获取到前面一段url
-            url = utils.queryURLParameter(url[frontUrl[0]])
-            redirect_uri = `${frontUrl[0]}=http://${url.host}`
-            // redirect_uri = `${frontUrl[0]}=http://${url.host}`
-            //显示二维码
-            this.qrcode = login //login是二维码图片 
             //扫码
-            this.$nextTick(()=>{this.getOpenIdAccessToken(appid,redirect_uri)})              
+            this.getOpenIdAccessToken(appid,redirect_uri)  
+            // 解决qq浏览器弹出问题
+            let iframe = document.querySelector('#qrcode>iframe')
+            iframe.sandbox ='allow-scripts allow-top-navigation allow-same-origin'
+                
              //  http://192.168.50.236:8080/?openid=oBUh059mnb-GkVYeGmJNouSQOBAo&accessToken=25_oXBtGHvN1AhmF2-cky27mki0Q7LNjn5h2qfmzZTqPjmPwlM-IhX3eaAnFXxDSOgHkBpzrQM_fvbdEfAq5bxrHI2LbMK-VtoguoCYtlXzINQ#/ 
         },
  
@@ -81,6 +82,10 @@ export default {
     height: 480px;
     width: 600px;
     box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.2);
+    .back{
+      color:  rgba(55, 61, 65, 1);
+      font-size: 14px;
+    }
     .login-title {
         width: 560px;
         a {

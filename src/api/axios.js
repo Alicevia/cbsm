@@ -11,11 +11,7 @@ function formatData(data) {
 // export default function ajax(url, data = {}, type = 'GET', flag = true) {
 
 export default function _axios({ url, data = {}, type = 'GET', flag = true }) {
-    // console.log(url,data,type,flag)
-    // if (flag) {
-    //     data = formatData(data)
-    //     url += data
-    // }
+
     return new Promise((resolve, reject) => {
         let promise
         // 1. 执行异步ajax请求
@@ -72,6 +68,7 @@ export default function _axios({ url, data = {}, type = 'GET', flag = true }) {
             // 3. 如果失败了, 不调用reject(reason), 而是提示异常信息
         }).catch(error => {
             // reject(error)
+            console.log(error)
             Message.error('请求出错了--: ' + error.message)
         })
     })

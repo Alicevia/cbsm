@@ -38,7 +38,7 @@
             </el-form>
         </div>
     </div>
-    <ResetPassWord :dialogFormVisible='dialogFormVisibleResetPassword' @changeDialogFormVisible='changeDialogFormVisibleResetPassword'  />
+    <ResetPassWord :dialogFormVisible='dialogFormVisibleResetPassword' @changeDialogFormVisible='changeDialogFormVisibleResetPassword'/>
     <ChangePhone :dialogFormVisible='dialogFormVisibleChangePhone' :changeDialogFormVisible='changeDialogFormVisibleChangePhone'  />
     </div>
 
@@ -46,7 +46,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import {reqModiUserInfo} from 'src/api'
+import {reqModiUserInfo,reqUserInfo} from 'src/api'
 import { Message } from 'element-ui';
 import ResetPassWord from 'pages/Home/Components/ResetPassWord'
 import ChangePhone from 'pages/Home/Components/ChangePhone'
@@ -65,7 +65,11 @@ export default {
     watch:{
       
     },
+    created() {
+    },
     mounted() {
+     
+    
     },
     methods: {
         ...mapActions(['getUserInfo']),

@@ -10,16 +10,20 @@ let router =  new Router({
             path: '/', 
             redirect:'/home/wx',
             component: ()=>import('pages/Home/Home'),
-            // beforeEnter: (to, from, next) => {
-            //     // console.log(to)
-            //     // console.log(from)
-            //     // console.log(store.state)
-            //     if (store.state.userToken) {
-            //         next()
-            //     }else {
-            //         next({path:'/login'})
-            //     }
-            // },
+            beforeEnter: (to, from, next) => {
+                // console.log(to)
+                // console.log(from)
+                // console.log(store.state)
+               if (from.path==='/') {
+                  next()
+                  return
+               }
+                if (store.state.userToken) {
+                    next()
+                }else {
+                    next({path:'/login'})
+                }
+            },
             children:[
                 {
                     path:'/home/wx',
@@ -66,7 +70,15 @@ let router =  new Router({
         },
         {
             path:'/bindphone',
-            component:()=>import('pages/CheckPhone/WxBindPhone')
+            component:()=>import('pages/CheckPhone/WxBindPhone'),
+            beforeEnter: (to, from, next) => {
+              if (from.path==='/home/wx') {
+                next()
+                
+              }else{
+                next({path:'/login'})
+              }
+          },
         },
         {
             path:'*',

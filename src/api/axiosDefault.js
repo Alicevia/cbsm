@@ -10,12 +10,12 @@ import store from '../store'
 // else if (process.env.NODE_ENV == 'production') {    
 //     axios.defaults.baseURL = 'https://www.production.com';
 // }
-// axios.defaults.baseURL = 'http://192.168.1.224:8888';//赵小超
-// axios.defaults.baseURL = 'http://192.168.50.163:8888';//赵俊
-// axios.defaults.baseURL='http://192.168.50.30:8082/'//杨卓
+//axios.defaults.baseURL = 'http://192.168.1.224:8888';//赵小超
+//axios.defaults.baseURL = 'http://192.168.50.163:8888';//赵俊
+//axios.defaults.baseURL='http://192.168.50.30:8082/'//杨卓
 //axios.defaults.baseURL = 'http://iot.cluster-iot.com:7070/gs/';//外网测试
 //axios.defaults.baseURL='http://192.168.50.236:8080'; //本地测试
-// axios.defaults.baseURL='http://192.168.50.144:8888/monitor-pc-api/'
+//axios.defaults.baseURL='http://192.168.50.144:8888/monitor-pc-api/'
 //axios.defaults.withCredentials = false;// 表示跨域请求时是否需要使用凭证
 axios.defaults.baseURL = 'http://www.cluster-dt.com:8082/'
 // axios.defaults.baseURL = 'http://www.cluster-dt.com:8888/opwx/'
@@ -28,9 +28,10 @@ axios.interceptors.request.use(function (config) {
     if (userToken) {
         config.headers['user-token'] = userToken;
     }
-    //console.log(config)//获取到所有的设置
+    // console.log(config)//获取到所有的设置
     return config;
 }, function (err) {
+  //  console.log(err) 目前没见到可以进来的请求错误 大都是响应出错
     return Promise.reject(err)
 });
 //响应拦截器设置user-token过期，重新授权
@@ -55,6 +56,7 @@ axios.interceptors.response.use(function (response) {
     }
     return response
 }, error => {
+    // console.log('response',error) 会被后面的catch
     return Promise.reject(error)
 });
 
