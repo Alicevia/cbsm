@@ -153,7 +153,7 @@ export default {
           // that.$emit("upload", data, that.skuname);
         });
       }
-      // this.dialogVisible = false;
+      this.dialogVisible = false;
     }
   },
 

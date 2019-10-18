@@ -48,19 +48,29 @@ export default {
                 redirect_uri:encodeURIComponent(redirect_uri),
                 state: Math.ceil(Math.random() * 1000),
                 style: "black",
-                self_redirect:false
             });
         },
     //   点击弹出二维码
         async getWeChatQRCode(){
             let href = window.location.href.split('#')[0];
+            console.log(href)
             let result = await reqWeChatQRCode({trueUrl:href})
             let {appid,login,redirect_uri} = result.data
             //扫码
-            this.getOpenIdAccessToken(appid,redirect_uri)  
-            // 解决qq浏览器弹出问题
+            this.getOpenIdAccessToken(appid,redirect_uri)
+            // console.log(redirect_uri)  
+     
+            new WxLogin({
+                id: "qrcode",
+                appid,
+                scope: "snsapi_login",
+                redirect_uri:encodeURIComponent(redirect_uri),
+                state: Math.ceil(Math.random() * 1000),
+                style: "black",
+            });
+
             let iframe = document.querySelector('#qrcode>iframe')
-            iframe.sandbox ='allow-scripts allow-top-navigation allow-same-origin'
+            iframe.sandbox = 'allow-scripts allow-top-navigation allow-same-origin'
                 
              //  http://192.168.50.236:8080/?openid=oBUh059mnb-GkVYeGmJNouSQOBAo&accessToken=25_oXBtGHvN1AhmF2-cky27mki0Q7LNjn5h2qfmzZTqPjmPwlM-IhX3eaAnFXxDSOgHkBpzrQM_fvbdEfAq5bxrHI2LbMK-VtoguoCYtlXzINQ#/ 
         },

@@ -282,7 +282,7 @@ export default {
     },
     // 获取裁切组件的图片file格式
     getChildImgFile(file,baseImg){
-      console.log(baseImg)
+      // console.log(baseImg)
       this.img = file
        this.modiWeChatInfo({ customerIcon: baseImg});
     },
