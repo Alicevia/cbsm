@@ -27,8 +27,15 @@ export default {
                 localStorage.removeItem("user-token");
                 this.deleteUserToken()
                 Message.success('您已退出登录')
-                this.$router.replace({ path: "/login" });
-                window.location.href ='http://'+ window.location.host
+                let a = setTimeout(()=>{
+                  clearTimeout(a)
+                  // this.$router.replace({ path: "/login/phone" });
+                  let origin = window.location.origin
+                  let pathname = window.location.pathname
+
+                  window.location.href =origin+pathname
+                },500)
+
             }else{
                 Message.error('用户信息已过期，请刷新页面重新登陆')
             }
