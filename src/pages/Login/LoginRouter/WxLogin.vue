@@ -36,7 +36,7 @@ export default {
       let pathname = window.location.pathname;
       let href = origin + pathname;
       let result = await reqWeChatQRCode({ trueUrl: href });
-      console.log(result);
+      // console.log(result);
       if (result.code === 0) {
         let { appid, login, redirect_uri } = result.data;
         new WxLogin({

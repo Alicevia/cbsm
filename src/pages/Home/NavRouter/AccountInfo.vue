@@ -24,7 +24,7 @@
                     <span @click="changeDialogFormVisibleChangePhone">{{userInfo.phone?'更换手机':'未绑定'}}</span>
                 </el-form-item>
                 <el-form-item label="邮箱">
-                    <el-input  v-model="userInfo.email" class="input-width"></el-input>
+                    <el-input v-model="userInfo.email" class="input-width"></el-input>
                 </el-form-item>
                 <el-form-item label="地址">
                     <el-input v-model="userInfo.address" class="input-width"></el-input>
@@ -84,30 +84,34 @@ export default {
         async changeUserInfo(){
             let {address='',email='',company='',name='',nickName='',headPicture=''} = this.userInfo
             let info = {address,email,company,name,nickName,headPicture}
+            // console.log(info)
             let result = await reqModiUserInfo(info)
+            // console.log(result)
             if (result.succeed) {
                 Message.success('修改成功')
-                this.getUserInfo()
+                // this.getUserInfo()
+            }else{
+              Message.error('修改失败，请刷新页面')
             }
 
         },
-        handleAvatarSuccess(res, file) {
-            console.log(res,file)
-            this.imageUrl = URL.createObjectURL(file.raw);
-            console.log(this.imageUrl)
-        },
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === "image/jpeg";
-            const isLt2M = file.size / 1024 / 1024 < 2;
+        // handleAvatarSuccess(res, file) {
+        //     console.log(res,file)
+        //     this.imageUrl = URL.createObjectURL(file.raw);
+        //     console.log(this.imageUrl)
+        // },
+        // beforeAvatarUpload(file) {
+        //     const isJPG = file.type === "image/jpeg";
+        //     const isLt2M = file.size / 1024 / 1024 < 2;
 
-            if (!isJPG) {
-                this.$message.error("上传头像图片只能是 JPG 格式!");
-            }
-            if (!isLt2M) {
-                this.$message.error("上传头像图片大小不能超过 2MB!");
-            }
-            return isJPG && isLt2M;
-        }
+        //     if (!isJPG) {
+        //         this.$message.error("上传头像图片只能是 JPG 格式!");
+        //     }
+        //     if (!isLt2M) {
+        //         this.$message.error("上传头像图片大小不能超过 2MB!");
+        //     }
+        //     return isJPG && isLt2M;
+        // }
     },
     components: {
         ResetPassWord,ChangePhone

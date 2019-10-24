@@ -113,7 +113,7 @@ export default {
     }
     .home-right {
         flex: 1;
-        background-image: url("~assets/images/bg-home.png");
+        background-image: url('http://img.cluster-dt.com/bg-home.49316c4.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
         height: 100%;
@@ -126,7 +126,6 @@ export default {
                 opacity:0;
                 transform: translate3d(100%,0,0)
             }
-
             .slide-left-enter-active,.slide-left-leave-active{
                 transition: all .5s  
             }

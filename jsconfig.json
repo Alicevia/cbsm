@@ -1,16 +1,17 @@
-
 {
-    "compilerOptions": {
-        "baseUrl": "./",
-        "paths": {
-            "src": ["src"],
-            "assets":["src/assets"],
-            "pages":["src/pages"]
-        }
-    },
-    "exclude": ["node_modules", "dist"]
+  "compilerOptions": {
+      "target": "ES6",
+      "module": "commonjs",
+      "allowSyntheticDefaultImports": true,
+      "baseUrl": "./",
+      "paths": {
+        "pages/*": ["src/pages*"]
+      }
+  },
+  "exclude": [
+      "node_modules"
+  ]
 }
-
 
 // {
 //     "compilerOptions": {

@@ -17,9 +17,9 @@ import store from '../store'
 //axios.defaults.baseURL='http://192.168.50.236:8080'; //本地测试
 //axios.defaults.baseURL='http://192.168.50.144:8888/monitor-pc-api/'
 //axios.defaults.withCredentials = false;// 表示跨域请求时是否需要使用凭证
-axios.defaults.baseURL = 'http://www.cluster-dt.com:8082/'
-// axios.defaults.baseURL = 'http://172.31.100.189:8082/'
-// axios.defaults.baseURL = 'http://www.cluster-dt.com:8888/opwx/'
+axios.defaults.baseURL = 'https://www.cluster-dt.com/'
+
+// axios.defaults.baseURL = 'http://www.cluster-dt.com:8082/'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 // axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 axios.defaults.timeout = 10000;
@@ -58,6 +58,7 @@ axios.interceptors.response.use(function (response) {
     return response
 }, error => {
     // console.log('response',error) 会被后面的catch
+    console.log(error)
     return Promise.reject(error)
 });
 

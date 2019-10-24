@@ -1,6 +1,7 @@
 <template>
   <div class="wx-manage home-right-common">
     <h2 class="title">微信管理</h2>
+    
     <div class="wx-wrap">
       <el-form
         :label-position="labelPosition"

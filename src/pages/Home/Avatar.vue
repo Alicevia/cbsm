@@ -37,7 +37,7 @@ export default {
             width: 1rem;
             height: 1rem;
             background-color: #fff;
-            background-image: url('~assets/images/avatar.jpg');
+            // background-image: url('http://img.cluster-dt.com/avatar.a331aa0.jpg');
             background-size: cover;
             background-repeat: no-repeat;
         }
