@@ -27,7 +27,18 @@ let router = new Router({
       children: [
         {
           path: '/home/wx',
-          component: () => import('pages/Home/NavRouter/WxManage')
+          redirect:'/home/wx/public',
+          component: () => import('pages/Home/NavRouter/WxManage'),
+          children:[
+            {
+              path:'/home/wx/public',
+              component:()=> import('pages/Home/WxRouter/WxPublic')
+            },
+            {
+              path:'/home/wx/menus',
+              component:()=> import('pages/Home/WxRouter/WxMenus') 
+            }
+          ]
         },
         {
           path: '/home/message',
@@ -45,7 +56,7 @@ let router = new Router({
            
             {
               path: '/home/service/:id',
-              component: () => import('pages/Home/Components/ServiceManage/ServiceItem.vue')
+              component: () => import('pages/Home/Components/ServiceRouter/ServiceItem.vue')
 
             },
           ]

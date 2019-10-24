@@ -2,7 +2,7 @@
   <div class="service-manage home-right-common">
     <h2 class="title">服务管理</h2>
     <div class="service-manage-wrap">
-      <ServiceCategory />
+      <ServiceCategory :routerObj='routerObj' />
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
@@ -11,10 +11,14 @@
 </template>
 
 <script>
-import ServiceCategory from 'pages/Home/Components/ServiceManage/ServiceCategory'
+import ServiceCategory from 'pages/Home/Components/ServiceRouter/ServiceCategory'
 export default {
   data () {
     return {
+        routerObj:[
+        {path:'/home/service/1',title:'item1'},
+        {path:'/home/service/2',title:'item2'}
+      ]
     };
   },
 

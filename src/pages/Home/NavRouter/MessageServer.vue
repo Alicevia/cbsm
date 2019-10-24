@@ -191,7 +191,7 @@ export default {
 </script>
 <style lang='less' scoped>
 .code {
-    margin-top: 50px;
+ 
     margin-bottom: 5px;
 }
 .modify {
