@@ -2,7 +2,7 @@
   <div class="service-manage home-right-common">
     <h2 class="title">服务管理</h2>
     <div class="service-manage-wrap">
-      <ServiceCategory :routerObj='routerObj' />
+      <LabelRouter :routerObj='routerObj' />
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ServiceCategory from 'pages/Home/Components/ServiceRouter/ServiceCategory'
+import LabelRouter from 'src/common/LabelRouter'
 export default {
   data () {
     return {
@@ -29,7 +29,7 @@ export default {
   methods: {},
 
   components: {
-    ServiceCategory
+    LabelRouter
   },
 }
 

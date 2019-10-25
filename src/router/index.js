@@ -28,15 +28,15 @@ let router = new Router({
         {
           path: '/home/wx',
           redirect:'/home/wx/public',
-          component: () => import('pages/Home/NavRouter/WxManage'),
+          component: () => import('pages/Home/NavRouter/WxManage/WxManage.vue'),
           children:[
             {
               path:'/home/wx/public',
-              component:()=> import('pages/Home/WxRouter/WxPublic')
+              component:()=> import('pages/Home/NavRouter/WxManage/WxRouter/WxPublic')
             },
             {
               path:'/home/wx/menus',
-              component:()=> import('pages/Home/WxRouter/WxMenus') 
+              component:()=> import('pages/Home/NavRouter/WxManage/WxRouter/WxMenus') 
             }
           ]
         },
@@ -51,19 +51,19 @@ let router = new Router({
         {
           path: '/home/service',
           redirect:'/home/service/1',
-          component: () => import('pages/Home/NavRouter/ServiceManage'),
+          component: () => import('pages/Home/NavRouter/ServiceManage/ServiceManage.vue'),
           children:[
            
             {
               path: '/home/service/:id',
-              component: () => import('pages/Home/Components/ServiceRouter/ServiceItem.vue')
+              component: () => import('pages/Home/NavRouter/ServiceManage/ServiceItem.vue')
 
             },
           ]
         },
         {
           path: '/home/admin',
-          component: () => import('pages/Home/NavRouter/Admin')
+          component: () => import('pages/Home/NavRouter/Admin/Admin.vue')
         },
       ]
     },

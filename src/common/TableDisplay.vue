@@ -1,6 +1,6 @@
 <template>
   <!-- 1,tab的外层包裹高度需要父级传递 -->
-  <div :style='tabWrapHeight'>
+  <div :style='tabWrapHeight' class="table-wrap">
   <table 
    class="table-show" 
    cellspacing="0" 
@@ -16,15 +16,17 @@
         <th>备注</th>-->
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td>王宇</td>
-        <td>小米公司</td>
-        <td>15579958465</td>
+    <tbody class="tbody">
+      <!-- <tr v-for="(item,index) in trData" :key="index">
+        <td>{{item.name}}</td>
+        <td>{{item.company}}</td>
+        <td>{{item.phone}}</td>
         <td>
-          <input class="remark" type="text" placeholder="备注" />
+          <slot></slot>
+          <input class="remark" type="text" :placeholder="item.bz" />
         </td>
-      </tr>
+      </tr> -->
+      <slot :data='trData'></slot>
     </tbody>
   </table>
   </div>
@@ -32,6 +34,7 @@
 </template>
 <script>
 export default {
+  props:['trData'],
   data() {
     return {
       thClass: {
@@ -40,6 +43,7 @@ export default {
         th3: { width: "1.5rem" },
         th4: { width: "2.6rem" }
       },
+   
       thData: [
         { category: "姓名", th: { width: "1.4rem" } },
         { category: "公司", th: { width: "3rem" } },
@@ -62,10 +66,14 @@ export default {
 };
 </script>
 <style lang='less' scoped>
+.table-wrap {
+   table-layout: fixed;
+}
 .table-show {
   width: 8rem;
   border: 1px solid #e5e5e5;
   border-collapse: collapse;
+ 
   .table-th {
     line-height: 0.5rem;
     background-color: #00b7c5;
@@ -73,9 +81,23 @@ export default {
     color: white;
     font-size: 0.18rem;
   }
+  // .tbody::-webkit-scrollbar {
+  //         display: none
+  //     }
+  .tbody {
+    tr {
+      &:hover {
+        background-color: #DDF8FF;
+        .remark {
+          background-color: #DDF8FF;
+        }
+      }
+    }
+  }
   .remark {
     text-align: center;
     background-color: #fff;
+
   }
   td {
     text-align: center;

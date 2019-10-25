@@ -2,19 +2,19 @@ import axios from '../axios'
 // 微信管理页面----------------------------------------------------
 // 获取公众号信息
 export const reqWeChatAuthInfo = ()=>axios({
-  url:'openwechat/auth/getWeChatAuth',
+  url:'auth/getWeChatAuth',
   flag:false
 })
 //初始化公众号信息
 export const reqInitWeChatAuthInfo = (data)=>axios({
-  url:'openwechat/auth/uploadCustomerImg',
+  url:'auth/uploadCustomerImg',
   data,
   type:'POST',
   flag:false
 })
 //修改公众号信息
 export const reqModiWeChatAuth = (data)=>axios({
-  url:'openwechat/auth/modifyWeChatAuth',
+  url:'auth/modifyWeChatAuth',
   data,
   type:'PUT',
   flag:false
@@ -24,7 +24,7 @@ export const reqModiWeChatAuth = (data)=>axios({
 
 // 通过appid查询公众号是否授权
 export const reqCheckAuth = (data)=>{
-  let url = `openwechat/auth/queryAuthorization/${data.appId}`
+  let url = `auth/queryAuthorization/${data.appId}`
   return axios({
       url,     
       flag:false
@@ -34,6 +34,6 @@ export const reqCheckAuth = (data)=>{
 
 // 用户扫码授权
 export const reqUserScanQR=()=>axios({
-url:'openwechat/auth/getPreAuthCode',
+url:'auth/getPreAuthCode',
 flag:false
 })

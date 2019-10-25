@@ -6,10 +6,11 @@
       <div class="operate">操作</div>
 
     </div>
+
     <ul class="service-show">
       <li class="service-item">
         <div class="item-icon">
-          <img src="../../../../assets/images/temp.png" alt="">
+          <img src="~src/assets/images/temp.png" alt="">
         </div>
         <div class="item-title">
           <h2>温度传感器</h2>
@@ -25,7 +26,7 @@
       </li>
        <li class="service-item">
         <div class="item-icon">
-          <img src="../../../../assets/images/press.png" alt="">
+          <img src="~src/assets/images/temp.png" alt="">
         </div>
         <div class="item-title">
           <h2>温度传感器</h2>
@@ -94,6 +95,7 @@ export default {
       height: .6rem;
       background-color: #DDF8FF;
       border-top: 1px solid white;
+      box-sizing: border-box;
       // &:first-child{
       //   border: none;
       // }

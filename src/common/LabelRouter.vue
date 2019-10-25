@@ -6,7 +6,6 @@
         tag="li"
         class="service-category-item"
       >{{item.title}}</router-link>
-     
     </ul>
   </div>
 </template>
