@@ -50,16 +50,7 @@ let router = new Router({
         },
         {
           path: '/home/service',
-          redirect:'/home/service/1',
           component: () => import('pages/Home/NavRouter/ServiceManage/ServiceManage.vue'),
-          children:[
-           
-            {
-              path: '/home/service/:id',
-              component: () => import('pages/Home/NavRouter/ServiceManage/ServiceItem.vue')
-
-            },
-          ]
         },
         {
           path: '/home/admin',

@@ -37,6 +37,26 @@ export default {
 
         state.weChatInfo = JSON.parse(JSON.stringify(state.weChatInfo))
 
+    },
+    //获取分类别
+    [TYPES.GET_GROUP_INFO](state,data){
+      state.groupInformation=data
+    },
+    //获取每个分类的数据
+    [TYPES.GET_GROUP_ITEM_INFO](state,{data,id,page}){
+      let {groupInformation} = state
+      groupInformation.forEach((item,index)=>{
+        if(item.id===id){
+          if (item['list']) {
+            item['list'].concat(data.list)
+          }else{
+            item['list'] = data.list
+            item['total'] = data.total
+          }
+        }
+      })
+      state.showCurrent = data.list
+      console.log(state.showCurrent)
     }
 
 }

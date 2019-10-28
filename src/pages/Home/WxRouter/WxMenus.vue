@@ -8,21 +8,12 @@
         <li>每次修改自定义菜单后，由于微信客户端缓存，需要24小时左右微信客户端才会显示生效。测试时可以尝试重新关注微信公众号，或者清除微信缓存。</li>
       </ul>
     </div>
-    <div style="overflow:hidden">
-      <el-button type="primary" class="wx-menus-btn" size="small">菜单添加</el-button>
-    </div>
-    <CustomMenus ></CustomMenus>
-    <div style="textAlign:center;marginTop:10px">
-      <el-button type="primary">生成自定义菜单</el-button>
-    </div>
-    
-    
+
+    <el-button type="primary" class="wx-menus-btn" size="small">菜单添加</el-button>
   </div>
 </template>
 
 <script>
-import CustomMenus from 'pages/Home/Components/CustomMenus'
-import Pagination from 'src/common/Pagination'
 export default {
   data() {
     return {};
@@ -34,10 +25,8 @@ export default {
 
   methods: {},
 
-  components: {
-    CustomMenus,Pagination
-  }
-}
+  components: {}
+};
 </script>
 <style lang='less' scoped>
 .wx-menus {

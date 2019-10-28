@@ -2,34 +2,41 @@
   <div class="service-manage home-right-common">
     <h2 class="title">服务管理</h2>
     <div class="service-manage-wrap">
-      <LabelRouter :routerObj='routerObj' />
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
+      <ServiceLabel :labelObj='groupInformation' />
+      <ServiceItem :serviceAry='showCurrent'></ServiceItem>
     </div>
   </div>
 </template>
 
 <script>
-import LabelRouter from 'src/common/LabelRouter'
+import ServiceLabel from './ServiceLabel'
+import ServiceItem from './ServiceItem'
+import { mapActions, mapState } from 'vuex';
 export default {
   data () {
     return {
-        routerObj:[
-        {path:'/home/service/1',title:'item1'},
-        {path:'/home/service/2',title:'item2'}
-      ]
+       
     };
   },
 
-  computed: {},
+  computed: {
+    ...mapState(['groupInformation','showCurrent'])
+  },
+  created(){
+    this.getGroupInfo()
 
-  mounted(){},
+  },
+  mounted(){
 
-  methods: {},
+  },
+
+  methods: {
+    ...mapActions(['getGroupInfo']),
+
+  },
 
   components: {
-    LabelRouter
+    ServiceLabel,ServiceItem
   },
 }
 

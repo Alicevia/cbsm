@@ -1,6 +1,6 @@
 <template>
   <div class="admin home-right-common">
-    <h2 class="title">服务管理</h2>
+    <h2 class="title">用户管理</h2>
     <div class="admin-wrap">
       <div class="intention">
         <h2>意向用户</h2>

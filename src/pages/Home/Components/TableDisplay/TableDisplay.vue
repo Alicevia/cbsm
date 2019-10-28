@@ -1,6 +1,6 @@
 <template>
   <!-- 1,tab的外层包裹高度需要父级传递 -->
-  <div :style='tabWrapHeight' class="table-wrap">
+  <div :style='tabWrapHeight'>
   <table 
    class="table-show" 
    cellspacing="0" 
@@ -16,17 +16,15 @@
         <th>备注</th>-->
       </tr>
     </thead>
-    <tbody class="tbody">
-      <!-- <tr v-for="(item,index) in trData" :key="index">
-        <td>{{item.name}}</td>
-        <td>{{item.company}}</td>
-        <td>{{item.phone}}</td>
+    <tbody>
+      <tr>
+        <td>王宇</td>
+        <td>小米公司</td>
+        <td>15579958465</td>
         <td>
-          <slot></slot>
-          <input class="remark" type="text" :placeholder="item.bz" />
+          <input class="remark" type="text" placeholder="备注" />
         </td>
-      </tr> -->
-      <slot :data='trData'></slot>
+      </tr>
     </tbody>
   </table>
   </div>
@@ -34,7 +32,6 @@
 </template>
 <script>
 export default {
-  props:['trData'],
   data() {
     return {
       thClass: {
@@ -43,7 +40,6 @@ export default {
         th3: { width: "1.5rem" },
         th4: { width: "2.6rem" }
       },
-   
       thData: [
         { category: "姓名", th: { width: "1.4rem" } },
         { category: "公司", th: { width: "3rem" } },
@@ -51,7 +47,7 @@ export default {
         { category: "备注", th: { width: "2.16rem" } }
       ],
       tabWrapHeight:{
-        height:'1.5rem'
+        height:'2rem'
       }
     };
   },
@@ -66,34 +62,16 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-.table-wrap {
-  margin-top: -.06rem;
-}
 .table-show {
   width: 8rem;
   border: 1px solid #e5e5e5;
   border-collapse: collapse;
- 
   .table-th {
-    line-height: 0.4rem;
+    line-height: 0.5rem;
     background-color: #00b7c5;
     text-align: center;
     color: white;
-    font-size: 0.16rem;
-    // font-weight: 1000;
-  }
-  // .tbody::-webkit-scrollbar {
-  //         display: none
-  //     }
-  .tbody {
-    tr {
-      &:hover {
-        background-color: #DDF8FF;
-        .remark {
-          background-color: #DDF8FF;
-        }
-      }
-    }
+    font-size: 0.18rem;
   }
   .remark {
     text-align: center;
@@ -101,7 +79,7 @@ export default {
   }
   td {
     text-align: center;
-    line-height: 0.4rem;
+    line-height: 0.5rem;
   }
 }
 </style>

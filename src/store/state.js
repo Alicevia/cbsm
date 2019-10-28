@@ -1,7 +1,10 @@
 export default {
-     userToken:'',
-     userInfo:{},
-     weChatInfo:{},
-     aliId:'',
-     aliMessageInfo:{}
+  userToken: '',
+  userInfo: {},
+  weChatInfo: {},
+  aliId: '',
+  aliMessageInfo: {},
+  groupInformation: [],
+  showCurrent:[]
+
 }

@@ -67,7 +67,7 @@ export default {
                 }
             }
         },
-    //     // 检测userToken是否有效
+     // 检测userToken是否有效
         async checkUserToken(){
             // let localUserToken = localStorage.getItem('user-token')
             let localUserToken = this.userToken
@@ -110,6 +110,7 @@ export default {
     height: 100%;
     .home-left {
         width: 3rem;
+
     }
     .home-right {
         flex: 1;
@@ -117,6 +118,8 @@ export default {
         background-size: 100% 100%;
         background-repeat: no-repeat;
         height: 100%;
+        overflow-y: scroll;
+        overflow-x: hidden;
         .home-right-wrap {
             display: flex;
             height: 100%;

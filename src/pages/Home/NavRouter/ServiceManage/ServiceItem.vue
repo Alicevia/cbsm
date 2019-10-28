@@ -2,42 +2,29 @@
   <div class="service-wrap">
     <div class="service-description">
       <div class="category">设备种类</div>
-      <div class="time">过期时间</div>
+      <div class="time">服务状态</div>
       <div class="operate">操作</div>
-
     </div>
-
     <ul class="service-show">
-      <li class="service-item">
+      <li class="service-item" v-for="(item) in serviceAry" :key="item.id">
         <div class="item-icon">
-          <img src="~src/assets/images/temp.png" alt="">
+          <img :src="item.serverPicture" alt />
         </div>
         <div class="item-title">
-          <h2>温度传感器</h2>
-          <p>温度的测量及控制对保证产品质量、提高生产效、率节约能源、生产安全...</p>
+          <h2>{{item.name}}</h2>
+          <p>{{item.content}}</p>
         </div>
         <div class="item-state">
-          <!-- <span class="past">已过期</span> -->
-          <span>2019.11.12</span>
+          <span class="past"></span>
+          <span>{{item.expirationDate}}</span>
         </div>
         <div class="item-operation">
-          <el-button type="primary" size="small">开通</el-button>
-        </div>
-      </li>
-       <li class="service-item">
-        <div class="item-icon">
-          <img src="~src/assets/images/temp.png" alt="">
-        </div>
-        <div class="item-title">
-          <h2>温度传感器</h2>
-          <p>温度的测量及控制对保证产品质量、提高生产效、率节约能源、生产安全...</p>
-        </div>
-        <div class="item-state">
-          <span class="past">已过期</span>
-          <!-- <span >（2019.11.12）</span> -->
-        </div>
-        <div class="item-operation">
-          <el-button type="warning" size="small">待审核</el-button>
+          <el-button
+            class="btn"
+            :type="btnColor(item.status)"
+            :disabled="item.status===0?false:true"
+            size="small"
+          >{{opreateStatus(item.status)}}</el-button>
         </div>
       </li>
     </ul>
@@ -45,44 +32,88 @@
 </template>
 <script>
 export default {
-  data () {
-    return {
-    };
+  props: {
+    serviceAry: {
+      type: Array
+    }
+  },
+  data() {
+    return {};
   },
 
-  computed: {},
+  computed: {
+    opreateStatus: function(status) {
+      return status => {
+        switch (status) {
+          case 0:
+            return "开通";
+            break;
+          case 1:
+            return "审核未通过";
+            break;
+          case 2:
+            return "正在审核";
+            break;
+          case 3:
+            return "已开通";
+            break;
+          default:
+            return "已过期";
+        }
+      };
+    },
+    btnColor(status) {
+      return (status) => {
+        switch (status) {
+          case 0:
+            return "primary";
+            break;
+          case 1:
+            return "danger";
+            break;
+          case 2:
+            return "warning";
+            break;
+          case 3:
+            return "success";
+            break;
+          default:
+            return "info";
+        }
+      };
+    }
+    // timeStatus(status)
+  },
 
-  mounted(){},
+  mounted() {},
 
   methods: {},
 
-  components: {},
-}
-
+  components: {}
+};
 </script>
 <style lang='less' scoped>
 .service-wrap {
-  .service-description{
+  .service-description {
     display: flex;
-    font-size: .16rem;
+    font-size: 0.16rem;
     font-weight: bold;
     text-align: center;
-    height: .5rem;
-    line-height: .5rem;
-    color:white;
-    background-color:#00B7C5;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    color: white;
+    background-color: #00b7c5;
     .category {
       width: 5rem;
-      border-right:1px solid white;
+      border-right: 1px solid white;
     }
     .time {
       width: 1.6rem;
       text-align: center;
-      border-right:1px solid white;
-
+      border-right: 1px solid white;
     }
     .operate {
-      width:1.2rem;
+      width: 1.2rem;
       text-align: center;
     }
   }
@@ -91,63 +122,64 @@ export default {
       display: flex;
       flex-flow: row nowrap;
       align-items: center;
-      padding: 0 .4rem;
-      height: .6rem;
-      background-color: #DDF8FF;
+      padding: 0 0.4rem;
+      padding-right: 0;
+      height: 0.6rem;
+      background-color: #ddf8ff;
       border-top: 1px solid white;
       box-sizing: border-box;
       // &:first-child{
       //   border: none;
       // }
       &:hover {
-        background-color: #E4EEF1;
+        background-color: #e4eef1;
       }
       .item-icon {
-        width: .4rem;
-        height: .4rem;
-        border-radius: .04rem;
+        width: 0.4rem;
+        height: 0.4rem;
+        border-radius: 0.04rem;
         background-color: #fff;
         img {
           display: block;
-          margin-left: .02rem;
-          margin-top: .02rem;
-          width: .36rem;
-          height: .36rem;
+          margin-left: 0.02rem;
+          margin-top: 0.02rem;
+          width: 0.36rem;
+          height: 0.36rem;
         }
-
       }
       .item-title {
         width: 3.95rem;
-        padding-left: .15rem;
+        padding-left: 0.15rem;
         h2 {
-          color: #373D41;
-          font-size: .14rem;
+          color: #373d41;
+          font-size: 0.14rem;
           font-weight: bold;
         }
         p {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          color: #7C7C7C;
-          font-size: .12rem;
+          color: #7c7c7c;
+          font-size: 0.12rem;
         }
       }
-      .item-state{
-        width: 1.92rem;
-        min-width: 1.3rem;
+      .item-state {
+        width: 1.9rem;
         box-sizing: border-box;
         text-align: center;
-        padding-right: .15rem;
+        padding-right: 0.15rem;
         .past {
           color: red;
         }
 
         // flex: 2;
-        
-
       }
-      .item-operation{
-        flex: 1;
+      .item-operation {
+        // flex: 1;
+        width: 1rem;
+        .btn {
+          display: inline;
+        }
         text-align: center;
       }
     }

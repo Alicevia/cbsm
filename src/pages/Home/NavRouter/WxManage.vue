@@ -1,7 +1,7 @@
 <template>
   <div class="wx-manage home-right-common">
     <h2 class="title">微信管理</h2>
-    <LabelRouter :routerObj="routerObj"/>
+    <ServiceCategory :routerObj="routerObj" />
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import LabelRouter from "src/common/LabelRouter";
+import ServiceCategory from "pages/Home/Components/ServiceRouter/ServiceCategory";
 
 export default {
 
@@ -33,14 +33,11 @@ export default {
   methods: {},
 
   components: {
-    LabelRouter
+    ServiceCategory
   }
 };
 </script>
 <style lang='less' scoped>
-// .wx-manage {
-//   // height:10rem;
-// }
 /deep/ .avatar-uploader .el-upload {
   cursor: pointer;
   position: relative;

@@ -19,6 +19,14 @@ export default {
     aliMessage(state){
         let aliId = state.aliId
         return aliId?false:true
-    }
+    },
+    //根据获取到的设备分组类别生成对象
+    // groupItemInfos(state){
+    //   let groupItemInfo = state.groupInformation
+    //   return groupItemInfo.map((item,index)=>{
+    //     return {[item.groupName]:[]}
+    //   })
+
+    // }
     
 }

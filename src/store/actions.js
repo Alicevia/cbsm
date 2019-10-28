@@ -64,7 +64,32 @@ export default {
     // 修改阿里短信服务
     modiAliMessageInfo({ commit }, data) {
         commit(TYPES.MODI_ALI_MESSAGE_INFO, { data })
+    },
+//--------------------------------服务管理
+    //获取服务分组类别
+    async getGroupInfo({commit}){
+      let result =await allReq.reqGroupInfo()
+      if(result.succeed){
+        let data = result.data
+        commit(TYPES.GET_GROUP_INFO,data)
+
+      }else {
+        Message.error('设备分组类别获取失败')
+      }
+    },
+    //获取每组服务的具体数据
+    async getGroupItemInfo({commit},data){
+      let {id,page} = data
+      
+      let result = await allReq.reqGroupItemInfo(data)
+      if(result.succeed){
+        let data = result.data
+        commit(TYPES.GET_GROUP_ITEM_INFO,{data,id,page})
+      }
     }
+
+
+
 
 
 
