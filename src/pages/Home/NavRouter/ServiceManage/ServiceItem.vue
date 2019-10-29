@@ -16,13 +16,14 @@
         </div>
         <div class="item-state">
           <span class="past"></span>
-          <span>{{item.expirationDate}}</span>
+          <span>{{item.expirationDate|formatTime}}</span>
         </div>
         <div class="item-operation">
           <el-button
+            @click="openService(item.id)"
             class="btn"
             :type="btnColor(item.status)"
-            :disabled="item.status===0?false:true"
+            :disabled="btnDisabled(item.status)"
             size="small"
           >{{opreateStatus(item.status)}}</el-button>
         </div>
@@ -31,6 +32,9 @@
   </div>
 </template>
 <script>
+
+import {Message} from 'element-ui'
+import {reqOpenService} from 'src/api'
 export default {
   props: {
     serviceAry: {
@@ -81,13 +85,52 @@ export default {
             return "info";
         }
       };
+    },
+    btnDisabled:function(status){
+       return (status) => {
+        switch (status) {
+          case 0:
+            return false;
+            break;
+          case 1:
+            return false;
+            break;
+          case 2:
+            return true;
+            break;
+          case 3:
+            return true;
+            break;
+          default:
+            return false;
+        }
+      };
     }
     // timeStatus(status)
   },
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    async openService(id){
+      let result = await reqOpenService({ manageId:id})
+      if (result.succeed) {
+        Message.success('开通成功，正在审核')
+        
+      }else{
+       Message.success('开通失败')
+      }
+    }
+  },
+  filters:{
+    formatTime(time){
+      // time='32323 0323'
+      if (time) {
+        return time.split(' ')[0]
+        
+      }
+    }
+  },
 
   components: {}
 };
@@ -148,7 +191,7 @@ export default {
         }
       }
       .item-title {
-        width: 3.95rem;
+        width:4.15rem;
         padding-left: 0.15rem;
         h2 {
           color: #373d41;
@@ -164,7 +207,7 @@ export default {
         }
       }
       .item-state {
-        width: 1.9rem;
+        width: 1.6rem;
         box-sizing: border-box;
         text-align: center;
         padding-right: 0.15rem;
@@ -176,7 +219,7 @@ export default {
       }
       .item-operation {
         // flex: 1;
-        width: 1rem;
+        width:1.2rem;
         .btn {
           display: inline;
         }

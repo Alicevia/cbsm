@@ -28,5 +28,31 @@ export default {
     //   })
 
     // }
+    //验证是否需要发送请求获取数据
+    checkLocalServiceData(state){
+      let {activeServiceInfo,groupInformation} = state
+      let {id,page} = activeServiceInfo
+      let flag = groupInformation.filter(item=>{
+        return item.id===id && item.allPage[page]
+      })
+      return flag
+    
+     
+      
+    },
+    // 获取当前展示的服务种类最大数目
+    getMaxService(state){
+      let {activeServiceInfo,groupInformation} = state
+      let maxPage
+      groupInformation.forEach(item=>{
+        if (item.id===activeServiceInfo.id) {
+          maxPage = item.total
+          
+        }
+      })
+
+
+      return maxPage
+    }
     
 }

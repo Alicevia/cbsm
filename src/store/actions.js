@@ -72,21 +72,35 @@ export default {
       if(result.succeed){
         let data = result.data
         commit(TYPES.GET_GROUP_INFO,data)
-
       }else {
         Message.error('设备分组类别获取失败')
       }
+      
     },
     //获取每组服务的具体数据
-    async getGroupItemInfo({commit},data){
-      let {id,page} = data
-      
-      let result = await allReq.reqGroupItemInfo(data)
+    async getGroupItemInfo({commit},payload){
+      let {id,page,size} = payload
+      let result = await allReq.reqGroupItemInfo(payload)
       if(result.succeed){
         let data = result.data
         commit(TYPES.GET_GROUP_ITEM_INFO,{data,id,page})
+      }else {
+        Message.error('获取设备分组具体数据失败')
       }
+    },
+    //保存当前请求的服务类的信息 
+    saveServiceInfo({commit},data){
+      commit(TYPES.SAVE_SERVICE_INFO,data)
+    },
+    // 展示最新的数据
+    modiShowCurrent({commit},data){
+      commit(TYPES.MODI_SHOW_CURRENT,data)
+    },
+    modiServiceStatus({commit},status){
+      commit(TYPES.MODI_SERVICE_STATUS,status)
     }
+
+
 
 
 

@@ -37,7 +37,6 @@ axios.interceptors.request.use(function (config) {
 });
 //响应拦截器设置user-token过期，重新授权
 axios.interceptors.response.use(function (response) {
-    // console.log(response) 
     if (response.data.succeed === false && response.data.code === 401) {//检测所有的响应
         Message.error('用户信息已过期')
         localStorage.removeItem('user-token');

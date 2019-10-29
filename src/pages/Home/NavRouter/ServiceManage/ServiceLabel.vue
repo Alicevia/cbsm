@@ -1,38 +1,56 @@
 <template>
   <div>
     <ul class="service-category">
-      <li v-for="item in labelObj" :key="item.id"
-      @click="receiveGroupItemInfo(item.id)"
-        class="service-category-item"
+      <li
+        v-for="(item,index) in labelObj"
+        :key="item.id"
+        @click="initGroupItemInfo({id:item.id,index})"
+        :class="activeClass(index)"
       >{{item.groupName}}</li>
     </ul>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import BUS from "src/assets/js/bus";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  props:{
-    labelObj:{
-      type:Array,
-      required:true,
+  props: {
+    labelObj: {
+      type: Array,
+      required: true
     }
   },
   data() {
-    return {};
+    return {
+      classIndex: "0"
+    };
   },
 
   computed: {
     // ...mapGetters([])
+    activeClass(index) {
+      return index => {
+        return this.classIndex === index
+          ? "service-category-item active"
+          : "service-category-item";
+      };
+    }
+  },
+  created() {
+    // 初始化选中传感器类
+    
   },
 
   mounted() {},
 
   methods: {
-    ...mapActions(['getGroupItemInfo']),
-        receiveGroupItemInfo(id){
-      
-      this.getGroupItemInfo({id,page:1})
+    ...mapActions(["getGroupItemInfo", "saveServiceInfo"]),
+    initGroupItemInfo({ id, index = 0, size = 9 }) {
+      this.classIndex = index;
+      let serviceInfo = {id,page: 0,size};
+      this.saveServiceInfo(serviceInfo)
+      this.getGroupItemInfo({ id, page: 0, size });
     }
   },
 
@@ -41,23 +59,23 @@ export default {
 </script>
 <style lang='less' scoped>
 .service-category {
-  margin-bottom: .2rem;
+  margin-bottom: 0.2rem;
   display: flex;
   justify-content: center;
   text-align: center;
   font-weight: bold;
-  font-family:'MicrosoftYaHei';
-  
+  font-family: "MicrosoftYaHei";
+
   .service-category-item {
-    margin-right: .4rem;
+    margin-right: 0.4rem;
     height: 0.54rem;
     line-height: 0.54rem;
     color: #373d41;
     font-size: 0.18rem;
     box-sizing: border-box;
-    border-radius: .04rem;
+    border-radius: 0.04rem;
     border: 1px solid transparent;
-    padding: 0 .1rem;
+    padding: 0 0.1rem;
     &.active {
       color: #00b7c5;
       background-color: #e4eef1;

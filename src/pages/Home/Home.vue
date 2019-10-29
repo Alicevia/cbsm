@@ -46,6 +46,7 @@ export default {
         // 默认访问的是这个页面，所以页面一打开就是这个页面，
         // 之后会跳转到登陆页面，登陆成功了后，不会进入这个生命周期函数
        this.checkUserToken()
+       console.log('--')
     //    this.getAliMessageAuth()
      
     },

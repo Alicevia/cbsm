@@ -45,18 +45,37 @@ export default {
     //获取每个分类的数据
     [TYPES.GET_GROUP_ITEM_INFO](state,{data,id,page}){
       let {groupInformation} = state
-      groupInformation.forEach((item,index)=>{
+      groupInformation = groupInformation.map((item)=>{
         if(item.id===id){
-          if (item['list']) {
-            item['list'].concat(data.list)
-          }else{
-            item['list'] = data.list
-            item['total'] = data.total
+          if (!item['allPage']) {
+            item['allPage']={}
+            item['allPage'][page] = data.list
+          }else {
+            item['allPage'][page] = data.list
           }
+         item.total = data.total
         }
+        return item
       })
       state.showCurrent = data.list
-      console.log(state.showCurrent)
+      state.groupInformation = groupInformation
+    },
+    //保存当前正在请求类的信息
+    [TYPES.SAVE_SERVICE_INFO](state,data){
+      state.activeServiceInfo=data
+    },
+    [TYPES.MODI_SHOW_CURRENT](state,data){
+      // let {groupInformation} = state
+      // let {id,page}=data
+      // groupInformation.forEach(item=>{
+      //   if (item.id===id) {
+      //     state.showCurrent = item.allPage[page]
+      //   }
+      // })
+      state.showCurrent = data
+    },
+    [TYPES.MODI_SERVICE_STATUS](state,data){
+      
     }
 
 }
