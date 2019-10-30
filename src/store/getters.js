@@ -31,14 +31,16 @@ export default {
     //验证是否需要发送请求获取数据
     checkLocalServiceData(state){
       let {activeServiceInfo,groupInformation} = state
-      let {id,page} = activeServiceInfo
-      let flag = groupInformation.filter(item=>{
+      let {id,page,index} = activeServiceInfo
+      let othersPage = groupInformation.filter(item=>{
+        if (!item.allPage) {
+          item.allPage={}
+        }
         return item.id===id && item.allPage[page]
       })
-      return flag
-    
-     
-      
+      let firstPage = groupInformation[index].allPage[0]
+
+      return {othersPage,firstPage}
     },
     // 获取当前展示的服务种类最大数目
     getMaxService(state){

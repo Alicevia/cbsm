@@ -100,8 +100,17 @@ export default {
     modiServiceStatus({commit},status){
       console.log(status)
       commit(TYPES.MODI_SERVICE_STATUS,status)
-    }
+    },
 
+    //用户管理页面----------------------------------
+    // 申请开通服务的用户列表
+    async getApplyOpenServiceUserList({commit},data){
+      let result = await allReq.reqApplyOpenServiceUserList(data)
+      if (result.succeed) {
+        commit(TYPES.GET_APPLY_SERVICE_USER_LIST,result.data)
+      }
+    }
+    
 
 
 

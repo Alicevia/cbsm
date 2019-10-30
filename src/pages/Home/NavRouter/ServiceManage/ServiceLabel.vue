@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import BUS from "src/assets/js/bus";
 import { mapActions, mapGetters } from "vuex";
 export default {
   props: {
@@ -28,7 +27,7 @@ export default {
   },
 
   computed: {
-    // ...mapGetters([])
+    ...mapGetters(['checkLocalServiceData']),
     activeClass(index) {
       return index => {
         return this.classIndex === index
@@ -45,12 +44,17 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(["getGroupItemInfo", "saveServiceInfo"]),
+    ...mapActions(["getGroupItemInfo", "saveServiceInfo",'modiShowCurrent']),
     initGroupItemInfo({ id, index = 0, size = 9 }) {
-      this.classIndex = index;
-      let serviceInfo = {id,index,page: 0,size,};
+      this.classIndex = index
+      let serviceInfo = {id,index,page: 0,size,}
       this.saveServiceInfo(serviceInfo)
-      this.getGroupItemInfo({ id, page: 0, size });
+      let {firstPage} = this.checkLocalServiceData
+      if (firstPage) {
+        this.modiShowCurrent(firstPage)
+      }else{
+        this.getGroupItemInfo({ id, page: 0, size })
+      }
     }
   },
 

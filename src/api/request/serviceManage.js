@@ -1,5 +1,5 @@
 import axios from '../axios'
-
+// ------------------服务管理页面
 // 获取分类列表
 export const reqGroupInfo = ()=>axios({
   url:'manage/groupInformation',
@@ -21,4 +21,11 @@ export const reqOpenService=(data)=>axios({
   data,
   type:'POST',
   flag:false
+})
+
+//-------------------- 用户管理页面
+// 获取申请开通服务的用户信息
+export const reqApplyOpenServiceUserList = (data)=>axios({
+  url:'manage/userSubscription',
+  data
 })

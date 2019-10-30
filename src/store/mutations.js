@@ -84,6 +84,10 @@ export default {
 
         }
       })
+    },
+    // 用户管理页面--------------------------
+    [TYPES.GET_APPLY_SERVICE_USER_LIST](state,data){
+      state.applyServiceUserList = data
     }
 
 }

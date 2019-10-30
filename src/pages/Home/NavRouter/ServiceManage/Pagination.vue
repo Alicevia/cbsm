@@ -37,11 +37,11 @@ export default {
       let {id,size}=this.activeServiceInfo
       page--;
       this.saveServiceInfo({id,size,page})
-      let serviceAry = this.checkLocalServiceData
+      let {othersPage} = this.checkLocalServiceData
       // console.log(serviceAry)
       //判断是发请求还是从本地读取
-      if (serviceAry.length>0) {
-        this.modiShowCurrent(serviceAry[0].allPage[page])
+      if (othersPage.length>0) {
+        this.modiShowCurrent(othersPage[0].allPage[page])
       }else{
         this.getGroupItemInfo({id,page,size})
         console.log(`当前页: ${page}`);

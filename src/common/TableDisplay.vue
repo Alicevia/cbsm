@@ -34,7 +34,7 @@
 </template>
 <script>
 export default {
-  props:['trData'],
+  props:['trData','thData'],
   data() {
     return {
       thClass: {
@@ -43,13 +43,7 @@ export default {
         th3: { width: "1.5rem" },
         th4: { width: "2.6rem" }
       },
-   
-      thData: [
-        { category: "姓名", th: { width: "1.4rem" } },
-        { category: "公司", th: { width: "3rem" } },
-        { category: "电话", th: { width: "1.5rem" } },
-        { category: "备注", th: { width: "2.16rem" } }
-      ],
+
       tabWrapHeight:{
         height:'1.5rem'
       }

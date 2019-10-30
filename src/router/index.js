@@ -11,7 +11,7 @@ let router = new Router({
       redirect: '/home/wx',
       component: () => import('pages/Home/Home'),
       beforeEnter: (to, from, next) => {
-        // console.log(to)
+        console.log(to)
         // console.log(from)
         // console.log(store.state)
         if (from.path === '/') {

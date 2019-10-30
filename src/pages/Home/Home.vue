@@ -8,14 +8,12 @@
         <div class="home-right">
             <Logout />
             <div class="home-right-wrap">
-                <transition name="slide-left"  mode='out-in' >
+                <transition name="slide-left" mode='out-in'>
                     <keep-alive>
                         <router-view></router-view>
                     </keep-alive>
                 </transition>
-               
             </div>
-
         </div>
     </div>
 </template>

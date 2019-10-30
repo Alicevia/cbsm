@@ -27,3 +27,6 @@ export const SAVE_SERVICE_INFO = 'SAVE_SERVICE_INFO'
 export const MODI_SHOW_CURRENT ='MODI_SHOW_CURRENT'
 
 export const MODI_SERVICE_STATUS = 'MODI_SERVICE_STATUS'
+
+//用户管理页面-----------------------------
+export const GET_APPLY_SERVICE_USER_LIST = 'GET_APPLY_SERVICE_USER_LIST'
