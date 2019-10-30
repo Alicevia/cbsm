@@ -62,20 +62,28 @@ export default {
     },
     //保存当前正在请求类的信息
     [TYPES.SAVE_SERVICE_INFO](state,data){
-      state.activeServiceInfo=data
+      let keys = Object.keys(data)
+      let {activeServiceInfo} = state
+      keys.forEach(item=>{
+        activeServiceInfo[item] = data[item]
+      })
+      state.activeServiceInfo=activeServiceInfo
     },
     [TYPES.MODI_SHOW_CURRENT](state,data){
-      // let {groupInformation} = state
-      // let {id,page}=data
-      // groupInformation.forEach(item=>{
-      //   if (item.id===id) {
-      //     state.showCurrent = item.allPage[page]
-      //   }
-      // })
       state.showCurrent = data
     },
-    [TYPES.MODI_SERVICE_STATUS](state,data){
-      
+    [TYPES.MODI_SERVICE_STATUS](state,status){
+      let {groupInformation} = state
+      let {index,page,manageId} = status
+      let ary = groupInformation[index].allPage[page]
+      console.log(ary)
+      ary.forEach(item=>{
+        if (item.id===manageId) {
+          console.log(item)
+          item.status=2
+
+        }
+      })
     }
 
 }

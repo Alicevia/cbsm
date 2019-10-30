@@ -96,7 +96,9 @@ export default {
     modiShowCurrent({commit},data){
       commit(TYPES.MODI_SHOW_CURRENT,data)
     },
+    //开通服务成功后修改状态status
     modiServiceStatus({commit},status){
+      console.log(status)
       commit(TYPES.MODI_SERVICE_STATUS,status)
     }
 

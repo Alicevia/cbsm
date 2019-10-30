@@ -48,7 +48,7 @@ export default {
     ...mapActions(["getGroupItemInfo", "saveServiceInfo"]),
     initGroupItemInfo({ id, index = 0, size = 9 }) {
       this.classIndex = index;
-      let serviceInfo = {id,page: 0,size};
+      let serviceInfo = {id,index,page: 0,size,};
       this.saveServiceInfo(serviceInfo)
       this.getGroupItemInfo({ id, page: 0, size });
     }

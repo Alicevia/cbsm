@@ -35,6 +35,7 @@
 
 import {Message} from 'element-ui'
 import {reqOpenService} from 'src/api'
+import { mapState, mapActions } from 'vuex';
 export default {
   props: {
     serviceAry: {
@@ -46,6 +47,7 @@ export default {
   },
 
   computed: {
+    ...mapState(['activeServiceInfo']),
     opreateStatus: function(status) {
       return status => {
         switch (status) {
@@ -112,9 +114,13 @@ export default {
   mounted() {},
 
   methods: {
-    async openService(id){
-      let result = await reqOpenService({ manageId:id})
+    ...mapActions(['modiServiceStatus']),
+    async openService(manageId){
+      let result = await reqOpenService({ manageId})
       if (result.succeed) {
+        let {index,page} = this.activeServiceInfo
+        console.log(this.activeServiceInfo)
+        this.modiServiceStatus({index,page,manageId})
         Message.success('开通成功，正在审核')
         
       }else{
