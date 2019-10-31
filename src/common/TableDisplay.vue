@@ -26,7 +26,9 @@
           <input class="remark" type="text" :placeholder="item.bz" />
         </td>
       </tr> -->
-      <slot :data='trData'></slot>
+      <slot :data='trData' :currentPage='currentPage'></slot>
+
+
     </tbody>
   </table>
   </div>
@@ -34,7 +36,7 @@
 </template>
 <script>
 export default {
-  props:['trData','thData'],
+  props:['trData','thData','currentPage'],
   data() {
     return {
       thClass: {
@@ -81,6 +83,7 @@ export default {
   //     }
   .tbody {
     tr {
+      line-height: 0.4rem;
       &:hover {
         background-color: #DDF8FF;
         .remark {

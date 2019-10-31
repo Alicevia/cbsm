@@ -30,3 +30,6 @@ export const MODI_SERVICE_STATUS = 'MODI_SERVICE_STATUS'
 
 //用户管理页面-----------------------------
 export const GET_APPLY_SERVICE_USER_LIST = 'GET_APPLY_SERVICE_USER_LIST'
+
+export const GET_ACTIVE_INTENTION_USER_ID = 'GET_ACTIVE_INTENTION_USER_ID'
+export const GET_USER_AUDIT = 'GET_USER_AUDIT'

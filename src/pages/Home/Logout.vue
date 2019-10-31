@@ -32,12 +32,13 @@ export default {
                   // this.$router.replace({ path: "/login/phone" });
                   let origin = window.location.origin
                   let pathname = window.location.pathname
-
                   window.location.href =origin+pathname
                 },500)
 
             }else{
                 Message.error('用户信息已过期，请刷新页面重新登陆')
+                
+                this.$router.replace({path:'/login/phone'})
             }
         }
     },

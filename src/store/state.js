@@ -14,10 +14,13 @@ export default {
     size:9
   },
 
-  currentAudit:{}, //当前渲染的待审核
+
+  applyServiceUserList:[],//意向用户列表
   activeIntentionUser:{},//选中的意向用户
-  applyServiceUserList:{},//意向用户列表
-  auditService:{},//意向用户的服务待处理
+
+  currentAudit:{}, //当前渲染的待审核
+  allAuditService:{},//所有的待审核
+
   allServiceDevice:{},//所有服务
   
 

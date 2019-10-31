@@ -107,7 +107,21 @@ export default {
     async getApplyOpenServiceUserList({commit},data){
       let result = await allReq.reqApplyOpenServiceUserList(data)
       if (result.succeed) {
-        commit(TYPES.GET_APPLY_SERVICE_USER_LIST,result.data)
+        commit(TYPES.GET_APPLY_SERVICE_USER_LIST,result.data.list)
+      }
+    },
+    // 更新当前选中的意向用户
+    getActiveIntentionUserId({commit},payload){
+      commit(TYPES.GET_ACTIVE_INTENTION_USER_ID,payload)
+    },
+    // 获取某个用户的待审核信息
+    async getUserAudit({commit},data){
+      let result = await allReq.reqUserAudit(data)
+      if (result.succeed) {
+        console.log(result)
+        commit(TYPES.GET_USER_AUDIT,result.data.list)
+      }else {
+        Message.warning('信息获取失败')
       }
     }
     

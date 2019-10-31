@@ -29,3 +29,8 @@ export const reqApplyOpenServiceUserList = (data)=>axios({
   url:'manage/userSubscription',
   data
 })
+// 获取某个意向用户的待审核数据
+export const reqUserAudit = (data)=>axios({
+  url:'manage/examineStatusNews',
+  data
+})

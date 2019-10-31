@@ -11,7 +11,8 @@ let router = new Router({
       redirect: '/home/wx',
       component: () => import('pages/Home/Home'),
       beforeEnter: (to, from, next) => {
-        console.log(to)
+        // console.log(to) 
+        // console.log(window.location)
         // console.log(from)
         // console.log(store.state)
         if (from.path === '/') {
@@ -64,7 +65,7 @@ let router = new Router({
       component: () => import('pages/Login/Login'),
       beforeEnter: (to, from, next) => {
         let userToken = localStorage.getItem('user-token')
-        // console.log(to)
+        console.log(to)
         if (userToken) {
           next({ path: '/' })
         } else {
@@ -91,7 +92,7 @@ let router = new Router({
       path: '/bindphone',
       component: () => import('pages/CheckPhone/WxBindPhone'),
       beforeEnter: (to, from, next) => {
-        if (from.path === '/home/wx') {
+        if (from.path.includes('/home/wx') ) {
           next()
 
         } else {

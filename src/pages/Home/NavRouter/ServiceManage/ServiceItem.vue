@@ -124,7 +124,7 @@ export default {
         Message.success('开通成功，正在审核')
         
       }else{
-       Message.success('开通失败')
+       Message.error('开通失败，需要先微信授权')
       }
     }
   },

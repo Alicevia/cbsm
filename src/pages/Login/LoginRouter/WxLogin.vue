@@ -36,7 +36,6 @@ export default {
       let pathname = window.location.pathname;
       let href = origin + pathname;
       let result = await reqWeChatQRCode({ trueUrl: href });
-      // console.log(result);
       if (result.code === 0) {
         let { appid, login, redirect_uri } = result.data;
         new WxLogin({
@@ -45,15 +44,14 @@ export default {
           scope: "snsapi_login",
           redirect_uri: encodeURIComponent(redirect_uri),
           state: Math.ceil(Math.random() * 1000),
-          self_redirect:false,
+          self_redirect: false,
           style: "black"
         });
         let iframe = document.querySelector("#qrcode>iframe");
         iframe.sandbox = "allow-scripts allow-top-navigation allow-same-origin";
-      }else{
-        Message.error('微信二维码获取失败,请刷新页面')
+      } else {
+        Message.error("微信二维码获取失败,请刷新页面");
       }
-
       //  iframe.sandbox = 'allow-top-navigation'
       // iframe.security='restrict'
       // iframe.sandbox = ''

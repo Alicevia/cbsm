@@ -1,5 +1,5 @@
 import * as TYPES from './mutations-types'
-
+import utils from 'src/utils'
 export default {
     // [TYPES.RECEIVE_ADDRESS](state,{address}){
     //     state.address = address
@@ -86,8 +86,21 @@ export default {
       })
     },
     // 用户管理页面--------------------------
+    // 获取所有意向用户
     [TYPES.GET_APPLY_SERVICE_USER_LIST](state,data){
-      state.applyServiceUserList = data
+      let ary = utils.changeAry(data,3)
+      state.applyServiceUserList = ary
+    },
+    // 更新当前选中的意向用户
+    [TYPES.GET_ACTIVE_INTENTION_USER_ID](state,payload){
+      state.activeIntentionUser = payload
+    },
+    // 获取某个意向用户的所有待审核信息
+    [TYPES.GET_USER_AUDIT](state,payload){
+      let {activeIntentionUser,allAuditService} = state
+      let {id} = activeIntentionUser
+      allAuditService[id] = payload
     }
+
 
 }

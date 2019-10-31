@@ -1,7 +1,7 @@
 <template>
   <div class="next-btn">
-      <el-button  size="mini">上一页</el-button>
-      <el-button  size="mini">下一页</el-button>
+      <el-button  size="mini" @click="prevPage">上一页</el-button>
+      <el-button  size="mini" @click="nextPage">下一页</el-button>
   </div>
 </template>
 
@@ -16,7 +16,17 @@ export default {
 
   mounted(){},
 
-  methods: {},
+  methods: {
+    prevPage(){
+      this.$emit('changePage')
+    },
+    nextPage(){
+      this.$emit('changePage','add')
+
+    }
+
+
+  },
 
   components: {},
 }

@@ -59,12 +59,31 @@ let utils = function (params) {
     a.onload = function (e) { callback(e.target.result); }
     a.readAsDataURL(blob);
   }
+  // 一维数组转二维数组
+  function changeAry(arry,num){
+    let ary = []
+    let temp = []
+    for (let index = 0; index < arry.length; index++) {
+      temp.push(arry[index])
+      if (index%(num)===(num-1)) {
+        ary.push(temp)
+        temp=[]
+      }
+    }
+    if (temp.length>0) {
+      ary.push(temp)
+    }
+    
+    temp=null
+    return ary
+  }
+
 
 
 
 
   return {
-    queryURLParameter, dataURLtoFile
+    queryURLParameter, dataURLtoFile,changeAry
   }
 }()
 

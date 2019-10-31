@@ -29,7 +29,8 @@ export default {
   },
 
   mounted() {
-    this.getApplyOpenServiceUserList()
+    // 获取意向用户的列表
+    this.getApplyOpenServiceUserList({size:999})
   },
 
   methods: {

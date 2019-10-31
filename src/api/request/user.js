@@ -6,7 +6,6 @@ import axios from '../axios'
 
 export const reqUserInfo=()=>axios({
   url:`user/userinfo`,
-  
   flag:false
 })
 export const reqModiUserInfo = (data)=>axios({
