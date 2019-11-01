@@ -111,19 +111,28 @@ export default {
       }
     },
     // 更新当前选中的意向用户
-    getActiveIntentionUserId({commit},payload){
-      commit(TYPES.GET_ACTIVE_INTENTION_USER_ID,payload)
+    saveActiveIntentionUserId({commit},payload){
+      commit(TYPES.SAVE_ACTIVE_INTENTION_USER_ID,payload)
+    },
+    // 更新选中用户的备注信息
+    modiUserRemark({commit},payload){
+      commit(TYPES.MODI_USER_REMARK,payload)
     },
     // 获取某个用户的待审核信息
     async getUserAudit({commit},data){
       let result = await allReq.reqUserAudit(data)
       if (result.succeed) {
-        console.log(result)
         commit(TYPES.GET_USER_AUDIT,result.data.list)
       }else {
         Message.warning('信息获取失败')
       }
+    },
+    //更新意向用户下的待处理信息
+    updateUserAuditInfo({commit},data){
+      commit(TYPES.UPDATE_USER_AUDIT_INFO,data)
     }
+    
+    
     
 
 

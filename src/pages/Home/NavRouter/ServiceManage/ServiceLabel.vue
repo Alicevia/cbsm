@@ -53,7 +53,7 @@ export default {
       if (firstPage) {
         this.modiShowCurrent(firstPage)
       }else{
-        this.getGroupItemInfo({ id, page: 0, size })
+        this.getGroupItemInfo({ id, page: 0, size, examineType:'GROUP'})
       }
     }
   },

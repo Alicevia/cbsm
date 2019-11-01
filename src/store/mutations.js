@@ -92,14 +92,45 @@ export default {
       state.applyServiceUserList = ary
     },
     // 更新当前选中的意向用户
-    [TYPES.GET_ACTIVE_INTENTION_USER_ID](state,payload){
+    [TYPES.SAVE_ACTIVE_INTENTION_USER_ID](state,payload){
       state.activeIntentionUser = payload
+    },
+    // 更新用户的备注
+    [TYPES.MODI_USER_REMARK](state,payload){
+      let {id,page,remark} = payload
+      let {applyServiceUserList} = state
+      applyServiceUserList[page].forEach(item=>{
+        if (item.id === id) {
+          item.remark = remark
+        }
+      })
+      state.applyServiceUserList = applyServiceUserList
     },
     // 获取某个意向用户的所有待审核信息
     [TYPES.GET_USER_AUDIT](state,payload){
       let {activeIntentionUser,allAuditService} = state
       let {id} = activeIntentionUser
-      allAuditService[id] = payload
+      if (payload) {
+        let ary = utils.changeAry(payload,3)
+        state.currentAudit = ary
+        allAuditService[id] = ary
+      }else{
+        state.currentAudit=[]
+        allAuditService[id]=[]
+      }
+     
+    },
+    [TYPES.UPDATE_USER_AUDIT_INFO](state,data){
+      let { id,currentPage,auditId,time} = data
+      let {allAuditService,currentAudit} = state
+      allAuditService[id][currentPage].forEach(item=>{
+         if (item.id===auditId) {
+           item.expirationDate=time
+         }
+      })
+      state.currentAudit = allAuditService[id]
+      state.allAuditService = JSON.parse(JSON.stringify(allAuditService))
+
     }
 
 

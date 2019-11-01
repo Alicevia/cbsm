@@ -24,10 +24,7 @@ export default {
       this.$emit('changePage','add')
 
     }
-
-
   },
-
   components: {},
 }
 
@@ -36,6 +33,9 @@ export default {
 .next-btn{
   width: 100%;
   text-align: right;
-  margin-top: .2rem;
+  margin-top: .25rem;
+  button {
+    margin: 0
+  }
 }
 </style>

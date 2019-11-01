@@ -65,7 +65,7 @@ let router = new Router({
       component: () => import('pages/Login/Login'),
       beforeEnter: (to, from, next) => {
         let userToken = localStorage.getItem('user-token')
-        console.log(to)
+        // console.log(to)
         if (userToken) {
           next({ path: '/' })
         } else {

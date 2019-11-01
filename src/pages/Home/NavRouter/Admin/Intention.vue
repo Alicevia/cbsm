@@ -7,13 +7,13 @@
         <tr
           v-for="(item) in slot.data[currentPage]"
           :key="item.id"
-          @click.stop="receiveUserApplyService(item.id)"
+          @click="receiveUserApplyService(item.id)"
         >
           <td>{{item.nickName}}</td>
           <td>{{item.company}}</td>
           <td>{{item.phone}}</td>
           <td>
-            <input type="text" class="remark" :placeholder="item.remark" />
+            <input type="text" @blur="setRemark($event)" class="remark" :value='item.remark'  placeholder="请设置备注" />
           </td>
         </tr>
         <tr v-for="(item,index) of resetTr" :key="index">
@@ -32,6 +32,7 @@
 import TableDisplay from "src/common/TableDisplay";
 import NextBtn from "src/common/NextBtn";
 import { mapState, mapActions } from "vuex";
+import {Message} from 'element-ui'
 export default {
   data() {
     return {
@@ -46,7 +47,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["applyServiceUserList"]),
+    ...mapState(["applyServiceUserList",'activeIntentionUser']),
     // 获取到最大页数
     maxPages: {
       get() {
@@ -60,7 +61,6 @@ export default {
         applyServiceUserList[currentPage] = [];
       }
       let reset = 3 - applyServiceUserList[currentPage].length;
-
       return reset;
     }
   },
@@ -68,12 +68,12 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(['getUserAudit','getActiveIntentionUserId']),
+    ...mapActions(['getUserAudit','saveActiveIntentionUserId','modiUserRemark']),
     // 上下翻页
     changePage(type) {
       let { currentPage, maxPages } = this;
       if (type === "add") {
-        if (currentPage === maxPages) {
+        if (currentPage+1 >= maxPages) {
           Message.warning("已经是最后一页");
           return;
         }
@@ -86,18 +86,27 @@ export default {
         this.currentPage--;
       }
     },
+    // 点击获取某个用户的待审核信息
     receiveUserApplyService(id) {
-      
-      this.getActiveIntentionUserId({id,page:0})
+      let page = this.currentPage
+      this.saveActiveIntentionUserId({id,page})
       this.getUserAudit({
         userId:id,
         size:999,
         ExamineType:'UNAUDITED'
       })
-
+    },
+    // 设置某个用户的备注信息
+    setRemark(e){
+      let {id,page} = this.activeIntentionUser
+      let payload = {
+        id,page,
+        remark:e.target.value
+      }
+     this.modiUserRemark(payload)
+     
     }
   },
-
   components: { TableDisplay, NextBtn }
 };
 </script>

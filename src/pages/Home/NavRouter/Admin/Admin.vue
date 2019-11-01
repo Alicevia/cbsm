@@ -3,8 +3,8 @@
     <h2 class="title">用户管理</h2>
     <div class="admin-wrap">
       <Intention ></Intention>
-      <!-- <Audit ></Audit>
-      <AllUser ></AllUser> -->
+      <Audit ></Audit>
+      <!-- <AllUser ></AllUser> -->
     </div>
   </div>
 </template>

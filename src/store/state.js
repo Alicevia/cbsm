@@ -19,6 +19,7 @@ export default {
   activeIntentionUser:{},//选中的意向用户
 
   currentAudit:{}, //当前渲染的待审核
+  selectAuditService:{},//需要处理的那一个待审核 待审核的id 待审核的页数
   allAuditService:{},//所有的待审核
 
   allServiceDevice:{},//所有服务

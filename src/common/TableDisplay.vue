@@ -78,9 +78,7 @@ export default {
     font-size: 0.16rem;
     // font-weight: 1000;
   }
-  // .tbody::-webkit-scrollbar {
-  //         display: none
-  //     }
+
   .tbody {
     tr {
       line-height: 0.4rem;
