@@ -1,7 +1,7 @@
 <template>
-  <div class="audit">
-    <h2>待审核</h2>
-    <TableDisplay :trData="currentAudit" :currentPage="currentPage" :thData="thData">
+  <div class="all-service">
+    <h2>全部服务</h2>
+    <TableDisplay :trData="allCurrentAudit" :currentPage="currentPage" :thData="thData">
       <template slot-scope="slot">
         <tr v-for="(item) in slot.data[currentPage]" :key="item.id">
           <td>{{item.name}}</td>
@@ -20,8 +20,9 @@
               <el-button class="btn" size="mini" round type="success" @click="agree(item)">同意</el-button>
               <el-button class="btn" size="mini" round type="danger" @click="reject(item)">拒绝</el-button>
             </template>
-            <el-button v-else-if="item.status===3" size="mini" type="success" disabled>已为其开通</el-button>
-            <el-button v-else-if="item.status===1" size="mini" type="warning" disabled>已拒绝开通请求</el-button>
+            <el-button v-else-if="item.status===3" size="mini" type="success">已开通,点击关闭</el-button>
+            <el-button v-else-if="item.status===1" size="mini" type="warning">已拒绝开通请求，点击开通</el-button>
+            <el-button v-else-if="item.status===0" size="mini" type="success">启动</el-button>
           </td>
         </tr>
         <tr v-for="(item,index) of resetTr" :key="index">
@@ -38,11 +39,10 @@
 <script>
 import TableDisplay from "src/common/TableDisplay";
 import NextBtn from "src/common/NextBtn";
-import { mapState, mapActions } from "vuex";
-import { reqAuditPass } from "src/api";
-import utils from "src/utils";
+import { mapState, mapActions, mapGetters } from "vuex";
 import { Message } from "element-ui";
 import moment from "moment";
+import {reqAuditPass} from 'src/api'
 export default {
   data() {
     return {
@@ -56,20 +56,22 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentAudit", "activeIntentionUser"]),
+    ...mapState(["activeIntentionUser"]),
+    ...mapGetters(["allCurrentAudit"]),
+
     // 获取到最大页数
     maxPages: {
       get() {
-        return this.currentAudit.length;
+        return this.allCurrentAudit.length;
       }
     },
     // 计算没有填充的行数
     resetTr() {
-      let { currentAudit, currentPage } = this;
-      if (!currentAudit[currentPage]) {
-        currentAudit[currentPage] = [];
+      let { allCurrentAudit, currentPage } = this;
+      if (!allCurrentAudit[currentPage]) {
+        allCurrentAudit[currentPage] = [];
       }
-      let reset = 3 - currentAudit[currentPage].length;
+      let reset = 3 - allCurrentAudit[currentPage].length;
       return reset;
     }
   },
@@ -77,7 +79,7 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(["updateUserAuditInfo"]),
+    ...mapActions(["updateAllServiceDevice"]),
     changePage(type) {
       let { currentPage, maxPages } = this;
       if (type === "add") {
@@ -96,34 +98,34 @@ export default {
     },
     setTime(e, auditId) {
       let { id } = this.activeIntentionUser;
-      let { currentPage } = this;
-
       let time = new Date(e);
       time = moment(time).format("YYYY-MM-DD");
-
-      this.updateUserAuditInfo({
+      this.updateAllServiceDevice({
         id,
-        currentPage,
         auditId,
         time
       });
+      // this.updateUserAuditInfo({
+      //   id,
+      //   currentPage,
+      //   auditId,
+      //   time
+      // });
 
       console.log(time);
 
       // console.log(e.target.value)
     },
-    
-    ModiUserAuditStatus(auditId,status) {
+    ModiUserAuditStatus(auditId, status) {
       let { id } = this.activeIntentionUser;
-      let { currentPage } = this;
-      this.updateUserAuditInfo({
+      this.updateAllServiceDevice({
         id,
-        currentPage,
         status,
         auditId
       });
     },
     async agree(item) {
+      console.log(item)
       let { customerId, id, modelId, expirationDate } = item;
       if (!expirationDate) {
         Message.warning("请先设置过期时间");
@@ -137,7 +139,7 @@ export default {
         examineType: "AGREE"
       });
       if (result.succeed) {
-        this.ModiUserAuditStatus(id,3)
+        this.ModiUserAuditStatus(id, 3);
         Message.success("为用户开通成功");
       } else {
         Message.error("为用户开通失败");
@@ -153,18 +155,19 @@ export default {
         examineType: "REFUSE"
       });
       if (result.succeed) {
-        this.ModiUserAuditStatus(id,1)
+        this.ModiUserAuditStatus(id, 1);
         Message.success("已拒绝用户请求");
       } else {
         Message.error("拒绝用户请求操作失败");
       }
     }
   },
+
   components: { TableDisplay, NextBtn }
 };
 </script>
 <style lang='less' scoped>
-.audit {
+.all-service {
   h2 {
     color: #373d41;
     font-size: 0.18rem;

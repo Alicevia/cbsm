@@ -5,15 +5,22 @@
       <template slot-scope="slot">
         <!-- rowspan -->
         <tr
-          v-for="(item) in slot.data[currentPage]"
+          v-for="(item,index) in slot.data[currentPage]"
           :key="item.id"
-          @click="receiveUserApplyService(item.id)"
+          :class="index===indexClass?'active':''"
+          @click="receiveUserApplyService(item.id,index)"
         >
           <td>{{item.nickName}}</td>
           <td>{{item.company}}</td>
           <td>{{item.phone}}</td>
           <td>
-            <input type="text" @blur="setRemark($event)" class="remark" :value='item.remark'  placeholder="请设置备注" />
+            <input
+              type="text"
+              @blur="setRemark($event)"
+              class="remark"
+              :value="item.remark"
+              placeholder="请设置备注"
+            />
           </td>
         </tr>
         <tr v-for="(item,index) of resetTr" :key="index">
@@ -32,11 +39,12 @@
 import TableDisplay from "src/common/TableDisplay";
 import NextBtn from "src/common/NextBtn";
 import { mapState, mapActions } from "vuex";
-import {Message} from 'element-ui'
+import { Message } from "element-ui";
 export default {
   data() {
     return {
       currentPage: 0,
+      indexClass: null,
       thData: [
         { category: "姓名", th: { width: "1.4rem" } },
         { category: "公司", th: { width: "3rem" } },
@@ -47,7 +55,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["applyServiceUserList",'activeIntentionUser']),
+    ...mapState(["applyServiceUserList", "activeIntentionUser"]),
     // 获取到最大页数
     maxPages: {
       get() {
@@ -68,12 +76,16 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(['getUserAudit','saveActiveIntentionUserId','modiUserRemark']),
+    ...mapActions([
+      "getUserAudit",
+      "saveActiveIntentionUserId",
+      "modiUserRemark",'getAllServiceDevice'
+    ]),
     // 上下翻页
     changePage(type) {
       let { currentPage, maxPages } = this;
       if (type === "add") {
-        if (currentPage+1 >= maxPages) {
+        if (currentPage + 1 >= maxPages) {
           Message.warning("已经是最后一页");
           return;
         }
@@ -87,24 +99,31 @@ export default {
       }
     },
     // 点击获取某个用户的待审核信息
-    receiveUserApplyService(id) {
-      let page = this.currentPage
-      this.saveActiveIntentionUserId({id,page})
+    receiveUserApplyService(id, index) {
+      let page = this.currentPage;
+      this.saveActiveIntentionUserId({ id, page });
+      // 获取某个用户的待审核
       this.getUserAudit({
-        userId:id,
-        size:999,
-        ExamineType:'UNAUDITED'
-      })
+        userId: id,
+        size: 999,
+        ExamineType: "UNAUDITED"
+      });
+      this.indexClass = index;
+      // 获取所某个用户的所有服务
+      this.getAllServiceDevice({
+        examineType: "ALL",
+        size: 999
+      });
     },
     // 设置某个用户的备注信息
-    setRemark(e){
-      let {id,page} = this.activeIntentionUser
+    setRemark(e) {
+      let { id, page } = this.activeIntentionUser;
       let payload = {
-        id,page,
-        remark:e.target.value
-      }
-     this.modiUserRemark(payload)
-     
+        id,
+        page,
+        remark: e.target.value
+      };
+      this.modiUserRemark(payload);
     }
   },
   components: { TableDisplay, NextBtn }
@@ -117,6 +136,14 @@ export default {
     font-size: 0.18rem;
     text-decoration: underline;
     margin-bottom: 0.1rem;
+  }
+  tr {
+    &.active {
+      background-color: #ddf8ff;
+      .remark {
+        background-color: #ddf8ff;
+      }
+    }
   }
 }
 </style>

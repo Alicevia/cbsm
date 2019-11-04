@@ -4,7 +4,7 @@
     <div class="admin-wrap">
       <Intention ></Intention>
       <Audit ></Audit>
-      <!-- <AllUser ></AllUser> -->
+      <AllService ></AllService>
     </div>
   </div>
 </template>
@@ -13,7 +13,7 @@
 import Pagination from "src/common/Pagination";
 import Intention from './Intention'
 import Audit from './Audit'
-import AllUser from './AllUser'
+import AllService from './AllService'
 import { mapActions, mapState } from 'vuex';
 export default {
   data() {
@@ -31,6 +31,8 @@ export default {
   mounted() {
     // 获取意向用户的列表
     this.getApplyOpenServiceUserList({size:999})
+    //获取所有的服务
+
   },
 
   methods: {
@@ -40,7 +42,7 @@ export default {
   components: {
     Intention,
  
-    Pagination,Audit,AllUser
+    Pagination,Audit,AllService
   }
 };
 </script>

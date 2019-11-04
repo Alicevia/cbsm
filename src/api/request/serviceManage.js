@@ -39,8 +39,13 @@ export const reqUserAudit = (data)=>axios({
   data
 })
 //管理员同意用户开通请求
-export const reqAuditPass = (data)=>axios({
-  url:'manage/auditPass',
-  data,
-  type:'PUT'
-})
+export const reqAuditPass = (data)=>{
+  let examineType = data.examineType
+  delete data.examineType
+  return axios({
+    url:`manage/auditPass?examineType=${examineType}`,
+    data,
+    type:'PUT',
+    flag:false
+  })
+}

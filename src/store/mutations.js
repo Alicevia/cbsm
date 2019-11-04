@@ -121,17 +121,45 @@ export default {
      
     },
     [TYPES.UPDATE_USER_AUDIT_INFO](state,data){
-      let { id,currentPage,auditId,time} = data
+      let { id,currentPage,auditId,time,status=null} = data
       let {allAuditService,currentAudit} = state
       allAuditService[id][currentPage].forEach(item=>{
          if (item.id===auditId) {
            item.expirationDate=time
+           if (status!==null) {
+             item.status = status
+           }
          }
       })
-      state.currentAudit = allAuditService[id]
+      state.currentAudit = JSON.parse(JSON.stringify(allAuditService[id]))
       state.allAuditService = JSON.parse(JSON.stringify(allAuditService))
+    },
 
+    // 获取所有服务的信息
+    [TYPES.GET_ALL_SERVICE_DEVICE](state,data){
+      let {id} = state.activeIntentionUser
+      let {allServiceDevice} = state
+      allServiceDevice[id] = data
+      state.allServiceDevice = JSON.parse(JSON.stringify(allServiceDevice))
+      // state.allServiceDevice = utils.changeAry(data,3)
+    },
+    [TYPES.UPDATE_ALL_SERVICE_DEVICE](state,data){
+      let {allServiceDevice} = state
+      let {id,time,auditId,status=null} = data
+      console.log(time,status)
+      allServiceDevice[id].forEach(item=>{
+        if (item.id===auditId) {
+          if (time) {
+            item.expirationDate = time
+          }
+          if (status!==null) {
+            item.status = status
+          }
+        }
+      })
+      state.allServiceDevice = JSON.parse(JSON.stringify(allServiceDevice))
     }
+  
 
 
 }

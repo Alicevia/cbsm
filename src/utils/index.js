@@ -60,11 +60,15 @@ let utils = function (params) {
     a.readAsDataURL(blob);
   }
   // 一维数组转二维数组
-  function changeAry(arry,num){
+  function changeAry(array,num){
     let ary = []
     let temp = []
-    for (let index = 0; index < arry.length; index++) {
-      temp.push(arry[index])
+    if (!array||array.length===0) {
+      return ary
+    }
+    
+    for (let index = 0; index < array.length; index++) {
+      temp.push(array[index])
       if (index%(num)===(num-1)) {
         ary.push(temp)
         temp=[]

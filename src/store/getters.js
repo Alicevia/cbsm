@@ -1,3 +1,5 @@
+import utils from "src/utils"
+
 export default {
     // pages(state,getters){
     //     let {iconList} = state
@@ -55,6 +57,15 @@ export default {
 
 
       return maxPage
+    },
+    // 对要展示的全部服务进行数组的二维化
+    allCurrentAudit(state){
+      let ary
+      let {activeIntentionUser,allServiceDevice} = state
+      let {id} = activeIntentionUser
+
+      ary = utils.changeAry(allServiceDevice[id],3)
+      return ary
     }
     
 }

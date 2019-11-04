@@ -130,6 +130,20 @@ export default {
     //更新意向用户下的待处理信息
     updateUserAuditInfo({commit},data){
       commit(TYPES.UPDATE_USER_AUDIT_INFO,data)
+    },
+    // 获取到所有种类的服务
+    async getAllServiceDevice({commit},data){
+      let result = await allReq.reqAllGroupInfo(data)
+      console.log(result)
+      if (result.succeed) {
+        commit(TYPES.GET_ALL_SERVICE_DEVICE,result.data.list)
+      }else{
+        Message.error('获取所有种类服务失败')
+      }
+    },
+    // 更新某个人的所有种类服务的信息
+    updateAllServiceDevice({commit},data){
+      commit(TYPES.UPDATE_ALL_SERVICE_DEVICE,data)
     }
     
     
