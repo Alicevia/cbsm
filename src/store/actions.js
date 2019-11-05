@@ -81,6 +81,7 @@ export default {
     async getGroupItemInfo({commit},payload){
       let {id,page,size} = payload
       let result = await allReq.reqGroupItemInfo(payload)
+      // console.log(result)
       if(result.succeed){
         let data = result.data
         commit(TYPES.GET_GROUP_ITEM_INFO,{data,id,page})
@@ -98,7 +99,7 @@ export default {
     },
     //开通服务成功后修改状态status
     modiServiceStatus({commit},status){
-      console.log(status)
+      // console.log(status)
       commit(TYPES.MODI_SERVICE_STATUS,status)
     },
 
@@ -127,14 +128,21 @@ export default {
         Message.warning('信息获取失败')
       }
     },
+    // 更新正在显示的待审核信息
+    updateCurrentAudit({commit},payload){
+      commit(TYPES.UPDATE_CURRENT_AUDIT,payload)
+    },
     //更新意向用户下的待处理信息
     updateUserAuditInfo({commit},data){
       commit(TYPES.UPDATE_USER_AUDIT_INFO,data)
     },
+
+
+
     // 获取到所有种类的服务
     async getAllServiceDevice({commit},data){
       let result = await allReq.reqAllGroupInfo(data)
-      console.log(result)
+      // console.log(result)
       if (result.succeed) {
         commit(TYPES.GET_ALL_SERVICE_DEVICE,result.data.list)
       }else{

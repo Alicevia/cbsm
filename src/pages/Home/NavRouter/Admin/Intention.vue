@@ -38,8 +38,9 @@
 <script>
 import TableDisplay from "src/common/TableDisplay";
 import NextBtn from "src/common/NextBtn";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import { Message } from "element-ui";
+import { reqEditRemark } from "src/api";
 export default {
   data() {
     return {
@@ -56,6 +57,7 @@ export default {
 
   computed: {
     ...mapState(["applyServiceUserList", "activeIntentionUser"]),
+    ...mapGetters(["CheckLocalAudit", "checkLocalAllService"]),
     // 获取到最大页数
     maxPages: {
       get() {
@@ -79,7 +81,9 @@ export default {
     ...mapActions([
       "getUserAudit",
       "saveActiveIntentionUserId",
-      "modiUserRemark",'getAllServiceDevice'
+      "modiUserRemark",
+      "getAllServiceDevice",
+      "updateCurrentAudit"
     ]),
     // 上下翻页
     changePage(type) {
@@ -101,29 +105,53 @@ export default {
     // 点击获取某个用户的待审核信息
     receiveUserApplyService(id, index) {
       let page = this.currentPage;
-      this.saveActiveIntentionUserId({ id, page });
-      // 获取某个用户的待审核
-      this.getUserAudit({
-        userId: id,
-        size: 999,
-        ExamineType: "UNAUDITED"
-      });
+      // 获取保存当前选中的意向用户的信息
+      this.saveActiveIntentionUserId({ id, page, index });
+      //验证是否需要新发请求获取某个用户下的所有待审核信息
+      let auditAry = this.CheckLocalAudit;
+      if (!auditAry) {
+        this.getUserAudit({
+          userId: id,
+          size: 999,
+          ExamineType: "UNAUDITED"
+        });
+      } else {
+        this.updateCurrentAudit(auditAry);
+      }
+      // 获取某个用户的所有待审核信息
       this.indexClass = index;
       // 获取所某个用户的所有服务
-      this.getAllServiceDevice({
-        examineType: "ALL",
-        size: 999
-      });
+      let allServiceAry = this.checkLocalAllService;
+      if (!allServiceAry) {
+        this.getAllServiceDevice({
+          customerUserId:id,
+          examineType: "ALL",
+          size: 999
+        });
+      }
     },
+
     // 设置某个用户的备注信息
-    setRemark(e) {
-      let { id, page } = this.activeIntentionUser;
-      let payload = {
-        id,
-        page,
-        remark: e.target.value
-      };
-      this.modiUserRemark(payload);
+    async setRemark(e) {
+      // e.stopPropagation();
+      let { id, page, index } = this.activeIntentionUser;
+
+      // let payload = {
+      //   id,
+      //   page,
+      //   remark: e.target.value
+      // };
+      let result = await reqEditRemark({
+        userId: id,
+        remarksInformation: e.target.value
+      });
+      if (result.succeed) {
+        this.modiUserRemark({ id, page, index, remark: e.target.value });
+        Message.success("用户备注修改成功");
+      } else {
+        Message.error("用户备注修改失败");
+      }
+      // this.modiUserRemark(payload);
     }
   },
   components: { TableDisplay, NextBtn }

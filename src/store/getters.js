@@ -30,7 +30,8 @@ export default {
     //   })
 
     // }
-    //验证是否需要发送请求获取数据
+    // 服务管理页面-----------------------------------
+    //验证是否需要发送请求获取数据 
     checkLocalServiceData(state){
       let {activeServiceInfo,groupInformation} = state
       let {id,page,index} = activeServiceInfo
@@ -44,6 +45,7 @@ export default {
 
       return {othersPage,firstPage}
     },
+
     // 获取当前展示的服务种类最大数目
     getMaxService(state){
       let {activeServiceInfo,groupInformation} = state
@@ -54,18 +56,32 @@ export default {
           
         }
       })
-
-
       return maxPage
     },
-    // 对要展示的全部服务进行数组的二维化
+
+
+    // 用户管理页面------------------------------
+    // 待审核的请求优化
+    CheckLocalAudit(state){
+      let {activeIntentionUser,allAuditService} = state
+      let {id} = activeIntentionUser
+      return allAuditService[id]
+    },
+
+
+    //全部服务表格中及时显示的数据 对要展示的全部服务进行数组的二维化
     allCurrentAudit(state){
       let ary
       let {activeIntentionUser,allServiceDevice} = state
       let {id} = activeIntentionUser
-
       ary = utils.changeAry(allServiceDevice[id],3)
       return ary
+    },
+    checkLocalAllService(state){
+      let {activeIntentionUser,allServiceDevice} = state
+      // let flag
+      let {id} = activeIntentionUser
+      return allServiceDevice[id]
     }
     
 }

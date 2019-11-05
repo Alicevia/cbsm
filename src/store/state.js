@@ -10,8 +10,8 @@ export default {
   activeServiceInfo:{//当前选中的请求配置
     id:0,
     index:0,
-    page:0,
-    size:9
+    page:0,//当前用户在的页数
+    size:9//每页多少个
   },
 
 

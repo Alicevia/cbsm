@@ -119,7 +119,7 @@ export default {
       let result = await reqOpenService({ manageId})
       if (result.succeed) {
         let {index,page} = this.activeServiceInfo
-        console.log(this.activeServiceInfo)
+        // console.log(this.activeServiceInfo)
         this.modiServiceStatus({index,page,manageId})
         Message.success('开通成功，正在审核')
         

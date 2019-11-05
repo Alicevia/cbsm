@@ -97,6 +97,7 @@ export default {
   td {
     text-align: center;
     line-height: 0.4rem;
+    border-color: #e5e5e5;
   }
 }
 </style>

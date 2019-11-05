@@ -43,7 +43,7 @@ export default {
       if (othersPage.length>0) {
         this.modiShowCurrent(othersPage[0].allPage[page])
       }else{
-        this.getGroupItemInfo({id,page,size})
+        this.getGroupItemInfo({id,page,size,examineType:'GROUP'})
         console.log(`当前页: ${page}`);
       }
      

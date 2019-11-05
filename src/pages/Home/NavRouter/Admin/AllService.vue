@@ -16,13 +16,11 @@
             ></el-date-picker>
           </td>
           <td>
-            <template v-if="item.status===2">
-              <el-button class="btn" size="mini" round type="success" @click="agree(item)">同意</el-button>
-              <el-button class="btn" size="mini" round type="danger" @click="reject(item)">拒绝</el-button>
-            </template>
-            <el-button v-else-if="item.status===3" size="mini" type="success">已开通,点击关闭</el-button>
-            <el-button v-else-if="item.status===1" size="mini" type="warning">已拒绝开通请求，点击开通</el-button>
-            <el-button v-else-if="item.status===0" size="mini" type="success">启动</el-button>
+            <el-button v-if="item.status===4" size="mini" type="success" @click="adminSet(item,'START')">启动</el-button>
+            <el-button v-else-if="item.status===3" size="mini" type="danger" @click="adminSet(item,'STOP')">停止</el-button>
+            <el-button v-else-if="item.status===1" size="mini" type="success" @click="adminSet(item,'START')">启动</el-button>
+            <el-button v-else-if="item.status===0" size="mini" type="success"  @click="adminSet(item,'START')">启动</el-button>
+            <el-button v-else-if="item.status===2" size="mini" type="info" :disabled="true">请在待审核内处理</el-button>
           </td>
         </tr>
         <tr v-for="(item,index) of resetTr" :key="index">
@@ -42,7 +40,7 @@ import NextBtn from "src/common/NextBtn";
 import { mapState, mapActions, mapGetters } from "vuex";
 import { Message } from "element-ui";
 import moment from "moment";
-import {reqAuditPass} from 'src/api'
+import {reqAuditPass,reqManageServiceWork} from 'src/api'
 export default {
   data() {
     return {
@@ -116,7 +114,7 @@ export default {
 
       // console.log(e.target.value)
     },
-    ModiUserAuditStatus(auditId, status) {
+    modiUserAuditStatus(auditId, status) {
       let { id } = this.activeIntentionUser;
       this.updateAllServiceDevice({
         id,
@@ -124,42 +122,28 @@ export default {
         auditId
       });
     },
-    async agree(item) {
-      console.log(item)
-      let { customerId, id, modelId, expirationDate } = item;
+    async adminSet(item,type){
+      let {id:userId} = this.activeIntentionUser
+      let {id:manageId,expirationDate} = item
       if (!expirationDate) {
-        Message.warning("请先设置过期时间");
-        return;
+        Message.warning('请设置时间')
+        return
       }
-      let result = await reqAuditPass({
-        customerId,
-        id,
-        modelId,
+      let result = await reqManageServiceWork({
+        userId,
+        manageId,
         expirationDate,
-        examineType: "AGREE"
-      });
+        examineType:type
+      })
       if (result.succeed) {
-        this.ModiUserAuditStatus(id, 3);
-        Message.success("为用户开通成功");
-      } else {
-        Message.error("为用户开通失败");
+        Message.success('服务设置成功')
+      }else{
+        Message.error('服务设置失败')
+
       }
-    },
-    async reject(item) {
-      let { id } = item;
-      let result = await reqAuditPass({
-        // customerId,
-        id,
-        // modelId,
-        // expirationDate,
-        examineType: "REFUSE"
-      });
-      if (result.succeed) {
-        this.ModiUserAuditStatus(id, 1);
-        Message.success("已拒绝用户请求");
-      } else {
-        Message.error("拒绝用户请求操作失败");
-      }
+
+
+
     }
   },
 
