@@ -168,7 +168,12 @@ export default {
       }
     })
     state.allServiceDevice = JSON.parse(JSON.stringify(allServiceDevice))
-  }
+  },
+
+// 微信自定义菜单页面-------------------------------------------
+[TYPES.GET_WE_CHAT_ACCESSTOKEN](state,data){
+  state.weChatAccessToken = data
+}
 
 
 

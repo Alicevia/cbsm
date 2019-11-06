@@ -1,4 +1,6 @@
-import axios from '../axios'
+// import axios from '../axios'
+import { axios1 as axios,ajax} from '../axios'
+
 // 阿里云短信页面--------------------------------------------------------------
 export const reqMessageAuth = ()=>axios({
   url:'/ali/message/findMessage',

@@ -12,27 +12,32 @@
       <el-button type="primary" class="wx-menus-btn" size="small">菜单添加</el-button>
     </div>
     <CustomMenus ></CustomMenus>
-    <div style="textAlign:center;marginTop:10px">
+    <div style="textAlign:center;marginTop:.05rem">
       <el-button type="primary">生成自定义菜单</el-button>
     </div>
-    
-    
   </div>
 </template>
 
 <script>
 import CustomMenus from 'pages/Home/Components/CustomMenus'
 import Pagination from 'src/common/Pagination'
+import { mapActions, mapState } from 'vuex';
 export default {
   data() {
     return {};
   },
 
-  computed: {},
-
+  computed: {
+    ...mapState(['weChatAccessToken'])
+  },
+  created(){
+    this.getUserOriginalWeChatMenus({access_token:this.weChatAccessToken})
+  },
   mounted() {},
 
-  methods: {},
+  methods: {
+    ...mapActions(['getUserOriginalWeChatMenus'])
+  },
 
   components: {
     CustomMenus,Pagination
@@ -49,7 +54,7 @@ export default {
     padding: .1rem .3rem;
     border-radius: .1rem;
     line-height: 1.5;
-    margin-bottom: .2rem;
+    margin-bottom: .1rem;
     h4 {
       color: #1b9ad5;
       margin-left: -.1rem;

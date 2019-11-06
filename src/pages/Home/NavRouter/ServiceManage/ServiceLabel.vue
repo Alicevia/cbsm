@@ -45,7 +45,7 @@ export default {
 
   methods: {
     ...mapActions(["getGroupItemInfo", "saveServiceInfo",'modiShowCurrent']),
-    initGroupItemInfo({ id, index = 0, size = 9 }) {
+    initGroupItemInfo({ id, index = 0, size = 8 }) {
       this.classIndex = index
       let serviceInfo = {id,index,page: 0,size,}
       this.saveServiceInfo(serviceInfo)

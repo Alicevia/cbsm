@@ -47,7 +47,7 @@ export default {
 <style lang='less' scoped>
 .service-manage{
   position: relative;
-  height: 8.5rem;
+  height: 8rem;
 
 }
 .service-pag {

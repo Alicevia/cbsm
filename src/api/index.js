@@ -3,6 +3,7 @@ export * from './request/user'
 export * from './request/auth'
 export * from './request/wx'
 export * from './request/serviceManage'
+export * from './request/wxMenus'
 // import axios from './axios'
 
 // // 微信登陆用openid 与access_token 换取user-token

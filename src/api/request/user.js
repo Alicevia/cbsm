@@ -1,6 +1,5 @@
-import axios from '../axios'
-
-
+// import axios from '../axios'
+import { axios1 as axios,ajax} from '../axios'
 // account--------------------------------------------------------------
 // 获取通过userToken获得用户信息
 
@@ -8,6 +7,7 @@ export const reqUserInfo=()=>axios({
   url:`user/userinfo`,
   flag:false
 })
+// 修改个人信息
 export const reqModiUserInfo = (data)=>axios({
   url:'user/info',
   data,

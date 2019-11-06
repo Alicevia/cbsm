@@ -10,7 +10,23 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/cgi-bin': {
+        target: 'https://api.weixin.qq.com/',
+        changeOrigin: true,
+        secure: true,  
+        pathRewrite: {
+          '^/cgi-bin': '/cgi-bin'
+        }
+      }
+
+      //  '/app': {
+      //   target: 'https://api.weixin.qq.com/',
+      //   pathRewrite: {'^/app' : ''},
+      //   changeOrigin: true,     // target是域名的话，需要这个参数，
+      //   secure: false,          // 设置支持https协议的代理
+      // },
+    },
 
     // Various Dev Server settings
     host: '192.168.50.236', // can be overwritten by process.env.HOST

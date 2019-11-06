@@ -1,4 +1,6 @@
-import axios from '../axios'
+// import axios from '../axios'
+import { axios1 as axios,ajax} from '../axios'
+
 // 微信管理页面----------------------------------------------------
 // 获取公众号信息
 export const reqWeChatAuthInfo = ()=>axios({
@@ -29,7 +31,6 @@ export const reqCheckAuth = (data)=>{
       url,     
       flag:false
   })
-  
 }
 
 // 用户扫码授权
@@ -37,3 +38,4 @@ export const reqUserScanQR=()=>axios({
 url:'auth/getPreAuthCode',
 flag:false
 })
+

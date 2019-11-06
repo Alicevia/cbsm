@@ -114,6 +114,7 @@ export default {
 
       // console.log(e.target.value)
     },
+    // 更新全部服务的信息
     modiUserAuditStatus(auditId, status) {
       let { id } = this.activeIntentionUser;
       this.updateAllServiceDevice({
@@ -136,6 +137,12 @@ export default {
         examineType:type
       })
       if (result.succeed) {
+        if (type==='START') {
+          this.modiUserAuditStatus(manageId,3)
+        }
+        if (type==='STOP') {
+          this.modiUserAuditStatus(manageId,4)
+        }
         Message.success('服务设置成功')
       }else{
         Message.error('服务设置失败')

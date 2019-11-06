@@ -1,4 +1,4 @@
-import {axios,instance1} from './axiosDefault'
+import axios from './axiosDefault'
 import { Message } from 'element-ui';
 
 import qs from 'qs'
@@ -10,7 +10,8 @@ function formatData(data) {
 
 // export default function ajax(url, data = {}, type = 'GET', flag = true) {
 
-export const axios1 =  ({ url, data = {}, type = 'GET', flag = true })=> {
+export default function _axios({ url, data = {}, type = 'GET', flag = true }) {
+
     return new Promise((resolve, reject) => {
         let promise
         // 1. 执行异步ajax请求
@@ -74,27 +75,6 @@ export const axios1 =  ({ url, data = {}, type = 'GET', flag = true })=> {
 
 
 }
-
-export  const ajax = ({url,data={},method='get',flag=true,config={}})=>{
-  let promise
-  if (flag) {
-    if (method==='get') {
-      promise = instance1({url,method,params:data,...config})
-    }else {
-      url+=formatData(data)
-      promise = instance1({url,method,...config})
-    }
-  }else {
-    promise = instance1({url,method,data,...config})
-  }
-  return promise
-}
-
-
-
-
-
-
 
 // 请求登陆接口
 // ajax('/login', {username: 'Tom', passsword: '12345'}, 'POST').then()

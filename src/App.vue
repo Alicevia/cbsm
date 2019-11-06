@@ -33,7 +33,9 @@ export default {
       "getUserInfo",
       "getWeChatAuthInfo",
       "getAliMessageAuth",
-      "getFindMessage"
+      "getFindMessage",
+      'getApplyOpenServiceUserList',
+      'getWeChatAccessToken'
     ]),
     // 检测用户是否绑定手机 并且将个人信息存入store一份
     async checkUserPhone_SaveUserInfo() {
@@ -47,6 +49,8 @@ export default {
           this.getUserInfo();
           this.getWeChatAuthInfo();
           this.getAliMessageAuth();
+          this.getApplyOpenServiceUserList({size:999})
+          this.getWeChatAccessToken()
         }
       }
     },

@@ -38,9 +38,9 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-// .wx-manage {
-//   // height:10rem;
-// }
+.wx-manage {
+  height:8rem;
+}
 /deep/ .avatar-uploader .el-upload {
   cursor: pointer;
   position: relative;

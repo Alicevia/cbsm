@@ -27,10 +27,13 @@ export default {
 
   computed: {
   },
+  created(){
+          // this.getApplyOpenServiceUserList({size:999})
 
+  },
   mounted() {
     // 获取意向用户的列表
-    this.getApplyOpenServiceUserList({size:999})
+    
     //获取所有的服务
 
   },
@@ -47,5 +50,7 @@ export default {
 };
 </script>
 <style lang='less' scoped>
-
+.admin {
+  height: 8rem;
+}
 </style>

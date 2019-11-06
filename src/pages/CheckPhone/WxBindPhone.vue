@@ -109,6 +109,7 @@ export default {
                   Message.success('手机绑定已经完成')
                   this.dialogFormVisible=false
                   this.getUserInfo()
+                  // window.location.href = location.origin+location.pathname
                   this.$router.replace({path:'/'})
               }else{
                   Message.error('绑定失败，请重新验证')

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from 'src/store'
+import { Message } from 'element-ui'
 Vue.use(Router)
 let router = new Router({
   linkActiveClass: 'active',
@@ -37,7 +38,15 @@ let router = new Router({
             },
             {
               path:'/home/wx/menus',
-              component:()=> import('pages/Home/NavRouter/WxManage/WxRouter/WxMenus') 
+              component:()=> import('pages/Home/NavRouter/WxManage/WxRouter/WxMenus'),
+              beforeEnter:(to,from,next)=>{
+                if (store.state.weChatAccessToken) {
+                  next()
+                } else {
+                  Message.warning('请先再本页面微信扫码授权')
+                  next({ path: '/home/wx/public' })
+                }
+              } 
             }
           ]
         },

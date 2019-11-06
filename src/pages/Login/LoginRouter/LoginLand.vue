@@ -73,7 +73,13 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(["getUserInfo", "getWeChatAuthInfo", "getAliMessageAuth"]),
+    ...mapActions([
+      "getUserInfo",
+      "getWeChatAuthInfo",
+      "getAliMessageAuth",
+      "getApplyOpenServiceUserList",
+      'getWeChatAccessToken'
+    ]),
     // 获取基本的各类信息
     async receiveUserInfo() {
       let result = await reqUserInfo();
@@ -81,6 +87,8 @@ export default {
         this.getUserInfo();
         this.getWeChatAuthInfo();
         this.getAliMessageAuth();
+        this.getApplyOpenServiceUserList({ size: 999 });
+        this.getWeChatAccessToken()
       }
     },
     // 手机密码登陆

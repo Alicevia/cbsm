@@ -62,38 +62,7 @@ axios.interceptors.response.use(function (response) {
 
 
 
-// -------------------------------
-let instance1 = axios.create({
-  baseURL:'https://api.weixin.qq.com/',
-  timeout:10000,
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Access-Control-Allow-Origin':"*",
-}
-})
-
-instance1.interceptors.request.use(config=>{
-  let userToken = store.state.userToken
-  if (userToken) {
-      config.headers['user-token'] = userToken;
-  }
-  if (config.url==='cgi-bin/get_current_selfmenu_info') {
-    delete config.headers['user-token']
-  }
-  console.log(config)
-
-  return config
-},err=>{
-  return Promise.reject(err)
-})
-
-instance1.interceptors.response.use(response=>{
-  return response
-},err=>{
-  return Promise.reject(err)
-})
 
 
 
-
-export  {axios,instance1};
+export default axios;

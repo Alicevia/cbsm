@@ -1,4 +1,5 @@
-import axios from '../axios'
+// import axios from '../axios'
+import { axios1 as axios,ajax} from '../axios'
 
 // 微信登陆用openid 与access_token 换取user-token
 export const reqWeChatLogin = (data)=>axios({

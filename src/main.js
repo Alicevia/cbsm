@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import router from './router'
 import store from './store'
-import axios from './api/axiosDefault'
+// import axios from './api/axiosDefault'
+import {axios} from './api/axiosDefault'
 //按需加载
 import {button,input,form,upload,Alert,MessageBox,Message,
     formItem,Switch} from 'element-ui'

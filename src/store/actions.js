@@ -107,6 +107,7 @@ export default {
     // 申请开通服务的用户列表
     async getApplyOpenServiceUserList({commit},data){
       let result = await allReq.reqApplyOpenServiceUserList(data)
+      console.log(result)
       if (result.succeed) {
         commit(TYPES.GET_APPLY_SERVICE_USER_LIST,result.data.list)
       }
@@ -152,11 +153,26 @@ export default {
     // 更新某个人的所有种类服务的信息
     updateAllServiceDevice({commit},data){
       commit(TYPES.UPDATE_ALL_SERVICE_DEVICE,data)
-    }
+    },
     
     
     
+// 微信自定义菜单页面-------------------------------------------
+    async getWeChatAccessToken({commit}){
+      let result = await allReq.reqWeChatAccessToken()
+      console.log(result)
+      if (result.code===0) {
+        commit(TYPES.GET_WE_CHAT_ACCESSTOKEN,result.data)
+      }else {
+        Message.warning('请先在公众号设置内微信扫码授权')
+      }
+    },
 
+// 获取用户本来的wx菜单
+   async getUserOriginalWeChatMenus({commit},data){
+    let result = await allReq.reqUserOriginalWeChatMenus(data)
+    console.log(result)
+   }
 
 
 

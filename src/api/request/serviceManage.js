@@ -1,4 +1,6 @@
-import axios from '../axios'
+// import axios from '../axios'
+import { axios1 as axios,ajax} from '../axios'
+
 // ------------------服务管理页面
 // 获取分类列表
 export const reqGroupInfo = ()=>axios({

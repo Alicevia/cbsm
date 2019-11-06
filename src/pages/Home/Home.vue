@@ -108,8 +108,8 @@ export default {
     background-size: 100% 100%;
     background-repeat: no-repeat;
     height: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    // overflow-y: scroll;
+    // overflow-x: hidden;
     .home-right-wrap {
       display: flex;
       height: 100%;
