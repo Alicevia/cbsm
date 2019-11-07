@@ -60,16 +60,11 @@ axios.interceptors.response.use(function (response) {
     return Promise.reject(error)
 });
 
-
-
 // -------------------------------
 let instance1 = axios.create({
-  baseURL:'https://api.weixin.qq.com/',
+  baseURL:'',
+  // baseURL:'https://www.cluster-dt.com/wx/',
   timeout:10000,
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Access-Control-Allow-Origin':"*",
-}
 })
 
 instance1.interceptors.request.use(config=>{
@@ -77,11 +72,6 @@ instance1.interceptors.request.use(config=>{
   if (userToken) {
       config.headers['user-token'] = userToken;
   }
-  if (config.url==='cgi-bin/get_current_selfmenu_info') {
-    delete config.headers['user-token']
-  }
-  console.log(config)
-
   return config
 },err=>{
   return Promise.reject(err)

@@ -23,6 +23,7 @@
 
 <script>
 import { reqUserScanQR } from "src/api";
+import { mapActions } from 'vuex';
 export default {
   props: {
     dialogVisible: {
@@ -41,6 +42,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(['getWeChatAccessToken']),
     handleClose(done) {
       // this.$confirm('确认关闭？')
       //     .then(_ => {
@@ -48,6 +50,7 @@ export default {
       //     })
       //     .catch(_ => {});
       this.$emit("toggle");
+      this.getWeChatAccessToken()
     },
     async getWXAuth() {
       let result = await reqUserScanQR();

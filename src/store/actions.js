@@ -158,22 +158,34 @@ export default {
     
     
 // 微信自定义菜单页面-------------------------------------------
+// 获取用户的accesstoken
     async getWeChatAccessToken({commit}){
       let result = await allReq.reqWeChatAccessToken()
       console.log(result)
       if (result.code===0) {
         commit(TYPES.GET_WE_CHAT_ACCESSTOKEN,result.data)
       }else {
-        Message.warning('请先在公众号设置内微信扫码授权')
+        // Message.warning('请先在公众号设置内微信扫码授权')
       }
     },
 
 // 获取用户本来的wx菜单
    async getUserOriginalWeChatMenus({commit},data){
     let result = await allReq.reqUserOriginalWeChatMenus(data)
-    console.log(result)
+    let selfmenu_info= result.data.selfmenu_info
+    if (result.status===200&& selfmenu_info) {
+      commit(TYPES.GET_ORIGIN_WE_CHAT_MENUS,selfmenu_info.button)
+    }else{
+      Message.error('获取用户wx菜单失败')
+    }
+   },
+// 获取用户存储在凝聚的的wx菜单
+   async getUserWeChatMenu({commit}){
+     let result = await allReq.reqUserWeChatMenus()
+     if (result.succeed) {
+       commit(TYPES.GET_USER_WE_CHAT_MENUS,result.data.buttonResponses)
+     }
    }
-
 
 
 

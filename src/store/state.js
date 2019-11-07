@@ -3,6 +3,7 @@ export default {
   userInfo: {},
   weChatInfo: {},
   weChatMenus:[],
+  weChatOriginMenus:[],
   weChatAccessToken:'',
   aliId: '',
   aliMessageInfo: {},

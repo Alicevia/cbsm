@@ -9,22 +9,29 @@
       </ul>
     </div>
     <div style="overflow:hidden">
-      <el-button type="primary" class="wx-menus-btn" size="small">菜单添加</el-button>
+      <el-button type="primary" class="wx-menus-btn" size="small" @click="changeMenuDialog">菜单添加</el-button>
     </div>
     <CustomMenus ></CustomMenus>
     <div style="textAlign:center;marginTop:.05rem">
       <el-button type="primary">生成自定义菜单</el-button>
     </div>
+    <WxMenusDialog 
+    :dialogFormVisible='menuDialogVisable'
+      @changeMenuDialog='changeMenuDialog'
+    ></WxMenusDialog>
   </div>
 </template>
 
 <script>
-import CustomMenus from 'pages/Home/Components/CustomMenus'
+import CustomMenus from '../CustomMenus'
 import Pagination from 'src/common/Pagination'
+import WxMenusDialog from '../WxMenusDialog'
 import { mapActions, mapState } from 'vuex';
 export default {
   data() {
-    return {};
+    return {
+      menuDialogVisable:true
+    };
   },
 
   computed: {
@@ -32,15 +39,19 @@ export default {
   },
   created(){
     this.getUserOriginalWeChatMenus({access_token:this.weChatAccessToken})
+    this.getUserWeChatMenu()
   },
   mounted() {},
 
   methods: {
-    ...mapActions(['getUserOriginalWeChatMenus'])
+    ...mapActions(['getUserOriginalWeChatMenus','getUserWeChatMenu']),
+    changeMenuDialog(){
+      this.menuDialogVisable = !this.menuDialogVisable
+    }
   },
 
   components: {
-    CustomMenus,Pagination
+    CustomMenus,Pagination,WxMenusDialog
   }
 }
 </script>
@@ -48,7 +59,6 @@ export default {
 .wx-menus {
   width: 100%;
   .wx-tip {
-    
     // min-width: 10rem;
     border: 1px dashed #1b9ad5;
     padding: .1rem .3rem;

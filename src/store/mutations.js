@@ -171,9 +171,24 @@ export default {
   },
 
 // 微信自定义菜单页面-------------------------------------------
+// 获取wxaccesstoken
 [TYPES.GET_WE_CHAT_ACCESSTOKEN](state,data){
   state.weChatAccessToken = data
+},
+// 获取公众号微信菜单
+[TYPES.GET_ORIGIN_WE_CHAT_MENUS](state,data){
+  state.weChatOriginMenus = data
+},
+// 获取用户在凝聚的wx菜单
+[TYPES.GET_USER_WE_CHAT_MENUS](state,data){
+  if (!data) {
+    state.weChatMenus = []
+  }else{
+    state.weChatMenus = data
+  }
+
 }
+
 
 
 

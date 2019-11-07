@@ -11,9 +11,20 @@ export const reqUserOriginalWeChatMenus = (data)=>ajax({
 })
 
 // 获取微信菜单
+export const reqUserWeChatMenus = ()=>axios({
+  url:'manage/menuInformation'
+})
+
+// 编辑微信菜单
+export const reqEditWeChatMenus = (data)=>axios({
+  url:'manage/editMenu',
+  data,
+  type:'POST',
+  flag:false
+})
 
 // 微信生成菜单
 
 // 微信删除菜单
 
-// 编辑微信菜单
+

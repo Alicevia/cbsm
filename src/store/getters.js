@@ -67,8 +67,6 @@ export default {
       let {id} = activeIntentionUser
       return allAuditService[id]
     },
-
-
     //全部服务表格中及时显示的数据 对要展示的全部服务进行数组的二维化
     allCurrentAudit(state){
       let ary
@@ -77,11 +75,24 @@ export default {
       ary = utils.changeAry(allServiceDevice[id],3)
       return ary
     },
+    // 全部服务：检查要请求的东西是否在本地
     checkLocalAllService(state){
       let {activeIntentionUser,allServiceDevice} = state
       // let flag
       let {id} = activeIntentionUser
       return allServiceDevice[id]
-    }
+    },
+    // 微信自定义菜单页面-----------------------------
+    // 计算用户还可以生成几个父菜单
+    resetParentMenuNum(state){
+      let {weChatMenus,weChatOriginMenus} = state
+      let length = weChatOriginMenus.length
+      return 3-length
+    },
+    // 根据用户在凝聚的菜单中获取到他的父菜单
+    // userParentMenu(state){
+    //   let {weChatMenus,weChatOriginMenus} = state
+
+    // }
     
 }
