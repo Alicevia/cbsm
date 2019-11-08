@@ -72,6 +72,7 @@ instance1.interceptors.request.use(config=>{
   if (userToken) {
       config.headers['user-token'] = userToken;
   }
+  console.log(config)
   return config
 },err=>{
   return Promise.reject(err)

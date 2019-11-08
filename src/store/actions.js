@@ -107,7 +107,7 @@ export default {
     // 申请开通服务的用户列表
     async getApplyOpenServiceUserList({commit},data){
       let result = await allReq.reqApplyOpenServiceUserList(data)
-      console.log(result)
+      // console.log(result)
       if (result.succeed) {
         commit(TYPES.GET_APPLY_SERVICE_USER_LIST,result.data.list)
       }
@@ -161,7 +161,7 @@ export default {
 // 获取用户的accesstoken
     async getWeChatAccessToken({commit}){
       let result = await allReq.reqWeChatAccessToken()
-      console.log(result)
+      // console.log(result)
       if (result.code===0) {
         commit(TYPES.GET_WE_CHAT_ACCESSTOKEN,result.data)
       }else {
@@ -185,7 +185,44 @@ export default {
      if (result.succeed) {
        commit(TYPES.GET_USER_WE_CHAT_MENUS,result.data.buttonResponses)
      }
-   }
+   },
+  //  更新或新建wx菜单
+  async updateUserWeChatMenu({commit},payload){
+    if (payload.menuType==='CLICK') {
+       payload.url=''
+    }else if (payload.menuType==='VIEW') {
+       payload.keyWord=''
+    }
+    let result = await allReq.reqEditWeChatMenus(payload)
+
+    if (result.succeed) {
+      commit(TYPES.UPDATE_USER_WE_CHAT_MENUS,result.data.buttonResponses)
+    }else {
+      Message.error(`添加或修改菜单失败`)
+    }
+  },
+  async deleteUserWeChatMenu({commit},payload){
+    let result = await allReq.reqDeleteWeChatMenus(payload)
+    if (result.succeed) {
+      commit(TYPES.UPDATE_USER_WE_CHAT_MENUS,result.data.buttonResponses)
+    }else{
+      Message.error('删除菜单失败')
+    }
+  },
+  async getCreateWxMenusFromNJ({state}){
+    let {weChatOriginMenus,weChatAccessToken} = state
+    let result = await allReq.reqCreateWeChatMenus()
+    result = result.data.button
+    console.log(result)
+    let newArray = weChatOriginMenus.concat(result)
+    console.log('menus',newArray)
+    let result2 = await allReq.reqModiOriginalWeChatMenus({
+      access_token:weChatAccessToken,
+      "button":newArray
+    })
+    console.log(result2)
+  }
+
 
 
 

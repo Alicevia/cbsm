@@ -1,5 +1,8 @@
 <template>
   <div class="custom-menus">
+    <div style="overflow:hidden">
+      <el-button type="primary" class="wx-menus-btn" size="small" @click="openMenuDialog">菜单添加</el-button>
+    </div>
     <el-table
       :data="weChatMenus"
       :border="true"
@@ -8,7 +11,7 @@
       :tree-props="{children: 'childrenResponse',hasChildren: 'hasChildren'}"
       row-key="id"
       default-expand-all
-      :row-class-name="noWorkRowClassName"
+      :row-class-name="tableRowClassName"
     >
       <el-table-column prop="name" width="120" label="父级菜单"></el-table-column>
       <el-table-column prop="childrenName" width="120" label="子级菜单"></el-table-column>
@@ -32,92 +35,67 @@
         </template>
       </el-table-column>
     </el-table>
+    <WxMenusDialog ref="menuDialog" :editMenu='editMenu'></WxMenusDialog>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
+import WxMenusDialog from "./WxMenusDialog";
+
 export default {
   data() {
     return {
+      editMenu:{},
       theadClass: {
         backgroundColor: "#00B7C5",
         color: "white",
         textAlign: "center",
         height: "40px"
       },
-      tableData: [
-        {
-          id: 1,
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          id: 2,
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          id: 3,
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          children: [
-            {
-              id: 31,
-              date: "",
-              name: "王小虎",
-              address: "上海市普陀区金沙江路 1519 弄"
-            },
-            {
-              id: 32,
-              date: "",
-              name: "王小虎",
-              address: "上海市普陀区金沙江路 1519 弄"
-            }
-          ]
-        },
-        {
-          id: 4,
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
     };
   },
 
   computed: {
     ...mapState(["weChatMenus"])
   },
-
   mounted() {},
-
   methods: {
-    noWorkRowClassName(row, rowIndex){
-      if (rowIndex===1) {
-        console.log(row)
-
-        return 'nowork'
+    ...mapActions(['deleteUserWeChatMenu']),
+    tableRowClassName({ row, rowIndex }) {
+      if (!row.isDisplay) {
+        // console.log(row, rowIndex);
+        return "nowork";
       }
+      return "";
     },
+    openMenuDialog() {
+      this.editMenu = {}
+      this.$refs['menuDialog'].showOrHide()
+    },
+    // clearEditMenu(){
+    //   this.editMenu = {}
+    // },
+    // 处理每行数据
     handleEdit(index, row) {
-      console.log(index, row);
+      this.$refs['menuDialog'].showOrHide()
+      this.editMenu = row
+      // console.log(index, row);
     },
     handleDelete(index, row) {
-      console.log(index, row);
+      this.deleteUserWeChatMenu({id:row.id})
+      // console.log(index, row);
     }
   },
 
-  components: {}
+  components: { WxMenusDialog }
 };
 </script>
 <style lang='less' scoped>
- .el-table .nowork{
-    background-color: rgb(194, 10, 65);
-  }
+/deep/.el-table .nowork {
+  background-color: #c0c4cc;
+}
+
 .custom-menus {
   margin-top: 0.1rem;
   .menus-btn {
@@ -126,6 +104,9 @@ export default {
     padding: 0;
     padding: 5px 0;
   }
- 
+  .wx-menus-btn {
+    float: right;
+    margin-bottom: .1rem;
+  }
 }
 </style>

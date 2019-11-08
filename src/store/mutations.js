@@ -187,6 +187,12 @@ export default {
     state.weChatMenus = data
   }
 
+},
+// 更新删除添加菜单
+[TYPES.UPDATE_USER_WE_CHAT_MENUS](state,payload){
+  // let {weChatMenus} = state
+  state.weChatMenus = payload
+
 }
 
 

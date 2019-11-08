@@ -5,17 +5,11 @@
       :close-on-click-modal="false"
       :before-close="showOrHide"
       center
-      :visible.sync="dialogFormVisible"
-      custom-class='wx-dialog'
-     
+      :visible="dialogFormVisible"
+      :destroy-on-close="true"
+      @open="updateEditMenu"
     >
-      <el-form
-        :model="ruleForm"
-        :rules="rules"
-        ref="ruleForm"
-        label-width="auto"
-        size="mini"
-      >
+      <el-form :model="ruleForm" :rules="rules" ref="wxMenus" size="mini" label-width="30%">
         <el-form-item label="父级菜单">
           <el-select v-model="ruleForm.parentId">
             <el-option label="请选择菜单" :value="0"></el-option>
@@ -27,11 +21,9 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item label="菜单名称" prop="name">
-          <el-input  class="wx-input" v-model="ruleForm.name"></el-input>
+          <el-input class="wx-input" v-model="ruleForm.name"></el-input>
         </el-form-item>
-
         <el-form-item label="菜单类型" prop="menuType">
           <el-radio-group v-model="ruleForm.menuType">
             <el-radio-button label="CLICK"></el-radio-button>
@@ -39,7 +31,10 @@
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item label="外随URL" prop="url">
+        <el-form-item v-if="ruleForm.menuType==='CLICK'" label="菜单关键字" prop="keyWord">
+          <el-input class="wx-input" v-model="ruleForm.keyWord"></el-input>
+        </el-form-item>
+        <el-form-item v-else label="外随URL" prop="url">
           <el-input class="wx-input" v-model="ruleForm.url"></el-input>
         </el-form-item>
 
@@ -49,77 +44,56 @@
             <el-radio-button label="否"></el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="排序"  prop="sequence">
-          <el-input  class="wx-input" v-model="ruleForm.sequence"></el-input>
+        <el-form-item label="排序" prop="sequence">
+          <el-input class="wx-input" v-model="ruleForm.sequence"></el-input>
         </el-form-item>
       </el-form>
-
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showOrHide">取 消</el-button>
-        <el-button type="primary" @click="showOrHide">确 定</el-button>
+        <el-button size="mini" @click="showOrHide">取 消</el-button>
+        <el-button size="mini" type="primary" @click="createMenus">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
+import { Message } from "element-ui";
 export default {
   props: {
-    dialogFormVisible: {
-      type: Boolean,
+    // dialogFormVisible: {
+    //   type: Boolean,
+    //   default: function() {
+    //     return false;
+    //   }
+    // },
+    editMenu: {
+      type: Object,
       default: function() {
-        return false;
+        return {};
       }
     }
   },
   data() {
     return {
-      wxdialog:'wx-dialog',
+      dialogFormVisible: false,
       ruleForm: {
-        parentId:0,
+        parentId: 0,
         name: "",
         menuType: "CLICK",
         url: "",
-        isDisplay:'是',
+        keyWord: "",
+        isDisplay: "是",
         sequence: ""
       },
       rules: {
         name: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
-          { min: 2, max: 16, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          { required: true, message: "请输入菜单名称", trigger: "blur" },
+          { min: 2, max: 8, message: "4个汉字以内", trigger: "blur" }
         ],
-        region: [
-          { required: true, message: "请选择活动区域", trigger: "change" }
-        ],
-        date1: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择日期",
-            trigger: "change"
-          }
-        ],
-        date2: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择时间",
-            trigger: "change"
-          }
-        ],
-        type: [
-          {
-            type: "array",
-            required: true,
-            message: "请至少选择一个活动性质",
-            trigger: "change"
-          }
-        ],
-        resource: [
-          { required: true, message: "请选择活动资源", trigger: "change" }
-        ],
-        desc: [{ required: true, message: "请填写活动形式", trigger: "blur" }]
+        sequence: { required: true, message: "不能为空", trigger: "blur" },
+        url: { required: true, message: "url不能为空", trigger: "blur" },
+        keyWord: { required: true, message: "keyWord不能为空", trigger: "blur" }
       }
     };
   },
@@ -127,12 +101,60 @@ export default {
   computed: {
     ...mapState(["weChatMenus"])
   },
-
+  created() {},
   mounted() {},
-
   methods: {
+    ...mapActions(["updateUserWeChatMenu"]),
+    // 判断是否传入editMen对象
+    checkEditMenu(editMenu) {
+      // let editMenu = JSON.parse(JSON.stringify(this.editMenu));
+      // if (editMenu.childrenResponse) {
+      //   delete editMenu.childrenResponse;
+      // }
+      let ary = Object.keys(editMenu);
+      editMenu = JSON.parse(JSON.stringify(editMenu));
+      // console.log(editMenu);
+      return { ary, editMenu };
+    },
+    // 新建更新wx菜单
+    createMenus() {
+      this.$refs["wxMenus"].validate(valid => {
+        // console.log(valid)不通过为false
+        if (!valid) return;
+        let menuRequest = JSON.parse(JSON.stringify(this.ruleForm));
+        if (this.ruleForm.isDisplay === "是") {
+          menuRequest.isDisplay = true;
+        } else {
+          menuRequest.isDisplay = false;
+        }
+        this.updateUserWeChatMenu(menuRequest).then(() => {
+          Message.success("更新菜单成功");
+          this.showOrHide();
+        });
+      });
+    },
+
+    updateEditMenu() {
+      let { ary, editMenu } = this.checkEditMenu(this.editMenu);
+      if (ary.length !== 0) {
+        editMenu.isDisplay
+          ? (editMenu.isDisplay = "是")
+          : (editMenu.isDisplay = "否");
+        this.ruleForm = editMenu;
+      } else {
+        this.ruleForm = {
+          parentId: 0,
+          name: "",
+          menuType: "CLICK",
+          url: "",
+          keyWord: "",
+          isDisplay: "是",
+          sequence: ""
+        };
+      }
+    },
     showOrHide() {
-      this.$emit("changeMenuDialog");
+      this.dialogFormVisible = !this.dialogFormVisible;
     }
   },
 
@@ -144,11 +166,7 @@ export default {
 //   text-align: center;
 // }
 
-.el-dialog .wx-dialog {
-  box-sizing: content-box; 
-  padding: .6rem;
-}
 .wx-input {
-  width: 3rem
+  width: 3rem;
 }
 </style>

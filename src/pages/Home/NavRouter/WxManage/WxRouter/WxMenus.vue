@@ -8,29 +8,22 @@
         <li>每次修改自定义菜单后，由于微信客户端缓存，需要24小时左右微信客户端才会显示生效。测试时可以尝试重新关注微信公众号，或者清除微信缓存。</li>
       </ul>
     </div>
-    <div style="overflow:hidden">
-      <el-button type="primary" class="wx-menus-btn" size="small" @click="changeMenuDialog">菜单添加</el-button>
-    </div>
+  
     <CustomMenus ></CustomMenus>
     <div style="textAlign:center;marginTop:.05rem">
-      <el-button type="primary">生成自定义菜单</el-button>
+      <el-button type="primary" @click="createUserWxMenu">生成自定义菜单</el-button>
     </div>
-    <WxMenusDialog 
-    :dialogFormVisible='menuDialogVisable'
-      @changeMenuDialog='changeMenuDialog'
-    ></WxMenusDialog>
+
   </div>
 </template>
 
 <script>
 import CustomMenus from '../CustomMenus'
 import Pagination from 'src/common/Pagination'
-import WxMenusDialog from '../WxMenusDialog'
 import { mapActions, mapState } from 'vuex';
 export default {
   data() {
     return {
-      menuDialogVisable:true
     };
   },
 
@@ -44,14 +37,14 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(['getUserOriginalWeChatMenus','getUserWeChatMenu']),
-    changeMenuDialog(){
-      this.menuDialogVisable = !this.menuDialogVisable
+    ...mapActions(['getUserOriginalWeChatMenus','getUserWeChatMenu','getCreateWxMenusFromNJ']),
+    createUserWxMenu(){
+      this.getCreateWxMenusFromNJ()
     }
   },
 
   components: {
-    CustomMenus,Pagination,WxMenusDialog
+    CustomMenus,Pagination
   }
 }
 </script>
@@ -70,8 +63,6 @@ export default {
       margin-left: -.1rem;
     }
   }
-  .wx-menus-btn {
-    float: right;
-  }
+
 }
 </style>
