@@ -16,7 +16,6 @@
 
   </div>
 </template>
-
 <script>
 import CustomMenus from '../CustomMenus'
 import Pagination from 'src/common/Pagination'
@@ -31,15 +30,15 @@ export default {
     ...mapState(['weChatAccessToken'])
   },
   created(){
-    this.getUserOriginalWeChatMenus({access_token:this.weChatAccessToken})
+    // this.getUserOriginalWeChatMenus({access_token:this.weChatAccessToken})
     this.getUserWeChatMenu()
   },
   mounted() {},
 
   methods: {
-    ...mapActions(['getUserOriginalWeChatMenus','getUserWeChatMenu','getCreateWxMenusFromNJ']),
+    ...mapActions(['getUserWeChatMenu']),
     createUserWxMenu(){
-      this.getCreateWxMenusFromNJ()
+      // this.getCreateWxMenusFromNJ()
     }
   },
 

@@ -20,7 +20,6 @@ export const reqModiWeChatAuth = (data)=>axios({
   data,
   type:'PUT',
   flag:false
-
 })
 
 

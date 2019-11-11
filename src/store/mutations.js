@@ -176,9 +176,9 @@ export default {
   state.weChatAccessToken = data
 },
 // 获取公众号微信菜单
-[TYPES.GET_ORIGIN_WE_CHAT_MENUS](state,data){
-  state.weChatOriginMenus = data
-},
+// [TYPES.GET_ORIGIN_WE_CHAT_MENUS](state,data){
+//   state.weChatOriginMenus = data
+// },
 // 获取用户在凝聚的wx菜单
 [TYPES.GET_USER_WE_CHAT_MENUS](state,data){
   if (!data) {
@@ -186,13 +186,11 @@ export default {
   }else{
     state.weChatMenus = data
   }
-
 },
 // 更新删除添加菜单
 [TYPES.UPDATE_USER_WE_CHAT_MENUS](state,payload){
   // let {weChatMenus} = state
   state.weChatMenus = payload
-
 }
 
 

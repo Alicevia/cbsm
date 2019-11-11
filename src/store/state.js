@@ -3,7 +3,7 @@ export default {
   userInfo: {},
   weChatInfo: {},
   weChatMenus:[],
-  weChatOriginMenus:[],
+  // weChatOriginMenus:[],
   weChatAccessToken:'',
   aliId: '',
   aliMessageInfo: {},
@@ -26,8 +26,5 @@ export default {
   allAuditService:{},//所有的待审核
 
   allServiceDevice:{},//所有服务
-
-  
-
   
 }

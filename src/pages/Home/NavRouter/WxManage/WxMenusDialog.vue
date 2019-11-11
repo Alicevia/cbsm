@@ -21,16 +21,21 @@
             ></el-option>
           </el-select>
         </el-form-item>
+
         <el-form-item label="菜单名称" prop="name">
           <el-input class="wx-input" v-model="ruleForm.name"></el-input>
         </el-form-item>
+
+        <!-- <el-form-item label="菜单名称" prop="childrenName" v-else>
+          <el-input class="wx-input" v-model="ruleForm.name"></el-input>
+        </el-form-item> -->
+
         <el-form-item label="菜单类型" prop="menuType">
           <el-radio-group v-model="ruleForm.menuType">
             <el-radio-button label="CLICK"></el-radio-button>
             <el-radio-button label="VIEW"></el-radio-button>
           </el-radio-group>
         </el-form-item>
-
         <el-form-item v-if="ruleForm.menuType==='CLICK'" label="菜单关键字" prop="keyWord">
           <el-input class="wx-input" v-model="ruleForm.keyWord"></el-input>
         </el-form-item>
@@ -45,7 +50,15 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="排序" prop="sequence">
-          <el-input class="wx-input" v-model="ruleForm.sequence"></el-input>
+          <el-select v-model="ruleForm.sequence" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+          <!-- <el-input class="wx-input" v-model="ruleForm.sequence"></el-input> -->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -76,6 +89,28 @@ export default {
   },
   data() {
     return {
+      options: [
+        {
+          value: 1,
+          label: "1"
+        },
+        {
+          value: 2,
+          label: "2"
+        },
+        {
+          value: 3,
+          label: "3"
+        },
+        {
+          value: 4,
+          label: "4"
+        },
+        {
+          value: 5,
+          label: "5"
+        }
+      ],
       dialogFormVisible: false,
       ruleForm: {
         parentId: 0,
@@ -90,6 +125,10 @@ export default {
         name: [
           { required: true, message: "请输入菜单名称", trigger: "blur" },
           { min: 2, max: 8, message: "4个汉字以内", trigger: "blur" }
+        ],
+        childrenName: [
+          { required: true, message: "请输入菜单名称", trigger: "blur" },
+          { min: 2, max: 14, message: "7个汉字以内", trigger: "blur" }
         ],
         sequence: { required: true, message: "不能为空", trigger: "blur" },
         url: { required: true, message: "url不能为空", trigger: "blur" },

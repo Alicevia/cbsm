@@ -61,7 +61,7 @@ export default {
   },
   mounted() {},
   methods: {
-    ...mapActions(['deleteUserWeChatMenu']),
+    // ...mapActions(['deleteUserWeChatMenu']),
     tableRowClassName({ row, rowIndex }) {
       if (!row.isDisplay) {
         // console.log(row, rowIndex);
@@ -82,8 +82,9 @@ export default {
       this.editMenu = row
       // console.log(index, row);
     },
+    // 删除微信的一行
     handleDelete(index, row) {
-      this.deleteUserWeChatMenu({id:row.id})
+      // this.deleteUserWeChatMenu({id:row.id})
       // console.log(index, row);
     }
   },
