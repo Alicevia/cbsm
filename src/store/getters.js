@@ -83,16 +83,21 @@ export default {
       return allServiceDevice[id]
     },
     // 微信自定义菜单页面-----------------------------
-    // 计算用户还可以生成几个父菜单
-    resetParentMenuNum(state){
-      let {weChatMenus,weChatOriginMenus} = state
-      let length = weChatOriginMenus.length
-      return 3-length
+    // 计算当前的currentId
+    currentIdAry(state){
+      let {weChatMenus} = state
+      let ary = []
+      weChatMenus.forEach(item=>{
+        ary.push(item.currentId)
+      })
+      return ary
     },
-    // 根据用户在凝聚的菜单中获取到他的父菜单
-    // userParentMenu(state){
-    //   let {weChatMenus,weChatOriginMenus} = state
+    //格式化本地的微信菜单
+    formatlocalMenu(state){
+      let {weChatMenus} = state
 
-    // }
+      
+
+    }
     
 }

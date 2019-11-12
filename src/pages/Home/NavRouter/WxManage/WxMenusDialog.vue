@@ -17,19 +17,13 @@
               v-for="(item,index) in weChatMenus"
               :key="index"
               :label="item.name"
-              :value="item.id"
+              :value="item.currentId"
             ></el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item label="菜单名称" prop="name">
           <el-input class="wx-input" v-model="ruleForm.name"></el-input>
         </el-form-item>
-
-        <!-- <el-form-item label="菜单名称" prop="childrenName" v-else>
-          <el-input class="wx-input" v-model="ruleForm.name"></el-input>
-        </el-form-item> -->
-
         <el-form-item label="菜单类型" prop="menuType">
           <el-radio-group v-model="ruleForm.menuType">
             <el-radio-button label="CLICK"></el-radio-button>
@@ -58,7 +52,6 @@
               :value="item.value"
             ></el-option>
           </el-select>
-          <!-- <el-input class="wx-input" v-model="ruleForm.sequence"></el-input> -->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -70,16 +63,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import { Message } from "element-ui";
 export default {
   props: {
-    // dialogFormVisible: {
-    //   type: Boolean,
-    //   default: function() {
-    //     return false;
-    //   }
-    // },
     editMenu: {
       type: Object,
       default: function() {
@@ -89,6 +76,7 @@ export default {
   },
   data() {
     return {
+      type: "add",
       options: [
         {
           value: 1,
@@ -138,22 +126,31 @@ export default {
   },
 
   computed: {
-    ...mapState(["weChatMenus"])
+    ...mapState(["weChatMenus"]),
+    ...mapGetters(["currentIdAry"])
   },
   created() {},
   mounted() {},
   methods: {
-    ...mapActions(["updateUserWeChatMenu"]),
+    ...mapActions(["addUserWeChatMenu",'updateUserWeChatMenu']),
     // 判断是否传入editMen对象
     checkEditMenu(editMenu) {
-      // let editMenu = JSON.parse(JSON.stringify(this.editMenu));
-      // if (editMenu.childrenResponse) {
-      //   delete editMenu.childrenResponse;
-      // }
       let ary = Object.keys(editMenu);
       editMenu = JSON.parse(JSON.stringify(editMenu));
-      // console.log(editMenu);
       return { ary, editMenu };
+    },
+    // 检查并且创造出唯一的currentid 在添加的时候有效
+    check_CreateCurrentId() {
+      if (this.ruleForm.parentId !== 0) {
+        return { currentId: 0 };
+      }
+      let currentIdAry = this.currentIdAry;
+      let currentId = 1;
+      while (currentIdAry.indexOf(currentId) !== -1) {
+        //以上成立的时候执行[1,2]
+        currentId++;
+      }
+      return { currentId };
     },
     // 新建更新wx菜单
     createMenus() {
@@ -166,21 +163,46 @@ export default {
         } else {
           menuRequest.isDisplay = false;
         }
-        this.updateUserWeChatMenu(menuRequest).then(() => {
-          Message.success("更新菜单成功");
-          this.showOrHide();
-        });
+        if (menuRequest.parentId !== 0) {
+          menuRequest["childrenName"] = menuRequest.name;
+          delete menuRequest.name;
+        }
+        if (this.type==='add') {
+          menuRequest.currentId = this.check_CreateCurrentId()["currentId"];
+          
+        }
+        console.log(menuRequest);
+        if (this.type === "add") {
+          this.addUserWeChatMenu(menuRequest).then(() => {
+            Message.success("添加菜单成功");
+            this.showOrHide();
+          });
+        } else {
+           this.updateUserWeChatMenu(menuRequest).then(() => {
+            Message.success("更新菜单成功");
+            this.showOrHide();
+          });
+        }
       });
     },
 
     updateEditMenu() {
       let { ary, editMenu } = this.checkEditMenu(this.editMenu);
       if (ary.length !== 0) {
+        this.type = "update";
+        let ary = Object.keys(editMenu);
+        // 更换子菜单的name
+        if (editMenu.currentId === 0) {
+          editMenu["name"] = editMenu.childrenName;
+          delete editMenu.childrenName;
+        }
+
         editMenu.isDisplay
           ? (editMenu.isDisplay = "是")
           : (editMenu.isDisplay = "否");
         this.ruleForm = editMenu;
       } else {
+        this.type = "add";
         this.ruleForm = {
           parentId: 0,
           name: "",

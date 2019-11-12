@@ -8,8 +8,8 @@
       :border="true"
       :header-cell-style="theadClass"
       height="400"
-      :tree-props="{children: 'childrenResponse',hasChildren: 'hasChildren'}"
-      row-key="id"
+      :tree-props="{children: 'childrenResponse'}"
+      row-key="childrenName"
       default-expand-all
       :row-class-name="tableRowClassName"
     >
@@ -35,7 +35,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <WxMenusDialog ref="menuDialog" :editMenu='editMenu'></WxMenusDialog>
+    <WxMenusDialog ref="menuDialog" :editMenu="editMenu"></WxMenusDialog>
   </div>
 </template>
 
@@ -46,13 +46,13 @@ import WxMenusDialog from "./WxMenusDialog";
 export default {
   data() {
     return {
-      editMenu:{},
+      editMenu: {},
       theadClass: {
         backgroundColor: "#00B7C5",
         color: "white",
         textAlign: "center",
         height: "40px"
-      },
+      }
     };
   },
 
@@ -61,7 +61,7 @@ export default {
   },
   mounted() {},
   methods: {
-    // ...mapActions(['deleteUserWeChatMenu']),
+    ...mapActions(['deleteUserWeChatMenu']),
     tableRowClassName({ row, rowIndex }) {
       if (!row.isDisplay) {
         // console.log(row, rowIndex);
@@ -70,22 +70,21 @@ export default {
       return "";
     },
     openMenuDialog() {
-      this.editMenu = {}
-      this.$refs['menuDialog'].showOrHide()
+      this.editMenu = {};
+      this.$refs["menuDialog"].showOrHide();
     },
-    // clearEditMenu(){
-    //   this.editMenu = {}
-    // },
+    // 创建或修改最新的用户菜单
+    createOrEditMenu() {},
     // 处理每行数据
     handleEdit(index, row) {
-      this.$refs['menuDialog'].showOrHide()
-      this.editMenu = row
-      // console.log(index, row);
+      this.$refs["menuDialog"].showOrHide();
+      this.editMenu = row;
+      console.log(index, row);
     },
     // 删除微信的一行
     handleDelete(index, row) {
-      // this.deleteUserWeChatMenu({id:row.id})
-      // console.log(index, row);
+      this.deleteUserWeChatMenu(row)
+      console.log(index, row);
     }
   },
 
@@ -107,7 +106,7 @@ export default {
   }
   .wx-menus-btn {
     float: right;
-    margin-bottom: .1rem;
+    margin-bottom: 0.1rem;
   }
 }
 </style>

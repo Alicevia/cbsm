@@ -36,9 +36,9 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(['getUserWeChatMenu']),
+    ...mapActions(['getUserWeChatMenu','createFormatWeChatMenu']),
     createUserWxMenu(){
-      // this.getCreateWxMenusFromNJ()
+      this.createFormatWeChatMenu()
     }
   },
 

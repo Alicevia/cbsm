@@ -141,7 +141,7 @@ export default {
   },
 
   // 更新正在显示的待审核信息
-  [TYPES.UPDATE_CURRENT_AUDIT](state,data){
+  [TYPES.UPDATE_CURRENT_AUDIT](state, data) {
     state.currentAudit = data
   },
   // 获取所有服务的信息
@@ -170,28 +170,99 @@ export default {
     state.allServiceDevice = JSON.parse(JSON.stringify(allServiceDevice))
   },
 
-// 微信自定义菜单页面-------------------------------------------
-// 获取wxaccesstoken
-[TYPES.GET_WE_CHAT_ACCESSTOKEN](state,data){
-  state.weChatAccessToken = data
-},
-// 获取公众号微信菜单
-// [TYPES.GET_ORIGIN_WE_CHAT_MENUS](state,data){
-//   state.weChatOriginMenus = data
-// },
-// 获取用户在凝聚的wx菜单
-[TYPES.GET_USER_WE_CHAT_MENUS](state,data){
-  if (!data) {
-    state.weChatMenus = []
-  }else{
-    state.weChatMenus = data
+  // 微信自定义菜单页面-------------------------------------------
+  // 获取wxaccesstoken
+  [TYPES.GET_WE_CHAT_ACCESSTOKEN](state, data) {
+    state.weChatAccessToken = data
+  },
+  // 删除公众号微信菜单
+  [TYPES.DELETE_USER_WE_CHAT_MENUS](state, payload) {
+    let { weChatMenus } = state
+    let { parentId, currentId } = payload
+    if (currentId !== 0) {//删除的是父
+      weChatMenus.forEach((item, index) => {
+        if (item.currentId === currentId) {
+          weChatMenus.splice(index, 1)
+        }
+      })
+    } else {
+      for (let i = 0; i < weChatMenus.length; i++) {
+        const item = weChatMenus[i];
+        if (item.childrenResponse) {
+          let children = item.childrenResponse
+          children.forEach((value, index) => {
+            if (value.parentId === parentId) {
+              children.splice(index, 1,payload)
+            }
+          })
+        }
+      }
+
+    }
+  },
+  // 获取用户在凝聚的wx菜单
+  [TYPES.GET_USER_WE_CHAT_MENUS](state, data) {
+    if (!data) {
+      state.weChatMenus = []
+    } else {
+      state.weChatMenus = data
+    }
+  },
+  // 添加菜单
+  [TYPES.ADD_USER_WE_CHAT_MENUS](state, payload) {
+    let { weChatMenus } = state
+    let { parentId } = payload
+    if (parentId === 0) {
+      weChatMenus.push(payload)
+    } else {
+      weChatMenus = weChatMenus.map(item => {
+        if (item.currentId === parentId) {
+          if (!item.childrenResponse) {
+            item.childrenResponse = []
+          }
+          item.childrenResponse.push(payload)
+        }
+        return item
+      })
+      state.weChatMenus = weChatMenus
+    }
+  },
+  // 更新微信菜单
+  [TYPES.UPDATE_USER_WE_CHAT_MENUS](state,payload){
+    let { weChatMenus } = state
+    let { parentId,currentId } = payload
+    // console.log('payload',payload)
+    if (currentId !== 0) {//更新的是父
+      weChatMenus = weChatMenus.map((item, index) => {
+        // console.log(item.currentId,currentId)
+        if (item.currentId === currentId) {
+          for (const key in payload) {
+            if (!item.hasOwnProperty(key)) return
+            console.log(item)
+            item[key]=payload[key]
+          }
+        }
+        return item
+      })
+      // console.log('wechat',weChatMenus)
+      // state.weChatMenus = JSON.parse(JSON.stringify(weChatMenus))
+    }else{
+      for (let i = 0; i < weChatMenus.length; i++) {
+        const item = weChatMenus[i];
+        if (item.childrenResponse) {
+          let children = item.childrenResponse
+          children.forEach((value, index) => {
+            if (value.parentId === parentId) {
+              children.splice(index, 1,payload)
+              console.log(children)
+
+            }
+          })
+        }
+      }
+      state.weChatMenus = JSON.parse(JSON.stringify(weChatMenus))
+    }
   }
-},
-// 更新删除添加菜单
-[TYPES.UPDATE_USER_WE_CHAT_MENUS](state,payload){
-  // let {weChatMenus} = state
-  state.weChatMenus = payload
-}
 
 
 

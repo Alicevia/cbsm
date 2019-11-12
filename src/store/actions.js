@@ -170,49 +170,50 @@ export default {
     }
   },
 
-  // 获取用户本来的wx菜单
-  //  async getUserOriginalWeChatMenus({commit},data){
-  //   let result = await allReq.reqUserOriginalWeChatMenus(data)
-  //   console.log(result)
-  //   let menu= result.data.menu.button
-  //   if (result.status===200&& menu) {
-  //     commit(TYPES.GET_ORIGIN_WE_CHAT_MENUS,menu)
-  //   }else{
-  //     if (result.data.errcode===46003) {
-  //       Message.warning('当前用户没有原始菜单')
-  //     }else{
-  //       Message.error('获取用户微信菜单失败')
-  //     }
-  //   }
-  //  },
-  // 获取用户存储在凝聚的的wx菜单
+  // 获取用户存在数据库的wx菜单
   async getUserWeChatMenu({ commit }) {
     let result = await allReq.reqUserWeChatMenus()
     if (result.succeed) {
       commit(TYPES.GET_USER_WE_CHAT_MENUS, result.data.buttonResponses)
     }
   },
-  //  更新或新建wx菜单
-  async updateUserWeChatMenu({ commit }, payload) {
+  //  新建数据库的wx菜单
+   addUserWeChatMenu({ commit }, payload) {
     if (payload.menuType === 'CLICK') {
       payload.url = ''
     } else if (payload.menuType === 'VIEW') {
       payload.keyWord = ''
     }
-    let result = await allReq.reqEditWeChatMenus(payload)
+    commit(TYPES.ADD_USER_WE_CHAT_MENUS, payload)
 
-    if (result.succeed) {
-      commit(TYPES.UPDATE_USER_WE_CHAT_MENUS, result.data.buttonResponses)
-    } else {
-      Message.error(`添加或修改菜单失败`)
-    }
   },
-  // 删除用户本地的菜单
-  // deleteUserWeChatMenu({ commit }, payload) {
-  //   commit(TYPES.UPDATE_USER_WE_CHAT_MENUS, payload)
-  // },
-  // 创建最新的微信菜单并且传到微信服务器
+  // 更新微信菜单
+  updateUserWeChatMenu({commit},payload){
+    if (payload.menuType === 'CLICK') {
+      payload.url = ''
+    } else if (payload.menuType === 'VIEW') {
+      payload.keyWord = ''
+    }
+    console.log('-',payload)
+    commit(TYPES.UPDATE_USER_WE_CHAT_MENUS,payload)
+  },
+  // 删除用户本地的某条菜单
+  deleteUserWeChatMenu({ commit }, payload) {
+    commit(TYPES.DELETE_USER_WE_CHAT_MENUS, payload)
+  },
 
+  //获得格式化后的微信菜单并且传到微信服务器
+  async createFormatWeChatMenu({state}){
+    let {weChatAccessToken} = state
+    let result = await allReq.reqCreateWeChatMenus()
+    console.log(result)
+    let result2  = await allReq.reqCreateOriginalWeChatMenus({
+      access_token:weChatAccessToken,
+      button:result.data.button
+    })
+    console.log(result2)
+
+  }
 
 
 
