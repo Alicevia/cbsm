@@ -12,12 +12,12 @@
 import LabelRouter from "src/common/LabelRouter";
 
 export default {
-
   data() {
     return {
       routerObj: [
         { path: "/home/wx/public", title: "公众号设置" },
-        { path: "/home/wx/menus", title: "自定义菜单" }
+        { path: "/home/wx/menus", title: "自定义菜单" },
+        {path:'/home/wx/usermanage',title:'用户管理'}
       ]
     };
   },

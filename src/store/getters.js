@@ -92,12 +92,39 @@ export default {
       })
       return ary
     },
+    wxIdAry(state){
+      let {weChatMenus} = state
+      let ary = []
+      ary = weChatMenus.reduce((pre,item,index)=>{
+        console.log(pre)
+        if (item.childrenResponse) {
+          let temp = item.childrenResponse
+          temp.forEach(value=>{
+            pre.push(value.id)
+          })
+        }
+        pre.push(item.id)
+        return pre
+      },ary)
+      return ary
+    },
     //格式化本地的微信菜单
     formatlocalMenu(state){
       let {weChatMenus} = state
-
-      
-
+      let newMenu=[]
+      weChatMenus = JSON.parse(JSON.stringify(weChatMenus))
+      newMenu = weChatMenus.reduce((pre,item,index)=>{
+        // console.log(pre,item)
+        if (item.childrenResponse) {
+          pre = pre.concat(item.childrenResponse)
+          delete item.childrenResponse
+          pre.push(item)
+        }else{
+          pre.push(item)
+        }
+        return pre
+      },newMenu)
+      return newMenu||[]
     }
     
 }

@@ -178,7 +178,8 @@ export default {
   // 删除公众号微信菜单
   [TYPES.DELETE_USER_WE_CHAT_MENUS](state, payload) {
     let { weChatMenus } = state
-    let { parentId, currentId } = payload
+    let { parentId, currentId,id } = payload
+    
     if (currentId !== 0) {//删除的是父
       weChatMenus.forEach((item, index) => {
         if (item.currentId === currentId) {
@@ -191,46 +192,49 @@ export default {
         if (item.childrenResponse) {
           let children = item.childrenResponse
           children.forEach((value, index) => {
-            if (value.parentId === parentId) {
-              children.splice(index, 1,payload)
+            if (value.id === id) {
+              console.log(id)
+              children.splice(index, 1)
             }
           })
         }
       }
-
+      state.weChatMenus = JSON.parse(JSON.stringify(weChatMenus))
     }
   },
   // 获取用户在凝聚的wx菜单
   [TYPES.GET_USER_WE_CHAT_MENUS](state, data) {
-    if (!data) {
-      state.weChatMenus = []
-    } else {
-      state.weChatMenus = data
-    }
+    // console.log(data)
+    state.weChatMenus = data
   },
   // 添加菜单
   [TYPES.ADD_USER_WE_CHAT_MENUS](state, payload) {
     let { weChatMenus } = state
     let { parentId } = payload
-    if (parentId === 0) {
+    if (parentId === 0) {//添加的是父
       weChatMenus.push(payload)
-    } else {
+    } else {//添加的是子
       weChatMenus = weChatMenus.map(item => {
         if (item.currentId === parentId) {
           if (!item.childrenResponse) {
             item.childrenResponse = []
+            item['childrenResponse'] = []
           }
+          // console.log(item)
           item.childrenResponse.push(payload)
+
         }
+        // console.log(item)
         return item
       })
+      // console.log(weChatMenus)
       state.weChatMenus = weChatMenus
     }
   },
   // 更新微信菜单
   [TYPES.UPDATE_USER_WE_CHAT_MENUS](state,payload){
     let { weChatMenus } = state
-    let { parentId,currentId } = payload
+    let { parentId,currentId,id } = payload
     // console.log('payload',payload)
     if (currentId !== 0) {//更新的是父
       weChatMenus = weChatMenus.map((item, index) => {
@@ -247,19 +251,15 @@ export default {
       // console.log('wechat',weChatMenus)
       // state.weChatMenus = JSON.parse(JSON.stringify(weChatMenus))
     }else{
-      for (let i = 0; i < weChatMenus.length; i++) {
-        const item = weChatMenus[i];
-        if (item.childrenResponse) {
-          let children = item.childrenResponse
-          children.forEach((value, index) => {
-            if (value.parentId === parentId) {
-              children.splice(index, 1,payload)
-              console.log(children)
-
+      weChatMenus.forEach(item=>{
+        if (item.currentId===parentId) {
+          item.childrenResponse.forEach((value,index)=>{
+            if (value.id===id) {
+              item.childrenResponse.splice(index,1,payload)
             }
           })
         }
-      }
+      })
       state.weChatMenus = JSON.parse(JSON.stringify(weChatMenus))
     }
   }

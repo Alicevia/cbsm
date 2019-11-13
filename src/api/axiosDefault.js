@@ -2,6 +2,7 @@ import axios from 'axios'
 import router from 'src/router/'
 import { Message } from 'element-ui'
 import store from '../store'
+import qs from 'qs'
 // if (process.env.NODE_ENV == 'development') {    
 //     axios.defaults.baseURL = 'https://www.baidu.com';} 
 // else if (process.env.NODE_ENV == 'debug') {    
@@ -20,8 +21,15 @@ import store from '../store'
 axios.defaults.baseURL = 'https://www.cluster-dt.com/pcwechat/'
 // axios.defaults.baseURL = 'http://www.cluster-dt.com:8082/'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+// axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 // axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
 axios.defaults.timeout = 10000;
+// axios.defaults.transformResponse=[(data) => {
+//   //向服务器发送前，修改请求数据
+//   //必须返回字符串
+//   //只能用在 'PUT', 'POST' 和 'PATCH' 这几个请求方法
+//   return JSON.parse(data)
+// }]
 //请求拦截器
 axios.interceptors.request.use(function (config) {
     let userToken = store.state.userToken
@@ -34,6 +42,7 @@ axios.interceptors.request.use(function (config) {
   //  console.log(err) 目前没见到可以进来的请求错误 大都是响应出错
     return Promise.reject(err)
 });
+
 //响应拦截器设置user-token过期，重新授权
 axios.interceptors.response.use(function (response) {
     if (response.data.succeed === false && response.data.code === 401) {//检测所有的响应
@@ -53,6 +62,7 @@ axios.interceptors.response.use(function (response) {
             // axios.defaults.headers.common['Cache-Control'] = 'no-cache'
         }
     }
+    // console.log(response)
     return response
 }, error => {
     // console.log('response',error) 会被后面的catch

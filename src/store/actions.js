@@ -80,9 +80,9 @@ export default {
   //获取每组服务的具体数据
   async getGroupItemInfo({ commit }, payload) {
     let { id, page, size } = payload
-    console.log(payload)
+    // console.log(payload)
     let result = await allReq.reqGroupItemInfo(payload)
-    console.log(result)
+    // console.log(result)
     if (result.succeed) {
       let data = result.data
       commit(TYPES.GET_GROUP_ITEM_INFO, { data, id, page })
@@ -174,11 +174,12 @@ export default {
   async getUserWeChatMenu({ commit }) {
     let result = await allReq.reqUserWeChatMenus()
     if (result.succeed) {
+      // console.log(result)
       commit(TYPES.GET_USER_WE_CHAT_MENUS, result.data.buttonResponses)
     }
   },
   //  新建数据库的wx菜单
-   addUserWeChatMenu({ commit }, payload) {
+  addUserWeChatMenu({ commit }, payload) {
     if (payload.menuType === 'CLICK') {
       payload.url = ''
     } else if (payload.menuType === 'VIEW') {
@@ -188,14 +189,14 @@ export default {
 
   },
   // 更新微信菜单
-  updateUserWeChatMenu({commit},payload){
+  updateUserWeChatMenu({ commit }, payload) {
     if (payload.menuType === 'CLICK') {
       payload.url = ''
     } else if (payload.menuType === 'VIEW') {
       payload.keyWord = ''
     }
-    console.log('-',payload)
-    commit(TYPES.UPDATE_USER_WE_CHAT_MENUS,payload)
+    // console.log('-',payload)
+    commit(TYPES.UPDATE_USER_WE_CHAT_MENUS, payload)
   },
   // 删除用户本地的某条菜单
   deleteUserWeChatMenu({ commit }, payload) {
@@ -203,15 +204,29 @@ export default {
   },
 
   //获得格式化后的微信菜单并且传到微信服务器
-  async createFormatWeChatMenu({state}){
-    let {weChatAccessToken} = state
-    let result = await allReq.reqCreateWeChatMenus()
+  async createFormatWeChatMenu({ state, getters }) {
+    let { weChatAccessToken } = state
+    let { formatlocalMenu } = getters
+    console.log(formatlocalMenu)
+    let result = await allReq.reqBatchEditMenus(formatlocalMenu)
     console.log(result)
-    let result2  = await allReq.reqCreateOriginalWeChatMenus({
-      access_token:weChatAccessToken,
-      button:result.data.button
-    })
-    console.log(result2)
+    if (result.succeed) {
+      let result1 = await allReq.reqCreateWeChatMenus()
+      console.log(result1)
+
+      if (result1.succeed) {
+        let result2 = await allReq.reqCreateOriginalWeChatMenus({
+          access_token: weChatAccessToken,
+          button: result1.data.button
+        })
+        console.log(result2)
+      }else{
+        Message.error('获取格式化后的菜单出错')
+      }
+    }else{
+      Message.error('同步服务器菜单出错')
+    }
+  
 
   }
 

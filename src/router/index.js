@@ -47,7 +47,21 @@ let router = new Router({
                   next({ path: '/home/wx/public' })
                 }
               } 
-            }
+            },
+            {
+              path:'/home/wx/usermanage',
+              component:()=> import('pages/Home/NavRouter/WxManage/WxRouter/WxUserMangage.vue'),
+              beforeEnter:(to,from,next)=>{
+                if (store.state.weChatAccessToken) {
+                  next()
+                } else {
+                  next({ path: '/home/wx/public' })
+                  Message.warning('请先再本页面微信扫码授权')
+
+                }
+              } 
+            },
+
           ]
         },
         {

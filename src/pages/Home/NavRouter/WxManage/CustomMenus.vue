@@ -9,9 +9,8 @@
       :header-cell-style="theadClass"
       height="400"
       :tree-props="{children: 'childrenResponse'}"
-      row-key="childrenName"
+      row-key="id"
       default-expand-all
-      :row-class-name="tableRowClassName"
     >
       <el-table-column prop="name" width="120" label="父级菜单"></el-table-column>
       <el-table-column prop="childrenName" width="120" label="子级菜单"></el-table-column>
@@ -59,7 +58,9 @@ export default {
   computed: {
     ...mapState(["weChatMenus"])
   },
-  mounted() {},
+  mounted() {
+    
+  },
   methods: {
     ...mapActions(['deleteUserWeChatMenu']),
     tableRowClassName({ row, rowIndex }) {

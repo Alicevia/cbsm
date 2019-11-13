@@ -127,7 +127,7 @@ export default {
 
   computed: {
     ...mapState(["weChatMenus"]),
-    ...mapGetters(["currentIdAry"])
+    ...mapGetters(["currentIdAry",'wxIdAry'])
   },
   created() {},
   mounted() {},
@@ -152,6 +152,16 @@ export default {
       }
       return { currentId };
     },
+    check_CreateWxId(){
+  
+        let wxIdAry = this.wxIdAry
+        let id = 1
+        while(wxIdAry.indexOf(id)!==-1){
+          id++
+        }
+        return {id}
+    
+    },
     // 新建更新wx菜单
     createMenus() {
       this.$refs["wxMenus"].validate(valid => {
@@ -169,7 +179,7 @@ export default {
         }
         if (this.type==='add') {
           menuRequest.currentId = this.check_CreateCurrentId()["currentId"];
-          
+          menuRequest.id =this.check_CreateWxId()['id']
         }
         console.log(menuRequest);
         if (this.type === "add") {
