@@ -1,5 +1,6 @@
 import {axios1 as axios ,ajax} from '../axios'
 
+
 // 获取微信accesstoken
 export const reqWeChatAccessToken = ()=>axios({
   url:'manage/customerAccessToken'
@@ -32,6 +33,7 @@ export const reqCreateWeChatMenus = ()=>axios({
 export const reqCreateOriginalWeChatMenus = (data)=>{
   let token = data.access_token
   delete data.access_token
+  console.log(store)
   return ajax({
     url:`cgi-bin/menu/create?access_token=${token}`,
     data,

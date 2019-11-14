@@ -126,7 +126,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["weChatMenus"]),
+    ...mapState(["weChatMenus",'userInfo']),
     ...mapGetters(["currentIdAry",'wxIdAry'])
   },
   created() {},
@@ -152,6 +152,7 @@ export default {
       }
       return { currentId };
     },
+    // 检查并且产生唯一的id
     check_CreateWxId(){
   
         let wxIdAry = this.wxIdAry
@@ -179,7 +180,7 @@ export default {
         }
         if (this.type==='add') {
           menuRequest.currentId = this.check_CreateCurrentId()["currentId"];
-          menuRequest.id =this.check_CreateWxId()['id']
+          menuRequest.id =parseInt(this.check_CreateWxId()['id']+this.userInfo.phone)
         }
         console.log(menuRequest);
         if (this.type === "add") {

@@ -8,7 +8,6 @@
         <li>每次修改自定义菜单后，由于微信客户端缓存，需要24小时左右微信客户端才会显示生效。测试时可以尝试重新关注微信公众号，或者清除微信缓存。</li>
       </ul>
     </div>
-  
     <CustomMenus ></CustomMenus>
     <div style="textAlign:center;marginTop:.05rem">
       <el-button type="primary" @click="createUserWxMenu">生成自定义菜单</el-button>

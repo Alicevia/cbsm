@@ -96,7 +96,6 @@ export default {
       let {weChatMenus} = state
       let ary = []
       ary = weChatMenus.reduce((pre,item,index)=>{
-        console.log(pre)
         if (item.childrenResponse) {
           let temp = item.childrenResponse
           temp.forEach(value=>{
@@ -124,6 +123,15 @@ export default {
         }
         return pre
       },newMenu)
+      if (newMenu.length>0) {
+        newMenu = newMenu.map(item=>{
+          if (item.childrenName) {
+            item.name = item.childrenName
+            delete item.childrenName
+          }
+          return item
+        })
+      }
       return newMenu||[]
     }
     

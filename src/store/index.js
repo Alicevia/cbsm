@@ -4,8 +4,12 @@ import state from './state'
 import actions from './actions'
 import mutations from './mutations'
 import getters from './getters'
+import wxUserManage from './wxUserManage'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state,actions,getters,mutations
+  state, actions, getters, mutations, 
+  modules: {
+    wxUserManage
+  }
 })

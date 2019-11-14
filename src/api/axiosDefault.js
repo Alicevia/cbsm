@@ -75,9 +75,11 @@ let instance1 = axios.create({
   baseURL:'',
   // baseURL:'https://www.cluster-dt.com/wx/',
   timeout:10000,
+
 })
 
 instance1.interceptors.request.use(config=>{
+  
   let userToken = store.state.userToken
   if (userToken) {
       config.headers['user-token'] = userToken;

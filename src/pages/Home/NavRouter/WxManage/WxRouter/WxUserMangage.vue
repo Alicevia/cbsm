@@ -57,11 +57,12 @@
             <el-button type="primary" size="mini">添加</el-button>
           </div>
           <ul class="group">
-            <li class="item">未分组<span class="numb">9</span></li>
-            <li class="item">未分组<span class="numb">99</span></li>
+            <li class="item"><span class="text">全部用户</span><span class="numb">9</span></li>
             <li class="item">未分组<span class="numb">99</span></li>
             <li class="item">未分组<span class="numb">99</span> <el-button class="group-btn" type="primary" size="mini">编辑</el-button></li>
-            <li class="item">未分组<span class="numb">9999</span> <el-button class="group-btn" type="primary" size="mini">编辑</el-button></li>
+            <li class="item"><span class="text"> 未分组手动阀是阿斯顿发分</span><span class="numb">9999</span> <el-button class="group-btn" type="primary" size="mini">编辑</el-button></li>
+            <li class="item"><span class="text">黑名单</span><span class="numb">9999</span></li>
+          
           </ul>
         </div>
       </div>
@@ -74,6 +75,7 @@
 
 <script>
 import Pagination from '../Pagination'
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -142,10 +144,14 @@ export default {
   },
 
   computed: {},
-
+  created(){
+    this.getWeChatLabel()
+    this.getAllAttentionUser()
+  },
   mounted() {},
 
   methods: {
+    ...mapActions(['getWeChatLabel','getAllAttentionUser']),
     toggleSelection(rows) {
         if (rows) {
           rows.forEach(row => {
@@ -213,7 +219,15 @@ export default {
            border: 1px solid rgb(235, 238, 245);
            line-height: .35rem;
            padding-left: .05rem;
-       
+            .text{
+              width: .6rem;
+              display: block;
+              float: left;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+              
+            }
            .numb {
              background-color: red;
              border-radius: .1rem;
@@ -221,15 +235,19 @@ export default {
              line-height: 1;
              text-align: center;
              min-width: .2rem;
-             margin-left: .05rem;
+             margin-left: .02rem;
              color: white;
              
             
            }
            .group-btn {
-             margin-top: .03rem;
+             margin-top: .07rem;
              float: right;
              margin-right: .01rem;
+             width: .4rem;
+             height: .2rem;
+             text-align: center;
+             padding: 0;
              
            }
           }
