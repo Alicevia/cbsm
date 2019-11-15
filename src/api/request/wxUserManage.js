@@ -47,11 +47,9 @@ export const reqDeleteLabel = (data) => {
 }
 
 // 获取标签下的粉丝列表
-export const reqLabelUserList = (data) => {
-  let token = data.access_token
-  delete data.access_token
+export const reqSomeLabelUserList = (data) => {
   return ajax({
-    url: `cgi-bin/user/tag/get?access_token=${token}`,
+    url: `cgi-bin/user/tag/get?access_token=${store.state.weChatAccessToken}`,
     data,
     method:'post',
     flag:false
@@ -105,10 +103,8 @@ export const reqBatchReceiveUserInfo = (data) => {
 
 //获取公众号黑名单列表
 export const reqBlackListUserInfo = (data) => {
-  let token = data.access_token
-  delete data.access_token
   return ajax({
-    url: `cgi-bin/tags/members/getblacklist?access_token=${token}`,
+    url: `cgi-bin/tags/members/getblacklist?access_token=${store.state.weChatAccessToken}`,
     data,
     method:'post',
     flag:false

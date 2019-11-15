@@ -31,24 +31,33 @@
         <div class="user-table">
           <el-table
             ref="multipleTable"
-            :data="tableData"
+            :data="showCurrentTableList[currentPage]"
             tooltip-effect="dark"
-             :border="true"
-             height="400"
+            :border="true"
+            height="400"
             :header-cell-style="theadClass"
-            size='mini'
+            :cell-style="{textAlign:'center'}"
+            size="mini"
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column label="头像" width="80">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
-            </el-table-column>
-            <el-table-column prop="name" label="昵称" width="120"></el-table-column>
-            <el-table-column prop="address" label="省(直辖市)" width="120" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="name" label="关注时间" width="130"></el-table-column>
-            <el-table-column prop="name" label="绑定用户" width="140"></el-table-column>
-            <el-table-column prop="name" label="操作" width="80"></el-table-column>
+              <template slot-scope="scope">
 
+                <img :src="scope.row.headimgurl" alt="" class='avatar'>
+                </template>
+            </el-table-column>
+            <el-table-column prop="nickname" label="昵称" width="120"></el-table-column>
+            <el-table-column prop="city" label="省(直辖市)" width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="subscribe_time" label="关注时间" width="130">
+              <template slot-scope='scope'>
+                {{scope.row.subscribe_time|formatTime}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="openid" label="绑定用户" width="140"></el-table-column>
+            <el-table-column prop="name" label="操作" width="80">
+              <i :style="{fontSize:'30px',color:'#00B7C5',cursor:'pointer'}" class="el-icon-s-comment"></i>
+            </el-table-column>
           </el-table>
         </div>
         <div class="user-update">
@@ -57,28 +66,42 @@
             <el-button type="primary" size="mini">添加</el-button>
           </div>
           <ul class="group">
-            <li class="item"><span class="text">全部用户</span><span class="numb">9</span></li>
-            <li class="item">未分组<span class="numb">99</span></li>
-            <li class="item">未分组<span class="numb">99</span> <el-button class="group-btn" type="primary" size="mini">编辑</el-button></li>
-            <li class="item"><span class="text"> 未分组手动阀是阿斯顿发分</span><span class="numb">9999</span> <el-button class="group-btn" type="primary" size="mini">编辑</el-button></li>
-            <li class="item"><span class="text">黑名单</span><span class="numb">9999</span></li>
-          
+            <li class="item">
+              <span class="text" @click="getAllAttentionUser" >全部用户</span>
+              <span class="numb">9</span>
+            </li>
+            <li class="item">
+               <span class="text">未分组</span>
+              <span class="numb">99</span>
+            </li>
+
+            <li class="item" v-for="(item) in labelList" :key="item.id" >
+              <span class="text" @click="getLableGategoryUser({tagid:item.id})">{{item.name}}</span>
+              <span class="numb">{{item.count}}</span>
+              <el-button v-if="item.name!=='星标组'" class="group-btn" type="primary" size="mini">编辑</el-button>
+            </li>
+
+            <li class="item">
+              <span class="text" @click="getBlackListUser">黑名单</span>
+              <span class="numb">9999</span>
+            </li>
           </ul>
         </div>
       </div>
       <div>
-        <Pagination ></Pagination>
+        <Pagination  @changeCurrentPage='changeCurrentPage'></Pagination>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Pagination from '../Pagination'
-import { mapActions } from 'vuex';
+import Pagination from "../Pagination";
+import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      currentPage:0,
       theadClass: {
         backgroundColor: "#00B7C5",
         color: "white",
@@ -109,64 +132,91 @@ export default {
         }
       ],
       value: "",
-      tableData: [{
-          date: '2016-',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-        multipleSelection: []
-
+      tableData: [
+        {
+          date: "2016-",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-04",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-08",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-06",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-07",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        }
+      ],
+      multipleSelection: []
     };
   },
 
-  computed: {},
-  created(){
-    this.getWeChatLabel()
-    this.getAllAttentionUser()
+  computed: {
+    ...mapState({
+      labelList:state=>state.wxUserManage.labelList
+    }),
+    ...mapGetters(['showCurrentTableList']),
+    // currentPage:{
+    //   get
+    // }
   },
-  mounted() {},
+  created() {
+    this.getWeChatLabel();
+    this.getAllAttentionUser();
+    // this.getBlackListUser()
+  },
+  mounted() {
+    
+
+  },
 
   methods: {
-    ...mapActions(['getWeChatLabel','getAllAttentionUser']),
+    ...mapActions(["getWeChatLabel", "getAllAttentionUser",'getLableGategoryUser','getBlackListUser']),
+    changeCurrentPage(page){
+      this.currentPage = page
+    },
     toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
       }
+    },
+    handleSelectionChange(val) {
+     this.multipleSelection = val;
+    }
+  },
+  filters:{
+    formatTime(time){
+      return new Date(time*1000).toLocaleDateString()
+    }
   },
 
-  components: {Pagination}
+  components: { Pagination }
 };
 </script>
 <style lang='less' scoped>
@@ -189,8 +239,8 @@ export default {
   }
   .user-manage {
     .user-operate {
-      margin-top: .2rem;
-      margin-bottom: .1rem;
+      margin-top: 0.2rem;
+      margin-bottom: 0.1rem;
       display: flex;
       justify-content: space-between;
       .user-search {
@@ -198,63 +248,66 @@ export default {
       }
     }
     .user-show {
-     display: flex;
-      .user-update{
-        margin-left: .1rem;
+      display: flex;
+      .user-table {
+        .table-td{
+          text-align: center;
+        }
+        .avatar {
+          width: .3rem;
+          height: .3rem;
+        }
+      }
+      .user-update {
+        margin-left: 0.1rem;
         flex: 1;
         align-self: flex-start;
         box-sizing: border-box;
-        
+
         border: 1px solid rgb(235, 238, 245);
         .update {
-          display:flex;
+          display: flex;
           border: 1px solid rgb(235, 238, 245);
-          line-height: .4rem;
-          padding: .06rem;
-
+          line-height: 0.4rem;
+          padding: 0.06rem;
         }
         .group {
-          font-size: .14rem;
+          font-size: 0.14rem;
           .item {
-           border: 1px solid rgb(235, 238, 245);
-           line-height: .35rem;
-           padding-left: .05rem;
-            .text{
-              width: .6rem;
+            border: 1px solid rgb(235, 238, 245);
+            line-height: 0.35rem;
+            padding-left: 0.05rem;
+            .text {
+              width: 0.6rem;
               display: block;
               float: left;
               text-overflow: ellipsis;
               white-space: nowrap;
               overflow: hidden;
-              
+              cursor: pointer;
             }
-           .numb {
-             background-color: red;
-             border-radius: .1rem;
-             display: inline-block;
-             line-height: 1;
-             text-align: center;
-             min-width: .2rem;
-             margin-left: .02rem;
-             color: white;
-             
-            
-           }
-           .group-btn {
-             margin-top: .07rem;
-             float: right;
-             margin-right: .01rem;
-             width: .4rem;
-             height: .2rem;
-             text-align: center;
-             padding: 0;
-             
-           }
+            .numb {
+              background-color: red;
+              border-radius: 0.1rem;
+              display: inline-block;
+              line-height: 1;
+              text-align: center;
+              min-width: 0.2rem;
+              margin-left: 0.02rem;
+              color: white;
+            }
+            .group-btn {
+              margin-top: 0.07rem;
+              float: right;
+              margin-right: 0.01rem;
+              width: 0.4rem;
+              height: 0.2rem;
+              text-align: center;
+              padding: 0;
+            }
           }
         }
       }
-
-
     }
   }
 }

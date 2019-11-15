@@ -1,38 +1,36 @@
 <template>
   <div class="pagination">
     <el-pagination
-      @size-change="handleSizeChange"
+      background
       @current-change="handleCurrentChange"
-      :current-page.sync="currentPage3"
-      :page-size="100"
+      :page-size="10"
       layout="prev, pager, next, jumper"
-      :total="1000"
-      small
+      :total="currentTableList.length?currentTableList.length:0"
     ></el-pagination>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4
+      currentPage: 1
     };
   },
 
-  computed: {},
+  computed: {
+    ...mapState({
+      currentTableList: state => state.wxUserManage.currentTableList
+    })
+  },
 
   mounted() {},
 
   methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+    handleCurrentChange(page) {
+      this.$emit("changeCurrentPage", page - 1);
+      console.log(`当前页: ${page}`);
     }
   },
 
@@ -41,8 +39,8 @@ export default {
 </script>
 <style lang='less' scoped>
 .pagination {
-  margin-top: .2rem;
-  .el-pagination{
+  margin-top: 0.2rem;
+  .el-pagination {
     text-align: center;
   }
 }
