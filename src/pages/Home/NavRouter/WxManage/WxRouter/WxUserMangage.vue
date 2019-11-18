@@ -13,14 +13,11 @@
         <div class="user-transport">
           <span>将选中的粉丝转移到分组中</span>
           <el-select v-model="value" placeholder="请选择" style="width:1rem" size="mini">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+            <el-option label="未分组" value="cancel"></el-option>
+            <el-option v-for="item in labelList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            <el-option label="黑名单" value="black"></el-option>
           </el-select>
-          <el-button type="primary" size="mini">转移</el-button>
+          <el-button type="primary" size="mini" @click="changeUsersLabel">转移</el-button>
         </div>
         <div class="user-search">
           <el-input v-model="search" placeholder="请输入昵称、省、市搜索" size="mini"></el-input>
@@ -34,7 +31,8 @@
             :data="showCurrentTableList[currentPage]"
             tooltip-effect="dark"
             :border="true"
-            height="400"
+            max-height="400px"
+            :height="400"
             :header-cell-style="theadClass"
             :cell-style="{textAlign:'center'}"
             size="mini"
@@ -43,53 +41,60 @@
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column label="头像" width="80">
               <template slot-scope="scope">
-
-                <img :src="scope.row.headimgurl" alt="" class='avatar'>
-                </template>
-            </el-table-column>
-            <el-table-column prop="nickname" label="昵称" width="120"></el-table-column>
-            <el-table-column prop="city" label="省(直辖市)" width="120" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="subscribe_time" label="关注时间" width="130">
-              <template slot-scope='scope'>
-                {{scope.row.subscribe_time|formatTime}}
+                <img :src="scope.row.headimgurl" alt class="avatar" />
               </template>
+            </el-table-column>
+            <el-table-column prop="nickname" label="昵称" width="125"></el-table-column>
+            <el-table-column prop="city" label="省(直辖市)" width="100" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="subscribe_time" label="关注时间" width="120">
+              <template slot-scope="scope">{{scope.row.subscribe_time|formatTime}}</template>
             </el-table-column>
             <el-table-column prop="openid" label="绑定用户" width="140"></el-table-column>
             <el-table-column prop="name" label="操作" width="80">
-              <i :style="{fontSize:'30px',color:'#00B7C5',cursor:'pointer'}" class="el-icon-s-comment"></i>
+              <i
+                :style="{fontSize:'30px',color:'#00B7C5',cursor:'pointer'}"
+                class="el-icon-s-comment"
+              ></i>
             </el-table-column>
           </el-table>
         </div>
         <div class="user-update">
           <div class="update">
-            <el-button type="primary" size="mini">更新</el-button>
-            <el-button type="primary" size="mini">添加</el-button>
+            <el-button type="primary" size="mini" @click="updateAllMessage">更新</el-button>
+            <el-button type="primary" size="mini" @click="addLabel">添加</el-button>
           </div>
           <ul class="group">
-            <li class="item">
-              <span class="text" @click="getAllAttentionUser" >全部用户</span>
-              <span class="numb">9</span>
-            </li>
-            <li class="item">
-               <span class="text">未分组</span>
-              <span class="numb">99</span>
-            </li>
-
-            <li class="item" v-for="(item) in labelList" :key="item.id" >
-              <span class="text" @click="getLableGategoryUser({tagid:item.id})">{{item.name}}</span>
-              <span class="numb">{{item.count}}</span>
-              <el-button v-if="item.name!=='星标组'" class="group-btn" type="primary" size="mini">编辑</el-button>
+            <!-- <li class="item">
+              <span class="text" @click="getAllAttentionUser">全部用户</span>
+              <span class="numb">{{allAttentionUserList.length}}</span>
+            </li>-->
+            <li :class="classFlag==='未分组'?'item active':'item'">
+              <span class="text" @click="changeCurrentToUnGroup" >未分组</span>
+              <span class="numb">{{unGroupUserList.length}}</span>
             </li>
 
-            <li class="item">
-              <span class="text" @click="getBlackListUser">黑名单</span>
-              <span class="numb">9999</span>
+            <li :class="classFlag===item.id?'item active':'item'"
+             v-for="(item) in labelList" :key="item.id">
+              <span class="text" @click="getLabelUser({tagid:item.id})">{{item.name}}</span>
+              <span class="numb">{{item.count?item.count:0}}</span>
+              <el-button
+                v-if="item.name!=='星标组'"
+                class="group-btn"
+                type="primary"
+                @click="changeLabelDialog(item)"
+                size="mini"
+              >编辑</el-button>
+            </li>
+
+            <li  :class="classFlag==='黑名单'?'item active':'item'">
+              <span class="text" @click="changeToBlackList">黑名单</span>
+              <span class="numb">{{blackList.length}}</span>
             </li>
           </ul>
         </div>
       </div>
       <div>
-        <Pagination  @changeCurrentPage='changeCurrentPage'></Pagination>
+        <Pagination @changeCurrentPage="changeCurrentPage"></Pagination>
       </div>
     </div>
   </div>
@@ -98,10 +103,12 @@
 <script>
 import Pagination from "../Pagination";
 import { mapActions, mapState, mapGetters } from "vuex";
+import { Message } from 'element-ui';
 export default {
   data() {
     return {
-      currentPage:0,
+      classFlag:'未分组',
+      currentPage: 0,
       theadClass: {
         backgroundColor: "#00B7C5",
         color: "white",
@@ -109,28 +116,6 @@ export default {
         height: "40px"
       },
       search: "",
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
       value: "",
       tableData: [
         {
@@ -175,28 +160,41 @@ export default {
 
   computed: {
     ...mapState({
-      labelList:state=>state.wxUserManage.labelList
+      labelList: state => state.wxUserManage.labelList,
+      blackList: state => state.wxUserManage.blackList,
+      allAttentionUserList: state => state.wxUserManage.allAttentionUserList
     }),
-    ...mapGetters(['showCurrentTableList']),
-    // currentPage:{
-    //   get
-    // }
+    ...mapGetters(["showCurrentTableList", "unGroupUserList"])
   },
   created() {
     this.getWeChatLabel();
-    this.getAllAttentionUser();
-    // this.getBlackListUser()
+    this.getAllAttentionUser({ flag: "init" }).then(() => {
+      this.showUnGroup();
+    });
+    this.getBlackListUser({ flag: "init" });
   },
-  mounted() {
-    
-
-  },
+  mounted() {},
 
   methods: {
-    ...mapActions(["getWeChatLabel", "getAllAttentionUser",'getLableGategoryUser','getBlackListUser']),
-    changeCurrentPage(page){
-      this.currentPage = page
+    ...mapActions([
+      "getWeChatLabel",
+      "getAllAttentionUser",
+      "getLableGategoryUser",
+      "getBlackListUser",
+      "addWeChatLabel",
+      "modiWeChatLabel",
+      "showUnGroup",
+      "batchUserLabel",
+      'batchCancelUserLabel'
+    ]),
+    changeToBlackList(){
+      this.getBlackListUser({ flag: '' })
+      this.classFlag='黑名单'
     },
+    changeCurrentPage(page) {
+      this.currentPage = page;
+    },
+    // 对选中的行进行操作
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -206,13 +204,104 @@ export default {
         this.$refs.multipleTable.clearSelection();
       }
     },
+    // 获取到选中数组
     handleSelectionChange(val) {
-     this.multipleSelection = val;
+      this.multipleSelection = val;
+      let newAry = this.multipleSelection;
+      newAry = newAry.map(item => {
+        return item.openid;
+      });
+      this.payload = { openid_list: newAry };
+      console.log(this.payload);
+    },
+    // 批量操作用户的标签
+    changeUsersLabel() {
+      let { payload, value,classFlag } = this;
+      if (classFlag===value||(classFlag==='未分组'&& value==='cancel')||(classFlag==='黑名单'&& value==='black')) {
+        Message.warning('你已经在这分组内')
+        return
+      }
+      if (value === "black") {
+        console.log(typeof classFlag)
+        if (typeof classFlag === 'number') {
+          Message.warning('黑名单只能被取消或者添加')
+          return 
+        }
+      } else if (value === "cancel") {
+        payload.tagid = classFlag;
+        this.batchCancelUserLabel(payload).then(()=>{
+          this.updateAllMessage()
+        });
+      } else {
+
+        payload.tagid = value;
+        this.batchUserLabel(payload).then(()=>{
+          this.updateAllMessage()
+        });
+      }
+      console.log(this.value);
+    },
+    // 获取标签下的用户
+    getLabelUser(tagid) {
+      this.getLableGategoryUser(tagid);
+      this.classFlag=tagid.tagid
+    },
+    // 添加标签
+    addLabel() {
+      this.$prompt("请输入标签名", "添加标签", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /^[\u4e00-\u9fa5]{1,10}$/,
+        inputErrorMessage: "标签名为1-10个汉字"
+      })
+        .then(({ value }) => {
+          this.addWeChatLabel({ tag: { name: value } });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消输入"
+          });
+        });
+    },
+    // 修改标签
+    changeLabelDialog(item) {
+      let { id, name } = item;
+      console.log(item);
+      this.$prompt("请修改标签名", "修改标签", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /^[\u4e00-\u9fa5]{1,10}$/,
+        inputErrorMessage: "标签名为1-10个汉字",
+        inputValue: name
+      })
+        .then(({ value }) => {
+          this.modiWeChatLabel({ tag: { id, name: value } });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消输入"
+          });
+        });
+    },
+    // 展示未分组
+    changeCurrentToUnGroup() {
+      this.showUnGroup();
+      this.classFlag = '未分组'
+    },
+    // 手动更新获取最新的信息
+    updateAllMessage() {
+      this.getWeChatLabel();
+      this.getAllAttentionUser({ flag: "init" }).then(() => {
+        this.showUnGroup();
+      });
+      this.getBlackListUser({ flag: "init" });
     }
   },
-  filters:{
-    formatTime(time){
-      return new Date(time*1000).toLocaleDateString()
+  filters: {
+    formatTime(time) {
+      return new Date(time * 1000).toLocaleDateString();
     }
   },
 
@@ -250,12 +339,13 @@ export default {
     .user-show {
       display: flex;
       .user-table {
-        .table-td{
+        width: 7rem;
+        .table-td {
           text-align: center;
         }
         .avatar {
-          width: .3rem;
-          height: .3rem;
+          width: 0.3rem;
+          height: 0.3rem;
         }
       }
       .user-update {
@@ -277,6 +367,13 @@ export default {
             border: 1px solid rgb(235, 238, 245);
             line-height: 0.35rem;
             padding-left: 0.05rem;
+            &:hover {
+              background-color: rgb(235, 238, 245);
+            }
+            &.active{
+              background-color: rgb(235, 238, 245);
+
+            }
             .text {
               width: 0.6rem;
               display: block;

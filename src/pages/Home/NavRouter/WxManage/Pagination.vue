@@ -26,7 +26,6 @@ export default {
   },
 
   mounted() {},
-
   methods: {
     handleCurrentChange(page) {
       this.$emit("changeCurrentPage", page - 1);

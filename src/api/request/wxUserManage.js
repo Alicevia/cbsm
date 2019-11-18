@@ -11,10 +11,8 @@ export const reqAllLabel = () => {
 
 // 创建标签分组
 export const reqCreateLabel = (data) => {
-  let token = data.access_token
-  delete data.access_token
   return ajax({
-    url: `cgi-bin/tags/create?access_token=${token}`,
+    url: `cgi-bin/tags/create?access_token=${store.state.weChatAccessToken}`,
     data,
     method:'post',
     flag:false
@@ -24,10 +22,9 @@ export const reqCreateLabel = (data) => {
 
 // 编辑标签分组
 export const reqEditLabel = (data) => {
-  let token = data.access_token
-  delete data.access_token
+  console.log(data)
   return ajax({
-    url: `cgi-bin/tags/update?access_token=${token}`,
+    url: `cgi-bin/tags/update?access_token=${store.state.weChatAccessToken}`,
     data,
     method:'post',
     flag:false
@@ -56,24 +53,20 @@ export const reqSomeLabelUserList = (data) => {
   })
 }
 
-// 批量对用户进行分组
+// 批量对用户进行打标签
 export const reqDivideUser = (data) => {
-  let token = data.access_token
-  delete data.access_token
   return ajax({
-    url: `cgi-bin/tags/members/batchtagging?access_token=${token}`,
+    url: `cgi-bin/tags/members/batchtagging?access_token=${store.state.weChatAccessToken}`,
     data,
     method:'post',
     flag:false
   })
 }
 
-// 批量对用户取消分组
+// 批量对用户取消标签
 export const reqCancelDivideUser = (data) => {
-  let token = data.access_token
-  delete data.access_token
   return ajax({
-    url: `cgi-bin/tags/members/batchuntagging?access_token=${token}`,
+    url: `cgi-bin/tags/members/batchuntagging?access_token=${store.state.weChatAccessToken}`,
     data,
     method:'post',
     flag:false
