@@ -35,6 +35,9 @@ export default {
     checkLocalServiceData(state){
       let {activeServiceInfo,groupInformation} = state
       let {id,page,index} = activeServiceInfo
+      if (groupInformation.length===0) {
+        return {}
+      }
       let othersPage = groupInformation.filter(item=>{
         if (!item.allPage) {
           item.allPage={}

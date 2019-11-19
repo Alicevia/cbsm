@@ -50,7 +50,7 @@ export default {
   async addWeChatLabel({ commit }, payload) {
 
     let result = await allReq.reqCreateLabel(payload)
-    console.log(result)
+
     if (result.status === 200 && !result.data.errcode) {
       commit(TYPES.ADD_WE_CHAT_LABEL, result.data.tag)
     } else {
@@ -58,11 +58,11 @@ export default {
     }
   },
   // 修改标签
-  async modiWeChatLabel({commit},payload){
+  async modiWeChatLabel({ commit }, payload) {
     let result = await allReq.reqEditLabel(payload)
-    if (result.data.errcode===0) {
-      commit(TYPES.MODI_WE_CHAT_LABEL,payload)
-    }else{
+    if (result.data.errcode === 0) {
+      commit(TYPES.MODI_WE_CHAT_LABEL, payload)
+    } else {
       showErrorMessage(result.data.errcode)
     }
   },
@@ -70,18 +70,18 @@ export default {
   async getLableGategoryUser({ commit }, payload) {
     let { tagid } = payload
     let result = await allReq.reqSomeLabelUserList(payload)
-    if (result.status === 200&& result.data.count!==0) {
+    if (result.status === 200 && result.data.count !== 0) {
       let user_list = result.data.data.openid
       user_list = user_list.map(item => ({ 'openid': item }))
-      
+
       let result2 = await allReq.reqBatchReceiveUserInfo({ user_list })
       if (result2.status === 200) {
         commit(TYPES.GET_SOME_LABEL_USER, { tagid, data: result2.data.user_info_list })
       } else {
         Message.error('获取标签下户信息出错')
       }
-    }else{
-      Message.warning('该标签下没有用户')
+    } else {
+      commit(TYPES.GET_SOME_LABEL_USER, { tagid, data: [] })
     }
 
   },
@@ -105,33 +105,72 @@ export default {
     }
   },
   // 展示未分组
-  async showUnGroup({commit,getters}){
-    let {unGroupUserList} = getters
-    commit(TYPES.SHOW_UN_GROUP,unGroupUserList)
+  showUnGroup({ commit, getters }) {
+    let { unGroupUserList } = getters
+    commit(TYPES.CHANGE_CURRENT_LIST, unGroupUserList)
+  },
+  // 展示搜索列表
+  showSearchList({ commit,state }, payload) {
+    state.searchList = payload
+    commit(TYPES.CHANGE_CURRENT_LIST, payload)
+  },
+  // 显示用户选择的列表
+  showUserSelect({commit,state,getters,dispatch}, payload) {
+    let unGroupUserList = getters.unGroupUserList
+    let data
+    if (typeof payload ==='number') {
+      dispatch('getLableGategoryUser',{tagid:payload})
+    }else{
+      switch (payload) {
+        case '未分组':
+          data = unGroupUserList
+          break;
+        case '黑名单':
+          data = state.blackList
+          break;
+        case '搜索':
+          data = state.searchList
+          break;
+      }
+      commit(TYPES.CHANGE_CURRENT_LIST, data)
+    }
+
   },
   // 批量操作用户的标签
-  async batchUserLabel({commit},payload){
-    let result  = await allReq.reqDivideUser(payload)
+  async batchUserLabel({ commit }, payload) {
+    let result = await allReq.reqDivideUser(payload)
   },
   // 批量取消用户标签
-  async batchCancelUserLabel({commit},payload){
+  async batchCancelUserLabel({ commit }, payload) {
     let result = await allReq.reqCancelDivideUser(payload)
-    console.log(result)
+
   },
   // 获取黑名单用户
   async getBlackListUser({ commit }, payload) {
-    let { flag='' } = payload
+    let { flag = '' } = payload
     let result = await allReq.reqBlackListUserInfo()
-    console.log(result)
     if (result.status === 200) {
-      batchUserInfo(result, (data) => {
-        console.log(data)
-        console.log(flag)
-        commit(TYPES.GET_BLACK_LIST, { data, flag })
-      })
+      if (result.data.count === 0) {
+        commit(TYPES.GET_BLACK_LIST, { data: {}, flag: 'empty' })
+      } else {
+        batchUserInfo(result, (data) => {
+          commit(TYPES.GET_BLACK_LIST, { data, flag })
+        })
+      }
+
     } else {
       Message.error('获取黑名单失败')
     }
   },
- 
+  // 批量拉黑用户
+  async batchUserToBlackList({ commit }, payload) {
+    let result = await allReq.reqBatchUserIntoBlackList(payload)
+  },
+  // 批量取消拉黑用户
+  async batchUserOutBlackList({ }, payload) {
+    let result = await allReq.reqBatchUserOutBlackList(payload)
+    console.log(result)
+
+  }
+
 }

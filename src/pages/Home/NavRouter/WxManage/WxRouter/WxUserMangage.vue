@@ -20,8 +20,8 @@
           <el-button type="primary" size="mini" @click="changeUsersLabel">转移</el-button>
         </div>
         <div class="user-search">
-          <el-input v-model="search" placeholder="请输入昵称、省、市搜索" size="mini"></el-input>
-          <el-button type="primary" size="mini">搜索</el-button>
+          <el-input v-model="search" placeholder="请输入昵称、省、市搜索" size="mini" @input="searchUser"></el-input>
+          <!-- <el-button type="primary" size="mini" @click="searchUser" >搜索</el-button> -->
         </div>
       </div>
       <div class="user-show">
@@ -33,7 +33,10 @@
             :border="true"
             max-height="400px"
             :height="400"
+             
+            v-loading='loading'
             :header-cell-style="theadClass"
+            
             :cell-style="{textAlign:'center'}"
             size="mini"
             @selection-change="handleSelectionChange"
@@ -69,12 +72,15 @@
               <span class="numb">{{allAttentionUserList.length}}</span>
             </li>-->
             <li :class="classFlag==='未分组'?'item active':'item'">
-              <span class="text" @click="changeCurrentToUnGroup" >未分组</span>
+              <span class="text" @click="changeCurrentToUnGroup">未分组</span>
               <span class="numb">{{unGroupUserList.length}}</span>
             </li>
 
-            <li :class="classFlag===item.id?'item active':'item'"
-             v-for="(item) in labelList" :key="item.id">
+            <li
+              :class="classFlag===item.id?'item active':'item'"
+              v-for="(item) in labelList"
+              :key="item.id"
+            >
               <span class="text" @click="getLabelUser({tagid:item.id})">{{item.name}}</span>
               <span class="numb">{{item.count?item.count:0}}</span>
               <el-button
@@ -86,7 +92,7 @@
               >编辑</el-button>
             </li>
 
-            <li  :class="classFlag==='黑名单'?'item active':'item'">
+            <li :class="classFlag==='黑名单'?'item active':'item'">
               <span class="text" @click="changeToBlackList">黑名单</span>
               <span class="numb">{{blackList.length}}</span>
             </li>
@@ -103,11 +109,13 @@
 <script>
 import Pagination from "../Pagination";
 import { mapActions, mapState, mapGetters } from "vuex";
-import { Message } from 'element-ui';
+import { Message,Loading } from "element-ui";
 export default {
   data() {
     return {
-      classFlag:'未分组',
+      loading:true,
+      loadingTarget:null,
+      classFlag: "未分组",
       currentPage: 0,
       theadClass: {
         backgroundColor: "#00B7C5",
@@ -167,14 +175,18 @@ export default {
     ...mapGetters(["showCurrentTableList", "unGroupUserList"])
   },
   created() {
+  
+
     this.getWeChatLabel();
     this.getAllAttentionUser({ flag: "init" }).then(() => {
       this.showUnGroup();
+      this.loading = false
     });
     this.getBlackListUser({ flag: "init" });
   },
-  mounted() {},
+  mounted() {
 
+  },
   methods: {
     ...mapActions([
       "getWeChatLabel",
@@ -185,14 +197,39 @@ export default {
       "modiWeChatLabel",
       "showUnGroup",
       "batchUserLabel",
-      'batchCancelUserLabel'
+      "batchCancelUserLabel",
+      "batchUserToBlackList",
+      "batchUserOutBlackList",
+      "showSearchList",
+      "showUserSelect"
     ]),
-    changeToBlackList(){
-      this.getBlackListUser({ flag: '' })
-      this.classFlag='黑名单'
+    // 获取黑名单
+    changeToBlackList() {
+      this.search = ''
+      this.getBlackListUser({ flag: "" });
+      this.classFlag = "黑名单";
     },
     changeCurrentPage(page) {
       this.currentPage = page;
+    },
+
+    // 搜索用户
+    searchUser(e) {
+      let allUser = this.allAttentionUserList;
+      let newAry = allUser.filter(item => {
+        return (
+          item.province.includes(this.search) ||
+          item.city.includes(this.search) ||
+          item.nickname.includes(this.search)
+        );
+      });
+      this.showSearchList(newAry);
+      if (e.length === 0) {
+        this.showUnGroup();
+        this.classFlag = "未分组";
+      } else {
+        this.classFlag = "搜索";
+      }
     },
     // 对选中的行进行操作
     toggleSelection(rows) {
@@ -216,35 +253,44 @@ export default {
     },
     // 批量操作用户的标签
     changeUsersLabel() {
-      let { payload, value,classFlag } = this;
-      if (classFlag===value||(classFlag==='未分组'&& value==='cancel')||(classFlag==='黑名单'&& value==='black')) {
-        Message.warning('你已经在这分组内')
-        return
+      let { payload, value, classFlag } = this;
+      if (
+        classFlag === value ||
+        (classFlag === "未分组" && value === "cancel") ||
+        (classFlag === "黑名单" && value === "black")
+      ) {
+        Message.warning("你已经在这分组内");
+        this.value = "";
+        return;
       }
+      this.loading = true
       if (value === "black") {
-        console.log(typeof classFlag)
-        if (typeof classFlag === 'number') {
-          Message.warning('黑名单只能被取消或者添加')
-          return 
-        }
-      } else if (value === "cancel") {
-        payload.tagid = classFlag;
-        this.batchCancelUserLabel(payload).then(()=>{
-          this.updateAllMessage()
+        this.batchUserToBlackList(payload).then(() => {
+          this.updateAllMessage();
         });
+      } else if (value === "cancel") {
+        if (classFlag === "黑名单") {
+          this.batchUserOutBlackList(payload).then(() => {
+            this.updateAllMessage();
+          });
+        } else {
+          payload.tagid = classFlag;
+          this.batchCancelUserLabel(payload).then(() => {
+            this.updateAllMessage();
+          });
+        }
       } else {
-
         payload.tagid = value;
-        this.batchUserLabel(payload).then(()=>{
-          this.updateAllMessage()
+        this.batchUserLabel(payload).then(() => {
+          this.updateAllMessage();
         });
       }
-      console.log(this.value);
     },
     // 获取标签下的用户
     getLabelUser(tagid) {
+      this.search = ''
       this.getLableGategoryUser(tagid);
-      this.classFlag=tagid.tagid
+      this.classFlag = tagid.tagid;
     },
     // 添加标签
     addLabel() {
@@ -287,16 +333,21 @@ export default {
     },
     // 展示未分组
     changeCurrentToUnGroup() {
+       this.search = ''
       this.showUnGroup();
-      this.classFlag = '未分组'
+      this.classFlag = "未分组";
     },
     // 手动更新获取最新的信息
     updateAllMessage() {
       this.getWeChatLabel();
-      this.getAllAttentionUser({ flag: "init" }).then(() => {
-        this.showUnGroup();
-      });
       this.getBlackListUser({ flag: "init" });
+      this.getAllAttentionUser({ flag: "init" }).then(() => {
+        
+        this.showUserSelect(this.classFlag);
+        this.loading = false
+      });
+
+      this.value = "";
     }
   },
   filters: {
@@ -370,9 +421,8 @@ export default {
             &:hover {
               background-color: rgb(235, 238, 245);
             }
-            &.active{
+            &.active {
               background-color: rgb(235, 238, 245);
-
             }
             .text {
               width: 0.6rem;

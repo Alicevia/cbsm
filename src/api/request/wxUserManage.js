@@ -106,10 +106,8 @@ export const reqBlackListUserInfo = (data) => {
 
 // 批量将用户拉进黑名单
 export const reqBatchUserIntoBlackList = (data) => {
-  let token = data.access_token
-  delete data.access_token
   return ajax({
-    url: `cgi-bin/tags/members/batchblacklist?access_token=${token}`,
+    url: `cgi-bin/tags/members/batchblacklist?access_token=${store.state.weChatAccessToken}`,
     data,
     method:'post',
     flag:false
@@ -118,10 +116,9 @@ export const reqBatchUserIntoBlackList = (data) => {
 
 // 取消用户黑名单
 export const reqBatchUserOutBlackList = (data) => {
-  let token = data.access_token
-  delete data.access_token
+  console.log(data)
   return ajax({
-    url: `cgi-bin/tags/members/batchunblacklist?access_token=${token}`,
+    url: `cgi-bin/tags/members/batchunblacklist?access_token=${store.state.weChatAccessToken}`,
     data,
     method:'post',
     flag:false

@@ -18,7 +18,8 @@ export default {
         { path: "/home/wx/public", title: "公众号设置" },
         { path: "/home/wx/menus", title: "自定义菜单" },
         {path:'/home/wx/usermanage',title:'用户管理'}
-      ]
+      ],
+      path:'/home/wx/public'
     };
   },
 
@@ -28,8 +29,21 @@ export default {
     // reqUserInfo()
   },
   mounted() {},
-  activated() {},
+  activated() {
+    let vm = this
+      vm.$router.push(vm.path)
 
+
+  },
+  // beforeRouteEnter(to,from,next){
+  //   console.log('2')
+  //   next(vm=>{
+  //   })
+  // },
+  beforeRouteLeave(to,from,next){
+    this.path = this.$route.path
+    next()
+  },
   methods: {},
 
   components: {

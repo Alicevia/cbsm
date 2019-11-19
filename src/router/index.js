@@ -2,6 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from 'src/store'
 import { Message } from 'element-ui'
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
+
 Vue.use(Router)
 let router = new Router({
   linkActiveClass: 'active',

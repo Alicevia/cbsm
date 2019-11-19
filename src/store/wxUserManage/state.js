@@ -1,5 +1,5 @@
 export default {
-  activeLabelGroup:{},
+  searchList:[],
   labelList:[],//标签列表
   labelCagegoryUser:{},//所有种类标签下的用户
 
