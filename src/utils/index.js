@@ -77,8 +77,6 @@ let utils = function (params) {
     if (temp.length>0) {
       ary.push(temp)
     }
-  
-    
     temp=null
     return ary
   }

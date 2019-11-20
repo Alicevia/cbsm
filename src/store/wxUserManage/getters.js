@@ -8,6 +8,9 @@ export default {
   // 生成未分组
   unGroupUserList(state){
     let {allAttentionUserList} = state
+    if (allAttentionUserList.length===0) {
+        return []
+    }
     return allAttentionUserList.filter(item=>{
       if (item.tagid_list) {
        return item.tagid_list.length===0

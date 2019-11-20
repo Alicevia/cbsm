@@ -22,7 +22,6 @@ export const reqCreateLabel = (data) => {
 
 // 编辑标签分组
 export const reqEditLabel = (data) => {
-  console.log(data)
   return ajax({
     url: `cgi-bin/tags/update?access_token=${store.state.weChatAccessToken}`,
     data,
@@ -116,9 +115,18 @@ export const reqBatchUserIntoBlackList = (data) => {
 
 // 取消用户黑名单
 export const reqBatchUserOutBlackList = (data) => {
-  console.log(data)
   return ajax({
     url: `cgi-bin/tags/members/batchunblacklist?access_token=${store.state.weChatAccessToken}`,
+    data,
+    method:'post',
+    flag:false
+  })
+}
+
+// 客服发送消息给客户
+export const reqSendMessageToUser = (data)=>{
+  return ajax({
+    url:`cgi-bin/message/custom/send?access_token=${store.state.weChatAccessToken}`,
     data,
     method:'post',
     flag:false

@@ -17,6 +17,18 @@
           ></el-input>
           <span class="cursor-pointer" @click="checkAuth">检查</span>
         </el-form-item>
+          <el-form-item label="公众号原始id">
+            <el-input class="input-width"></el-input>
+            <span class="cursor-pointer" @click="checkAuth">检查</span>
+          </el-form-item>
+          <el-form-item label="APPSecret">
+            <el-input class="input-width"></el-input>
+            <span class="cursor-pointer" @click="checkAuth">检查</span>
+          </el-form-item>
+          <el-form-item label="Token">
+            <el-input class="input-width"></el-input>
+            <span class="cursor-pointer" @click="checkAuth">检查</span>
+          </el-form-item>
         <el-form-item label="微信授权">
           <span>{{isAuth}}</span>
           <el-button
@@ -102,9 +114,7 @@
       </el-form>
     </div>
     <!-- 图片裁切 -->
-    <Cropper :toChildimgFile="toChildimgFile"
-    :getChildImgFile='getChildImgFile'
-     ref="vueCropper" />
+    <Cropper :toChildimgFile="toChildimgFile" :getChildImgFile="getChildImgFile" ref="vueCropper" />
     <!-- 重新授权 -->
     <PopupWx v-if="dialogVisible" :dialogVisible="dialogVisible" @toggle="togglePopupWx" />
   </div>
@@ -135,7 +145,7 @@ export default {
         wxName: true
       },
       wxSwitch: false,
-      toChildimgFile:'',
+      toChildimgFile: "",
       rules: {
         appId: [
           {
@@ -275,15 +285,15 @@ export default {
       reader.onload = e => {
         // console.log(e)
         // 将base64文件传递给子组件 用于裁切
-        this.toChildimgFile =  e.target.result
+        this.toChildimgFile = e.target.result;
         // this.modiWeChatInfo({ customerIcon: e.target.result });
       };
     },
     // 获取裁切组件的图片file格式
-    getChildImgFile(file,baseImg){
+    getChildImgFile(file, baseImg) {
       // console.log(baseImg)
-      this.img = file
-       this.modiWeChatInfo({ customerIcon: baseImg});
+      this.img = file;
+      this.modiWeChatInfo({ customerIcon: baseImg });
     },
 
     // wx授权
@@ -340,6 +350,9 @@ export default {
   overflow: hidden;
   border: 1px dashed #d9d9d9;
 }
+.el-form-item {
+  margin-bottom: 0.12rem;
+}
 
 .avatar-uploader .el-upload:hover {
   border-color: #409eff;
@@ -352,8 +365,8 @@ export default {
   text-align: center;
 }
 .avatar {
-  width: 1.78rem;
-  height: 1.78rem;
+  width: 1.6rem;
+  height:1rem;
   display: block;
 }
 .cursor-pointer {

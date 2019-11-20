@@ -25,6 +25,7 @@
         </div>
       </div>
       <div class="user-show">
+        <!-- 表格区域 -->
         <div class="user-table">
           <el-table
             ref="multipleTable"
@@ -33,10 +34,8 @@
             :border="true"
             max-height="400px"
             :height="400"
-             
-            v-loading='loading'
+            v-loading="loading"
             :header-cell-style="theadClass"
-            
             :cell-style="{textAlign:'center'}"
             size="mini"
             @selection-change="handleSelectionChange"
@@ -54,13 +53,17 @@
             </el-table-column>
             <el-table-column prop="openid" label="绑定用户" width="140"></el-table-column>
             <el-table-column prop="name" label="操作" width="80">
-              <i
-                :style="{fontSize:'30px',color:'#00B7C5',cursor:'pointer'}"
-                class="el-icon-s-comment"
-              ></i>
+              <template slot-scope="scope">
+                <i
+                  :style="{fontSize:'30px',color:'#00B7C5',cursor:'pointer'}"
+                  @click="openMessageDialog(scope.$index, scope.row)"
+                  class="el-icon-s-comment"
+                ></i>
+              </template>
             </el-table-column>
           </el-table>
         </div>
+        <!-- 标签区域 -->
         <div class="user-update">
           <div class="update">
             <el-button type="primary" size="mini" @click="updateAllMessage">更新</el-button>
@@ -103,18 +106,21 @@
         <Pagination @changeCurrentPage="changeCurrentPage"></Pagination>
       </div>
     </div>
+    <WxUserManageDialog ref="message" :message='toChildDialog'></WxUserManageDialog>
   </div>
 </template>
 
 <script>
 import Pagination from "../Pagination";
 import { mapActions, mapState, mapGetters } from "vuex";
-import { Message,Loading } from "element-ui";
+import { Message, Loading } from "element-ui";
+import WxUserManageDialog from "../WxUserManageDialog";
 export default {
   data() {
     return {
-      loading:true,
-      loadingTarget:null,
+      toChildDialog:{},
+      loading: true,
+      loadingTarget: null,
       classFlag: "未分组",
       currentPage: 0,
       theadClass: {
@@ -175,17 +181,18 @@ export default {
     ...mapGetters(["showCurrentTableList", "unGroupUserList"])
   },
   created() {
-  
-
     this.getWeChatLabel();
     this.getAllAttentionUser({ flag: "init" }).then(() => {
       this.showUnGroup();
-      this.loading = false
+      this.loading = false;
     });
     this.getBlackListUser({ flag: "init" });
   },
   mounted() {
 
+  },
+  activated(){
+  
   },
   methods: {
     ...mapActions([
@@ -203,16 +210,21 @@ export default {
       "showSearchList",
       "showUserSelect"
     ]),
+    // 打开给用户发消息的对话框
+    openMessageDialog(index,row) {
+      this.toChildDialog = row
+      this.$refs['message'].toggleMessageDialog()
+    },
     // 获取黑名单
     changeToBlackList() {
-      this.search = ''
+      this.search = "";
       this.getBlackListUser({ flag: "" });
       this.classFlag = "黑名单";
     },
+    // 切换页码
     changeCurrentPage(page) {
       this.currentPage = page;
     },
-
     // 搜索用户
     searchUser(e) {
       let allUser = this.allAttentionUserList;
@@ -249,7 +261,6 @@ export default {
         return item.openid;
       });
       this.payload = { openid_list: newAry };
-      console.log(this.payload);
     },
     // 批量操作用户的标签
     changeUsersLabel() {
@@ -263,7 +274,7 @@ export default {
         this.value = "";
         return;
       }
-      this.loading = true
+      this.loading = true;
       if (value === "black") {
         this.batchUserToBlackList(payload).then(() => {
           this.updateAllMessage();
@@ -288,7 +299,7 @@ export default {
     },
     // 获取标签下的用户
     getLabelUser(tagid) {
-      this.search = ''
+      this.search = "";
       this.getLableGategoryUser(tagid);
       this.classFlag = tagid.tagid;
     },
@@ -297,8 +308,8 @@ export default {
       this.$prompt("请输入标签名", "添加标签", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[\u4e00-\u9fa5]{1,10}$/,
-        inputErrorMessage: "标签名为1-10个汉字"
+        inputPattern: /^\S{1,10}$/,
+        inputErrorMessage: "标签名为1-10个字符"
       })
         .then(({ value }) => {
           this.addWeChatLabel({ tag: { name: value } });
@@ -317,8 +328,8 @@ export default {
       this.$prompt("请修改标签名", "修改标签", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[\u4e00-\u9fa5]{1,10}$/,
-        inputErrorMessage: "标签名为1-10个汉字",
+        inputPattern: /^\S{1,10}$/,
+        inputErrorMessage: "标签名为1-10个字符",
         inputValue: name
       })
         .then(({ value }) => {
@@ -333,18 +344,18 @@ export default {
     },
     // 展示未分组
     changeCurrentToUnGroup() {
-       this.search = ''
+      this.search = "";
       this.showUnGroup();
       this.classFlag = "未分组";
     },
     // 手动更新获取最新的信息
     updateAllMessage() {
+      this.loading = true;
       this.getWeChatLabel();
       this.getBlackListUser({ flag: "init" });
       this.getAllAttentionUser({ flag: "init" }).then(() => {
-        
         this.showUserSelect(this.classFlag);
-        this.loading = false
+        this.loading = false;
       });
 
       this.value = "";
@@ -356,7 +367,7 @@ export default {
     }
   },
 
-  components: { Pagination }
+  components: { Pagination, WxUserManageDialog }
 };
 </script>
 <style lang='less' scoped>

@@ -154,14 +154,17 @@ export default {
     },
     // 检查并且产生唯一的id
     check_CreateWxId(){
-  
+        this.userInfo.phone
         let wxIdAry = this.wxIdAry
-        let id = 1
-        while(wxIdAry.indexOf(id)!==-1){
+        let flag = this.userInfo.phone
+        let flag2 = flag.split('').reverse().join('')
+        let flag3 = parseInt(flag)+parseInt(flag2)
+        flag = Math.floor(parseInt(flag3)/100000)
+        let id=1
+        while(wxIdAry.indexOf(parseInt(flag+id))!==-1){
           id++
         }
-        return {id}
-    
+        return {id:parseInt(flag+id)}
     },
     // 新建更新wx菜单
     createMenus() {
@@ -180,9 +183,8 @@ export default {
         }
         if (this.type==='add') {
           menuRequest.currentId = this.check_CreateCurrentId()["currentId"];
-          menuRequest.id =parseInt(this.check_CreateWxId()['id']+this.userInfo.phone)
+          menuRequest.id =parseInt(this.check_CreateWxId()['id'])
         }
-        console.log(menuRequest);
         if (this.type === "add") {
           this.addUserWeChatMenu(menuRequest).then(() => {
             Message.success("添加菜单成功");

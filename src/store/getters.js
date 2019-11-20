@@ -98,7 +98,7 @@ export default {
     wxIdAry(state){
       let {weChatMenus} = state
       let ary = []
-      ary = weChatMenus.reduce((pre,item,index)=>{
+      ary = weChatMenus.reduce((pre,item)=>{
         if (item.childrenResponse) {
           let temp = item.childrenResponse
           temp.forEach(value=>{
