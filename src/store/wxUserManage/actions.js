@@ -52,9 +52,7 @@ export default {
   },
   // 添加标签
   async addWeChatLabel({ commit }, payload) {
-
     let result = await allReq.reqCreateLabel(payload)
-
     if (result.status === 200 && !result.data.errcode) {
       commit(TYPES.ADD_WE_CHAT_LABEL, result.data.tag)
     } else {
@@ -93,8 +91,6 @@ export default {
   async getAllAttentionUser({ commit }, payload) {
     let { flag } = payload
     let result = await allReq.reqBatchReceiveOpenId()
-    console.log(result)
-
     if (!result.data.errcode) {
       let user_list = result.data.data.openid
       user_list = user_list.map(item => ({ 'openid': item })) || []
@@ -106,7 +102,8 @@ export default {
       let resultAll = await Promise.all(newAry.map(user_list => {
         return allReq.reqBatchReceiveUserInfo({ user_list })
       }))
-      if (resultAll[0]) {
+      
+      if (resultAll[0]) {//请求是否成功
         let user_info_list = []
         resultAll.forEach(item => {
           user_info_list = user_info_list.concat(item.data.user_info_list)

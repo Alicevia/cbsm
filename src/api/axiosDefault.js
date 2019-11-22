@@ -72,8 +72,8 @@ axios.interceptors.response.use(function (response) {
 
 // -------------------------------
 let instance1 = axios.create({
-  // baseURL:'',
-  baseURL:'https://www.cluster-dt.com/wx/',
+  baseURL:'',
+  // baseURL:'https://www.cluster-dt.com/wx/',
   timeout:10000,
 
 })

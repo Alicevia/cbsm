@@ -37,7 +37,8 @@ export default {
 
             }else{
                 Message.error('用户信息已过期，请刷新页面重新登陆')
-                
+                localStorage.removeItem("user-token");
+                this.deleteUserToken()
                 this.$router.replace({path:'/login/phone'})
             }
         }

@@ -17,18 +17,29 @@
           ></el-input>
           <span class="cursor-pointer" @click="checkAuth">检查</span>
         </el-form-item>
-          <el-form-item label="公众号原始id">
-            <el-input class="input-width"></el-input>
-            <span class="cursor-pointer" @click="checkAuth">检查</span>
-          </el-form-item>
-          <el-form-item label="APPSecret">
-            <el-input class="input-width"></el-input>
-            <span class="cursor-pointer" @click="checkAuth">检查</span>
-          </el-form-item>
-          <el-form-item label="Token">
-            <el-input class="input-width"></el-input>
-            <span class="cursor-pointer" @click="checkAuth">检查</span>
-          </el-form-item>
+
+        <el-form-item label="公众号原始id">
+          <el-input
+            class="input-width"
+            @input="changeWeChatInfo({'originalId':$event})"
+            :value="weChatInfo.originalId"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="APPSecret">
+          <el-input
+            class="input-width"
+            @input="changeWeChatInfo({'appSecret':$event})"
+            :value="weChatInfo.appSecret"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="Token">
+          <el-input
+            class="input-width"
+            @input="changeWeChatInfo({'token':$event})"
+            :value="weChatInfo.token"
+          ></el-input>
+        </el-form-item>
+
         <el-form-item label="微信授权">
           <span>{{isAuth}}</span>
           <el-button
@@ -241,7 +252,10 @@ export default {
         onlineTemplateId,
         id,
         reportTemplateId,
-        warnTemplateId
+        warnTemplateId,
+        originalId,
+        token,
+        appSecret
       } = this.weChatInfo;
       let data = {
         appId,
@@ -250,7 +264,10 @@ export default {
         onlineTemplateId,
         reportTemplateId,
         warnTemplateId,
-        id
+        id,
+        originalId,
+        token,
+        appSecret
       };
       // console.log(data)
       let formdata = new FormData();
@@ -366,7 +383,7 @@ export default {
 }
 .avatar {
   width: 1.6rem;
-  height:1rem;
+  height: 1rem;
   display: block;
 }
 .cursor-pointer {
